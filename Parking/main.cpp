@@ -8,6 +8,7 @@
 #include <tuple>
 #include <unordered_map>
 #include <vector>
+#include <utility>
 
 using namespace std;
 
@@ -103,7 +104,7 @@ public:
         }
         */
 
-        Duration duration;
+        Duration duration = Clock::now() - Clock::now(); // 0
         if (now_parked_.count(car) > 0) {
             duration += Clock::now() - now_parked_.at(car);
         }
@@ -128,6 +129,8 @@ public:
         for (auto& [car, duration] : complete_parks_) {
             output[car] = chrono::duration_cast<chrono::seconds>(duration).count() * cost_per_second_;
         }
+
+        complete_parks_ = std::move(unordered_map<VehiclePlate, Duration, VehiclePlateHasher>());
 
         return output;
     }
@@ -179,6 +182,7 @@ int main() {
     parking.Park({'B', 'B', 222, 'B', 99});
 
     TestClock::SetNow(40);
+    std::cout << parking.GetCurrentBill({'A', 'A', 111, 'A', 99}) << std::endl;
     assert(parking.GetCurrentBill({'A', 'A', 111, 'A', 99}) == 100);
     assert(parking.GetCurrentBill({'B', 'B', 222, 'B', 99}) == 200);
     parking.Park({'A', 'A', 111, 'A', 99});

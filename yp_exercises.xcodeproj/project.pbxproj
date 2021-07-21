@@ -41,7 +41,7 @@
 		750B0A5C26A86E00002A522A = {
 			isa = PBXGroup;
 			children = (
-				750B0A6726A86E00002A522A /* yp_exercises */,
+				750B0A6726A86E00002A522A /* Parking */,
 				750B0A6626A86E00002A522A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,12 +54,12 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		750B0A6726A86E00002A522A /* yp_exercises */ = {
+		750B0A6726A86E00002A522A /* Parking */ = {
 			isa = PBXGroup;
 			children = (
 				750B0A6826A86E00002A522A /* main.cpp */,
 			);
-			path = yp_exercises;
+			path = Parking;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
