@@ -11,6 +11,8 @@
 		750B0A7626A99D07002A522A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 750B0A7526A99D07002A522A /* main.cpp */; };
 		750B0A8126A9AD66002A522A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 750B0A8026A9AD66002A522A /* main.cpp */; };
 		750B0A8C26AA918A002A522A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 750B0A8B26AA918A002A522A /* main.cpp */; };
+		75DBBC5F26BAF49B007723AF /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75DBBC5E26BAF49B007723AF /* main.cpp */; };
+		75DBBC6526BAF4F1007723AF /* json.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75DBBC6326BAF4F1007723AF /* json.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -50,6 +52,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		75DBBC5A26BAF49B007723AF /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +72,10 @@
 		750B0A8026A9AD66002A522A /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		750B0A8926AA918A002A522A /* TreeIterator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TreeIterator; sourceTree = BUILT_PRODUCTS_DIR; };
 		750B0A8B26AA918A002A522A /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		75DBBC5C26BAF49B007723AF /* JsonLoader */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = JsonLoader; sourceTree = BUILT_PRODUCTS_DIR; };
+		75DBBC5E26BAF49B007723AF /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		75DBBC6326BAF4F1007723AF /* json.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = json.cpp; sourceTree = "<group>"; };
+		75DBBC6426BAF4F1007723AF /* json.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +107,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		75DBBC5926BAF49B007723AF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -102,6 +124,7 @@
 				750B0A7426A99D07002A522A /* DumbbellHasher */,
 				750B0A7F26A9AD66002A522A /* TreesAndSearch */,
 				750B0A8A26AA918A002A522A /* TreeIterator */,
+				75DBBC5D26BAF49B007723AF /* JsonLoader */,
 				750B0A6626A86E00002A522A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -113,6 +136,7 @@
 				750B0A7326A99D07002A522A /* DumbbellHasher */,
 				750B0A7E26A9AD66002A522A /* TreesAndSearch */,
 				750B0A8926AA918A002A522A /* TreeIterator */,
+				75DBBC5C26BAF49B007723AF /* JsonLoader */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -147,6 +171,16 @@
 				750B0A8B26AA918A002A522A /* main.cpp */,
 			);
 			path = TreeIterator;
+			sourceTree = "<group>";
+		};
+		75DBBC5D26BAF49B007723AF /* JsonLoader */ = {
+			isa = PBXGroup;
+			children = (
+				75DBBC5E26BAF49B007723AF /* main.cpp */,
+				75DBBC6326BAF4F1007723AF /* json.cpp */,
+				75DBBC6426BAF4F1007723AF /* json.h */,
+			);
+			path = JsonLoader;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -220,6 +254,23 @@
 			productReference = 750B0A8926AA918A002A522A /* TreeIterator */;
 			productType = "com.apple.product-type.tool";
 		};
+		75DBBC5B26BAF49B007723AF /* JsonLoader */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 75DBBC6226BAF49B007723AF /* Build configuration list for PBXNativeTarget "JsonLoader" */;
+			buildPhases = (
+				75DBBC5826BAF49B007723AF /* Sources */,
+				75DBBC5926BAF49B007723AF /* Frameworks */,
+				75DBBC5A26BAF49B007723AF /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JsonLoader;
+			productName = JsonLoader;
+			productReference = 75DBBC5C26BAF49B007723AF /* JsonLoader */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -241,6 +292,9 @@
 					750B0A8826AA918A002A522A = {
 						CreatedOnToolsVersion = 13.0;
 					};
+					75DBBC5B26BAF49B007723AF = {
+						CreatedOnToolsVersion = 13.0;
+					};
 				};
 			};
 			buildConfigurationList = 750B0A6026A86E00002A522A /* Build configuration list for PBXProject "yp_exercises" */;
@@ -260,6 +314,7 @@
 				750B0A7226A99D07002A522A /* DumbbellHasher */,
 				750B0A7D26A9AD66002A522A /* TreesAndSearch */,
 				750B0A8826AA918A002A522A /* TreeIterator */,
+				75DBBC5B26BAF49B007723AF /* JsonLoader */,
 			);
 		};
 /* End PBXProject section */
@@ -294,6 +349,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				750B0A8C26AA918A002A522A /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75DBBC5826BAF49B007723AF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75DBBC5F26BAF49B007723AF /* main.cpp in Sources */,
+				75DBBC6526BAF4F1007723AF /* json.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -481,6 +545,22 @@
 			};
 			name = Release;
 		};
+		75DBBC6026BAF49B007723AF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		75DBBC6126BAF49B007723AF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -525,6 +605,15 @@
 			buildConfigurations = (
 				750B0A8D26AA918A002A522A /* Debug */,
 				750B0A8E26AA918A002A522A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		75DBBC6226BAF49B007723AF /* Build configuration list for PBXNativeTarget "JsonLoader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75DBBC6026BAF49B007723AF /* Debug */,
+				75DBBC6126BAF49B007723AF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
