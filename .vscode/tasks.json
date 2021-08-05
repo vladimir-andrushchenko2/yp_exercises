@@ -9,8 +9,8 @@
 				"-std=c++17",
 				"-g",
 				"-Wall",
-				"../JsonLoader/main.cpp",
-				"../JsonLoader/json.cpp",
+				"../Ini/main.cpp",
+				"../Ini/ini.cpp",
 			],
 			"options": {
 				"cwd": "${fileDirname}"
