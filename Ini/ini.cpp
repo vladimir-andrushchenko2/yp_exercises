@@ -51,6 +51,8 @@ Document Load(std::istream& input) {
             continue;
         }
 
+        line = trim(line);
+
         if (line[0] == '[') {
             std::string section_name;
             for (int i = 1; i < line.size(); ++i) {

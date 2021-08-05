@@ -16,7 +16,7 @@ int main() {
         "\n"
         "        cucumbers     =           12          \n"
         "\n"
-        "[guests] \n"
+        "     [guests] \n"
         "guest1_name = Ivan Durak\n"
         "guest2_name =  Vasilisa Premudraya\n"
         "[guest black list]"};
