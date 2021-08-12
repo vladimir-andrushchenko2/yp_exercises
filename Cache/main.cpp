@@ -1,13 +1,16 @@
 #include <cassert>
 #include <iostream>
+#include <map>
 #include <memory>
 #include <string>
 #include <string_view>
 #include <unordered_map>
 
+using namespace std::string_literals;
+
 template <typename Key, typename Value, typename ValueFactoryFn>
 class Cache {
-public:
+   public:
     // Создаёт кэш инициализированный фабрикой значений, созданной по умолчанию
     Cache() = default;
 
@@ -16,23 +19,45 @@ public:
     // Фабрика должна вернуть shared_ptr<Value> либо unique_ptr<Value>.
     // Пример использования:
     // shared_ptr<Value> value = value_factory(key);
-    explicit Cache(ValueFactoryFn value_factory) {
-        // Реализуйте конструктор самостоятельно
-    }
+    explicit Cache(ValueFactoryFn value_factory) : value_factory_(value_factory) {}
 
     // Возвращает закешированное значение по ключу. Если значение отсутствует или уже удалено,
     // оно должно быть создано с помощью фабрики и сохранено в кэше.
     // Если на объект нет внешних ссылок, он должен быть удалён из кэша
     std::shared_ptr<Value> GetValue(const Key& key) {
-        (void) key;
-        // Заглушка. Реализуйте метод самостоятельно
-        return nullptr;
+        if (cache_.count(key) == 0) {
+            std::shared_ptr<Value> output = value_factory_(key);
+
+            std::weak_ptr wp_value{output};
+
+            assert(!wp_value.expired());  // remove this
+
+            cache_[key] = wp_value;
+
+            return output;
+        }
+
+        std::weak_ptr<Value> wp_value = cache_.at(key);
+
+        if (wp_value.expired()) {
+            std::shared_ptr<Value> output = value_factory_(key);
+            cache_[key] = std::weak_ptr{output};
+            return output;
+        }
+
+        assert(!wp_value.expired());  // remove this
+
+        return wp_value.lock();
     }
+
+   private:
+    std::map<Key, std::weak_ptr<Value>> cache_;
+    ValueFactoryFn value_factory_;
 };
 
 // Пример объекта, находящегося в кэше
 class Object {
-public:
+   public:
     explicit Object(std::string id)
         : id_(std::move(id))  //
     {
@@ -40,25 +65,21 @@ public:
         cout << "Object '"sv << id_ << "' has been created"sv << endl;
     }
 
-    const std::string& GetId() const {
-        return id_;
-    }
+    const std::string& GetId() const { return id_; }
 
     ~Object() {
         using namespace std;
         cout << "Object '"sv << id_ << "' has been destroyed"sv << endl;
     }
 
-private:
+   private:
     std::string id_;
 };
 
 using ObjectPtr = std::shared_ptr<Object>;
 
 struct ObjectFactory {
-    ObjectPtr operator()(std::string id) const {
-        return std::make_shared<Object>(std::move(id));
-    }
+    ObjectPtr operator()(std::string id) const { return std::make_shared<Object>(std::move(id)); }
 };
 
 void Test1() {
@@ -96,10 +117,7 @@ void Test1() {
 }
 
 struct Book {
-    Book(std::string title, std::string content)
-        : title(std::move(title))
-        , content(std::move(content)) {
-    }
+    Book(std::string title, std::string content) : title(std::move(title)), content(std::move(content)) {}
 
     std::string title;
     std::string content;
@@ -107,13 +125,11 @@ struct Book {
 
 // Функциональный объект, загружающий книги из unordered_map
 class BookLoader {
-public:
+   public:
     using BookStore = std::unordered_map<std::string, std::string>;
 
     // Принимает константную ссылку на хранилище книг и ссылку на переменную-счётчик загрузок
-    explicit BookLoader(const BookStore& store, size_t& load_count) {
-        // Реализуйте конструктор самостоятельно
-    }
+    explicit BookLoader(const BookStore& store, size_t& load_count) : book_store_(store), load_count_(load_count) {}
 
     // Загружает книгу из хранилища по её названию и возвращает указатель
     // В случае успешной загрузки (книга есть в хранилище)
@@ -121,13 +137,17 @@ public:
     // Если книга в хранилище отсутствует, нужно выбросить исключение std::out_of_range,
     // а счётчик не увеличивать
     std::shared_ptr<Book> operator()(const std::string& title) const {
-        // Заглушка, реализуйте метод самостоятельно
-        (void) title;
-        throw std::out_of_range("Not implemented"s);
+        if (book_store_.count(title) == 0) {
+            throw std::out_of_range("no such title in book store"s);
+        }
+
+        load_count_++;
+        return std::make_shared<Book>(title, book_store_.at(title));
     }
 
-private:
-    // Добавьте необходимые данные и/или методы
+   private:
+    const BookStore& book_store_;
+    size_t& load_count_;
 };
 
 void Test2() {
