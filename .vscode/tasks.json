@@ -9,8 +9,7 @@
 				"-std=c++17",
 				"-g",
 				"-Wall",
-				"../Ini/main.cpp",
-				"../Ini/ini.cpp",
+				"../Cache/main.cpp",
 			],
 			"options": {
 				"cwd": "${fileDirname}"
