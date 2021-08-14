@@ -29,7 +29,27 @@ ostream& operator<<(ostream& out, Color color) {
 }
 
 class Shape {
-    // Напишите реализацию самостоятельно
+   public:
+    Shape(Color color) : color_(color) {}
+
+    Color GetColor() {
+        return color_;
+    }
+
+    void SetColor(Color color) {
+        color_ = color;
+    }
+
+    virtual std::string GetType() const {
+        return "Shape"s;
+    }
+
+    virtual double GetArea() const {
+        return 0.0;
+    }
+
+   private:
+    Color color_;
 };
 
 class Rectangle {
