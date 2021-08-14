@@ -4,57 +4,34 @@
 
 using namespace std;
 
-Programmer::Programmer(const string& name, int age, Gender gender) {
-    // Напишите тело конструктора
+Person::Person(const string& name, int age, Gender gender) : name_(name), age_(age), gender_(gender) {
 }
 
-const string& Programmer::GetName() const {
-    // Заглушка, реализуйте метод самостоятельно
-    throw std::logic_error("Not implemented"s);
+const string& Person::GetName() const {
+    return name_;
 }
 
-int Programmer::GetAge() const {
-    // Заглушка, реализуйте метод самостоятельно
-    return 0;
+int Person::GetAge() const {
+    return age_;
 }
 
-Gender Programmer::GetGender() const {
-    // Заглушка, реализуйте метод самостоятельно
-    return Gender::MALE;
+Gender Person::GetGender() const {
+    return gender_;
 }
 
 void Programmer::AddProgrammingLanguage(ProgrammingLanguage language) {
-    // Заглушка, реализуйте метод самостоятельно
+    programming_languages_.insert(language);
 }
 
 bool Programmer::CanProgram(ProgrammingLanguage language) const {
-    // Заглушка, реализуйте метод самостоятельно
-    return false;
-}
-
-Worker::Worker(const string& name, int age, Gender gender) {
-    // Заглушка, реализуйте конструктор самостоятельно
-}
-
-const string& Worker::GetName() const {
-    // Заглушка, реализуйте метод самостоятельно
-    throw std::logic_error("Not implemented"s);
-}
-
-int Worker::GetAge() const {
-    // Заглушка, реализуйте метод самостоятельно
-    return 0;
-}
-
-Gender Worker::GetGender() const {
-    return Gender::MALE;
+    return programming_languages_.count(language) > 0 ? true : false;
 }
 
 void Worker::AddSpeciality(WorkerSpeciality speciality) {
-    // Заглушка, реализуйте метод самостоятельно
+    worker_specialities_.insert(speciality);
 }
 
 bool Worker::HasSpeciality(WorkerSpeciality speciality) const {
-    // Заглушка, реализуйте метод самостоятельно
-    return false;
+    return worker_specialities_.count(speciality) > 0 ? true : false;
 }
+
