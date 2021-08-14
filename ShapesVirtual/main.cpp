@@ -32,39 +32,66 @@ class Shape {
    public:
     Shape(Color color) : color_(color) {}
 
-    Color GetColor() {
-        return color_;
-    }
+    Color GetColor() const { return color_; }
 
-    void SetColor(Color color) {
-        color_ = color;
-    }
+    void SetColor(Color color) { color_ = color; }
 
-    virtual std::string GetType() const {
-        return "Shape"s;
-    }
+    virtual std::string GetType() const { return "Shape"s; }
 
-    virtual double GetArea() const {
-        return 0.0;
-    }
+    virtual double GetArea() const { return 0.0; }
 
    private:
     Color color_;
 };
 
-class Rectangle {
-    // Напишите реализацию самостоятельно
+class Rectangle : public Shape {
+   public:
+    Rectangle(double width, double height, Color color) : Shape(color), width_(width), height_(height) {}
+
+    std::string GetType() const override { return "Rectangle"s; }
+
+    double GetArea() const override { return width_ * height_; }
+
+    double GetWidth() const { return width_; }
+
+    double GetHeight() const { return height_; }
+
+    void SetSize(double width, double height) {
+        width_ = width;
+        height_ = height;
+    }
+
+   private:
+    double width_;
+    double height_;
 };
 
-class Circle {
-    // Напишите реализацию самостоятельно
+class Circle : public Shape {
+   public:
+    Circle(double radius, Color color) : Shape(color), radius_(radius) {}
+
+    std::string GetType() const override { return "Circle"s; }
+
+    double GetArea() const override { return M_PI * radius_ * radius_; }
+
+    double GetRadius() const { return radius_; }
+
+    void SetRadius(double radius) { radius_ = radius; }
+
+   private:
+    double radius_;
 };
 
 // Возвращает суммарную площадь фигур, указатели на которые находятся в переданной коллекции collection
 template <typename ShapeCollection>
 double CalcSumArea(const ShapeCollection& collection) {
-    // Заглушка. Напишите реализацию самостоятельно
-    return 0;
+    double output{};
+
+    for (const Shape* shape : collection) {
+        output += shape->GetArea();
+    }
+
+    return output;
 }
 
 void PrintShapeInfo(const Shape& shape) {
