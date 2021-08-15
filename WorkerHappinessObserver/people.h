@@ -14,7 +14,7 @@ public:
 
 protected:
     // Класс PersonObserver не предназначен для удаления напрямую
-    ~PersonObserver() = defavult;
+    ~PersonObserver() = default;
 };
 
 /*
