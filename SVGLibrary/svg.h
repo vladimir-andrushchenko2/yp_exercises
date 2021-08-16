@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace svg {
 
@@ -127,7 +128,10 @@ public:
      Document doc;
      doc.Add(Circle().SetCenter({20, 30}).SetRadius(15));
     */
-    // void Add(???);
+    template <typename Obj>
+    void Add(Obj obj) {
+        objects_.emplace_back(std::make_unique<Obj>(std::move(obj)));
+    }
 
     // Добавляет в svg-документ объект-наследник svg::Object
     void AddPtr(std::unique_ptr<Object>&& obj);
@@ -136,6 +140,9 @@ public:
     void Render(std::ostream& out) const;
 
     // Прочие методы и данные, необходимые для реализации класса Document
+
+private:
+    std::vector<std::unique_ptr<Object>> objects_;
 };
 
 }  // namespace svg

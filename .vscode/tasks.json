@@ -9,7 +9,8 @@
 				"-std=c++17",
 				"-g",
 				"-Wall",
-				"../WorkerHappinessObserver/main.cpp",
+				"../SVGLibrary/main.cpp",
+				"../SVGLibrary/svg.cpp",
 			],
 			"options": {
 				"cwd": "${fileDirname}"

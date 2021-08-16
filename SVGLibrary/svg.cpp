@@ -32,4 +32,22 @@ void Circle::RenderObject(const RenderContext& context) const {
     out << "/>"sv;
 }
 
+// ---------- Document ------------------
+
+void Document::AddPtr(std::unique_ptr<Object>&& obj) {
+    objects_.push_back(std::move(obj));
+}
+
+void Document::Render(std::ostream& out) const {
+    out << "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"sv << std::endl;
+    out << "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"sv << std::endl;
+
+    for (const auto& object : objects_) {
+        RenderContext ctx(out, 2, 2);
+        object->Render(ctx);
+    }
+
+    out << "</svg>"sv;
+}
+
 }  // namespace svg
