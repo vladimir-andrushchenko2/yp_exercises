@@ -9,7 +9,7 @@
 				"-std=c++17",
 				"-g",
 				"-Wall",
-				"../ShapesVirtual/main.cpp",
+				"../WorkerHappinessObserver/main.cpp",
 			],
 			"options": {
 				"cwd": "${fileDirname}"
