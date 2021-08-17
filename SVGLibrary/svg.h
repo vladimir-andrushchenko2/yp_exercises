@@ -152,6 +152,7 @@ class Document : public ObjectContainer {
     void Render(std::ostream& out) const;
 };
 
+// used to add shapes to the container
 class Drawable {
    public:
     virtual void Draw(ObjectContainer& container) const = 0;
