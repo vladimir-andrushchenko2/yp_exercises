@@ -91,7 +91,7 @@ Text& Text::SetOffset(Point pos) {
 }
 
 Text& Text::SetFontSize(uint32_t size) {
-    size_ = size;
+    font_size_ = size;
     return *this;
 }
 
@@ -110,36 +110,21 @@ Text& Text::SetData(std::string data) {
     return *this;
 }
 
-template <typename Attr, typename Val>
-std::string AttributeValue(Attr attribute, Val value) {
-    std::stringstream output;
-    output << attribute << "=\""sv << value << "\""sv;
-
-    return output.str();
-}
-
 void Text::RenderObject(const RenderContext& context) const {
     auto& out = context.out;
-    // <text x="35" y="20" dx="0" dy="6" font-size="12" font-family="Verdana" font-weight="bold">Hello C++</text
-    out << "<text "sv;
-    out << AttributeValue("x"sv, position_.x) << " "sv << AttributeValue("y"sv, position_.y) << " "sv;
-    out << AttributeValue("dx"sv, offset_.x) << " "sv << AttributeValue("dy"sv, offset_.y) << " "sv;
-    out << AttributeValue("font-size"sv, size_);
-
+    out << "<text"sv;
+    out << " x=\""sv << position_.x << "\" y=\""sv << position_.y << "\" "sv
+        << "dx=\""sv << offset_.x << "\" dy=\""sv << offset_.y << "\" "sv
+        << "font-size=\""sv << font_size_ << "\""sv;
     if (!font_family_.empty()) {
-        out << " "sv;
-        out << AttributeValue("font-family"sv, font_family_);
+        out << " font-family=\""sv << font_family_ << "\""sv;
     }
-
     if (!font_weight_.empty()) {
-        out << " "sv;
-        out << AttributeValue("font-weight"sv, font_weight_);
+        out << " font-weight=\""sv << font_weight_ << "\""sv;
     }
-
     out << ">"sv;
     PrintData(out, data_);
-    out << "<"sv;
-    out << "/text>"sv;
+    out << "</text>"sv;
 }
 
 // ---------- Document ------------------
