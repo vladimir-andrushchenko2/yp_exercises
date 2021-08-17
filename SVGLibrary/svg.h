@@ -122,9 +122,9 @@ private:
     void RenderObject(const RenderContext& context) const override;
 
 private:
-    Point position_;
-    Point offset_;
-    uint32_t size_;
+    Point position_ = {0.0, 0.0};
+    Point offset_ = {0.0, 0.0};
+    uint32_t size_ = 1;
     std::string font_family_;
     std::string font_weight_;
     std::string data_;

@@ -17,12 +17,12 @@ void Object::Render(const RenderContext& context) const {
 
 // ---------- Circle ------------------
 
-Circle& Circle::SetCenter(Point center)  {
+Circle& Circle::SetCenter(Point center) {
     center_ = center;
     return *this;
 }
 
-Circle& Circle::SetRadius(double radius)  {
+Circle& Circle::SetRadius(double radius) {
     radius_ = radius;
     return *this;
 }
@@ -44,18 +44,42 @@ Polyline& Polyline::AddPoint(Point point) {
 void Polyline::RenderObject(const RenderContext& context) const {
     auto& out = context.out;
     out << "<polyline points=\""sv;
-    
-    for (size_t i = 0; i < points_.size() - 1; ++i){
+
+    for (int i = 0; i < static_cast<int>(points_.size()) - 1; ++i) {
         Point point = points_.at(i);
         out << point.x << ","sv << point.y << " "sv;
     }
 
     out << points_.back().x << ","sv << points_.back().y;
-    
+
     out << "\" />"sv;
 }
 
 // ---------- Text ------------------
+void ScreenString(std::ostream& out, const std::string& data) {
+    for (char c : data) {
+        switch (c) {
+            case '\"':
+                out << "&quot;"sv;
+                break;
+            case '\'':
+                out << "&apos;"sv;
+                break;
+            case '<':
+                out << "&lt;"sv;
+                break;
+            case '>':
+                out << "&gt;"sv;
+                break;
+            case '&':
+                out << "&amp;"sv;
+                break;
+            default:
+                out << c;
+                break;
+        }
+    }
+}
 
 Text& Text::SetPosition(Point pos) {
     position_ = pos;
@@ -87,31 +111,41 @@ Text& Text::SetData(std::string data) {
     return *this;
 }
 
-template<typename Attr, typename Val>
+template <typename Attr, typename Val>
 std::string AttributeValue(Attr attribute, Val value) {
     std::stringstream output;
-    output << attribute << "=\""sv << value << "\" "sv;
-    return output.str(); //                       ^ followed by a space
+    output << attribute << "=\""sv << value << "\""sv;
+
+    return output.str();
 }
 
 void Text::RenderObject(const RenderContext& context) const {
     auto& out = context.out;
     // <text x="35" y="20" dx="0" dy="6" font-size="12" font-family="Verdana" font-weight="bold">Hello C++</text
     out << "<text "sv;
-    out << AttributeValue("x"sv, position_.x) << AttributeValue("y"sv, position_.y);
-    out << AttributeValue("dx"sv, offset_.x) << AttributeValue("dy"sv, offset_.y);
+    out << AttributeValue("x"sv, position_.x) << " "sv << AttributeValue("y"sv, position_.y) << " "sv;
+    out << AttributeValue("dx"sv, offset_.x) << " "sv << AttributeValue("dy"sv, offset_.y) << " "sv;
     out << AttributeValue("font-size"sv, size_);
-    out << AttributeValue("font-family"sv, font_family_);
-    out << AttributeValue("font-weight"sv, font_weight_);
-    out << ">"sv << data_ << "<"sv;
+
+    if (!font_family_.empty()) {
+        out << " "sv;
+        out << AttributeValue("font-family"sv, font_family_);
+    }
+
+    if (!font_weight_.empty()) {
+        out << " "sv;
+        out << AttributeValue("font-weight"sv, font_weight_);
+    }
+
+    out << ">"sv;
+    ScreenString(out, data_);
+    out << "<"sv;
     out << "/text>"sv;
 }
 
 // ---------- Document ------------------
 
-void Document::AddPtr(std::unique_ptr<Object>&& obj) {
-    objects_.push_back(std::move(obj));
-}
+void Document::AddPtr(std::unique_ptr<Object>&& obj) { objects_.push_back(std::move(obj)); }
 
 void Document::Render(std::ostream& out) const {
     out << "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"sv << std::endl;
