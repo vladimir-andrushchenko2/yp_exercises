@@ -10,10 +10,7 @@ namespace svg {
 
 struct Point {
     Point() = default;
-    Point(double x, double y)
-        : x(x)
-        , y(y) {
-    }
+    Point(double x, double y) : x(x), y(y) {}
     double x = 0;
     double y = 0;
 };
@@ -23,19 +20,12 @@ struct Point {
  * Хранит ссылку на поток вывода, текущее значение и шаг отступа при выводе элемента
  */
 struct RenderContext {
-    RenderContext(std::ostream& out)
-        : out(out) {
-    }
+    RenderContext(std::ostream& out) : out(out) {}
 
     RenderContext(std::ostream& out, int indent_step, int indent = 0)
-        : out(out)
-        , indent_step(indent_step)
-        , indent(indent) {
-    }
+        : out(out), indent_step(indent_step), indent(indent) {}
 
-    RenderContext Indented() const {
-        return {out, indent_step, indent + indent_step};
-    }
+    RenderContext Indented() const { return {out, indent_step, indent + indent_step}; }
 
     void RenderIndent() const {
         for (int i = 0; i < indent; ++i) {
@@ -54,12 +44,12 @@ struct RenderContext {
  * Реализует паттерн "Шаблонный метод" для вывода содержимого тега
  */
 class Object {
-public:
+   public:
     void Render(const RenderContext& context) const;
 
     virtual ~Object() = default;
 
-private:
+   private:
     virtual void RenderObject(const RenderContext& context) const = 0;
 };
 
@@ -68,11 +58,11 @@ private:
  * https://developer.mozilla.org/en-US/docs/Web/SVG/Element/circle
  */
 class Circle final : public Object {
-public:
+   public:
     Circle& SetCenter(Point center);
     Circle& SetRadius(double radius);
 
-private:
+   private:
     void RenderObject(const RenderContext& context) const override;
 
     Point center_;
@@ -83,12 +73,12 @@ private:
  * Класс Polyline моделирует элемент <polyline> для отображения ломаных линий
  * https://developer.mozilla.org/en-US/docs/Web/SVG/Element/polyline
  */
-class Polyline : public Object{
-public:
+class Polyline : public Object {
+   public:
     // Добавляет очередную вершину к ломаной линии
     Polyline& AddPoint(Point point);
 
-private:
+   private:
     void RenderObject(const RenderContext& context) const override;
 
     std::vector<Point> points_;
@@ -99,7 +89,7 @@ private:
  * https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text
  */
 class Text : public Object {
-public:
+   public:
     // Задаёт координаты опорной точки (атрибуты x и y)
     Text& SetPosition(Point pos);
 
@@ -118,10 +108,10 @@ public:
     // Задаёт текстовое содержимое объекта (отображается внутри тега text)
     Text& SetData(std::string data);
 
-private:
+   private:
     void RenderObject(const RenderContext& context) const override;
 
-private:
+   private:
     Point position_ = {0.0, 0.0};
     Point offset_ = {0.0, 0.0};
     uint32_t font_size_ = 1;
@@ -131,7 +121,7 @@ private:
 };
 
 class Document {
-public:
+   public:
     /*
      Метод Add добавляет в svg-документ любой объект-наследник svg::Object.
      Пример использования:
@@ -151,7 +141,7 @@ public:
 
     // Прочие методы и данные, необходимые для реализации класса Document
 
-private:
+   private:
     std::vector<std::unique_ptr<Object>> objects_;
 };
 
