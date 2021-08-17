@@ -44,19 +44,18 @@ Polyline& Polyline::AddPoint(Point point) {
 void Polyline::RenderObject(const RenderContext& context) const {
     auto& out = context.out;
     out << "<polyline points=\""sv;
-
-    for (int i = 0; i < static_cast<int>(points_.size()) - 1; ++i) {
-        Point point = points_.at(i);
-        out << point.x << ","sv << point.y << " "sv;
+    for (auto it = points_.begin(); it != points_.end(); ++it) {
+        out << it->x << ","sv << it->y;
+        if (it + 1 != points_.end()) {
+            out << " "sv;
+        }
     }
-
-    out << points_.back().x << ","sv << points_.back().y;
-
-    out << "\" />"sv;
+    out << "\""sv;
+    out << "/>"sv;
 }
 
 // ---------- Text ------------------
-void ScreenString(std::ostream& out, const std::string& data) {
+void PrintData(std::ostream& out, const std::string& data) {
     for (char c : data) {
         switch (c) {
             case '\"':
@@ -138,7 +137,7 @@ void Text::RenderObject(const RenderContext& context) const {
     }
 
     out << ">"sv;
-    ScreenString(out, data_);
+    PrintData(out, data_);
     out << "<"sv;
     out << "/text>"sv;
 }
