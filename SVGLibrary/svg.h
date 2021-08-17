@@ -83,21 +83,22 @@ private:
  * Класс Polyline моделирует элемент <polyline> для отображения ломаных линий
  * https://developer.mozilla.org/en-US/docs/Web/SVG/Element/polyline
  */
-class Polyline {
+class Polyline : public Object{
 public:
     // Добавляет очередную вершину к ломаной линии
     Polyline& AddPoint(Point point);
 
-    /*
-     * Прочие методы и данные, необходимые для реализации элемента <polyline>
-     */
+private:
+    void RenderObject(const RenderContext& context) const override;
+
+    std::vector<Point> points_;
 };
 
 /*
  * Класс Text моделирует элемент <text> для отображения текста
  * https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text
  */
-class Text {
+class Text : public Object {
 public:
     // Задаёт координаты опорной точки (атрибуты x и y)
     Text& SetPosition(Point pos);
@@ -117,7 +118,16 @@ public:
     // Задаёт текстовое содержимое объекта (отображается внутри тега text)
     Text& SetData(std::string data);
 
-    // Прочие данные и методы, необходимые для реализации элемента <text>
+private:
+    void RenderObject(const RenderContext& context) const override;
+
+private:
+    Point position_;
+    Point offset_;
+    uint32_t size_;
+    std::string font_family_;
+    std::string font_weight_;
+    std::string data_;
 };
 
 class Document {

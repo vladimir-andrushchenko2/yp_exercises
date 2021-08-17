@@ -1,5 +1,7 @@
 #include "svg.h"
 
+#include <sstream>
+
 namespace svg {
 
 using namespace std::literals;
@@ -30,6 +32,76 @@ void Circle::RenderObject(const RenderContext& context) const {
     out << "<circle cx=\""sv << center_.x << "\" cy=\""sv << center_.y << "\" "sv;
     out << "r=\""sv << radius_ << "\" "sv;
     out << "/>"sv;
+}
+
+// ---------- Polyline ------------------
+
+Polyline& Polyline::AddPoint(Point point) {
+    points_.push_back(point);
+    return *this;
+}
+
+void Polyline::RenderObject(const RenderContext& context) const {
+    auto& out = context.out;
+    out << "<polyline points=\""sv;
+    
+    for (const auto& point : points_){
+        out << " "sv << point.x << ","sv << point.y;
+    }
+    
+    out << "\" />"sv;
+}
+
+// ---------- Text ------------------
+
+Text& Text::SetPosition(Point pos) {
+    position_ = pos;
+    return *this;
+}
+
+Text& Text::SetOffset(Point pos) {
+    offset_ = pos;
+    return *this;
+}
+
+Text& Text::SetFontSize(uint32_t size) {
+    size_ = size;
+    return *this;
+}
+
+Text& Text::SetFontFamily(std::string font_family) {
+    font_family_ = font_family;
+    return *this;
+}
+
+Text& Text::SetFontWeight(std::string font_weight) {
+    font_weight_ = font_weight;
+    return *this;
+}
+
+Text& Text::SetData(std::string data) {
+    data_ = data;
+    return *this;
+}
+
+template<typename Attr, typename Val>
+std::string AttributeValue(Attr attribute, Val value) {
+    std::stringstream output;
+    output << attribute << "=\""sv << value << "\" "sv;
+    return output.str(); //                       ^ followed by a space
+}
+
+void Text::RenderObject(const RenderContext& context) const {
+    auto& out = context.out;
+    // <text x="35" y="20" dx="0" dy="6" font-size="12" font-family="Verdana" font-weight="bold">Hello C++</text
+    out << "<text "sv;
+    out << AttributeValue("x"sv, position_.x) << AttributeValue("y"sv, position_.y);
+    out << AttributeValue("dx"sv, offset_.x) << AttributeValue("dy"sv, offset_.y);
+    out << AttributeValue("font-size"sv, size_);
+    out << AttributeValue("font-family"sv, font_family_);
+    out << AttributeValue("font-weight"sv, font_weight_);
+    out << ">"sv << data_ << "<"sv;
+    out << "/text>"sv;
 }
 
 // ---------- Document ------------------
