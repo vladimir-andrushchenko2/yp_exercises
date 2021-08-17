@@ -8,16 +8,6 @@
 
 namespace svg {
 
-class ObjectContainer;
-
-// Интерфейс Drawable задаёт объекты, которые можно нарисовать с помощью Graphics
-class Drawable {
-   public:
-    virtual void Draw(ObjectContainer& container) const = 0;
-
-    virtual ~Drawable() = default;
-};
-
 struct Point {
     Point() = default;
     Point(double x, double y) : x(x), y(y) {}
@@ -160,6 +150,13 @@ class Document : public ObjectContainer {
 
     // Выводит в ostream svg-представление документа
     void Render(std::ostream& out) const;
+};
+
+class Drawable {
+   public:
+    virtual void Draw(ObjectContainer& container) const = 0;
+
+    virtual ~Drawable() = default;
 };
 
 }  // namespace svg
