@@ -13,6 +13,48 @@ void Object::Render(const RenderContext& context) const {
     context.out << std::endl;
 }
 
+// ---------- StrokeLineCap ------------------
+
+std::ostream& operator<<(std::ostream& stream, const StrokeLineCap& stroke_line_cap) {
+    using namespace std::string_view_literals;
+    switch (stroke_line_cap) {
+        case StrokeLineCap::BUTT:
+            stream << "butt"sv;
+            break;
+        case StrokeLineCap::ROUND:
+            stream << "round"sv;
+            break;
+        case StrokeLineCap::SQUARE:
+            stream << "square"sv;
+            break;
+    }
+    return stream;
+}
+
+// ---------- StrokeLineJoin ------------------
+
+std::ostream& operator<<(std::ostream& stream, const StrokeLineJoin& stroke_line_join) {
+    using namespace std::string_view_literals;
+    switch (stroke_line_join) {
+        case StrokeLineJoin::ARCS:
+            stream << "arcs"sv;
+            break;
+        case StrokeLineJoin::BEVEL:
+            stream << "bevel"sv;
+            break;
+        case StrokeLineJoin::MITER:
+            stream << "miter"sv;
+            break;
+        case StrokeLineJoin::MITER_CLIP:
+            stream << "miter-clip"sv;
+            break;
+        case StrokeLineJoin::ROUND:
+            stream << "round"sv;
+            break;
+    }
+    return stream;
+}
+
 // ---------- Circle ------------------
 
 Circle& Circle::SetCenter(Point center) {
@@ -29,6 +71,7 @@ void Circle::RenderObject(const RenderContext& context) const {
     auto& out = context.out;
     out << "<circle cx=\""sv << center_.x << "\" cy=\""sv << center_.y << "\" "sv;
     out << "r=\""sv << radius_ << "\" "sv;
+    RenderAttrs(out);
     out << "/>"sv;
 }
 
@@ -49,6 +92,7 @@ void Polyline::RenderObject(const RenderContext& context) const {
         }
     }
     out << "\""sv;
+    RenderAttrs(out);
     out << "/>"sv;
 }
 
@@ -120,6 +164,7 @@ void Text::RenderObject(const RenderContext& context) const {
     if (!font_weight_.empty()) {
         out << " font-weight=\""sv << font_weight_ << "\""sv;
     }
+    RenderAttrs(out);
     out << ">"sv;
     PrintData(out, data_);
     out << "</text>"sv;

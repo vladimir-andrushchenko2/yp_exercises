@@ -3,9 +3,10 @@
 #include <cstdint>
 #include <iostream>
 #include <memory>
-#include <string>
-#include <vector>
 #include <optional>
+#include <string>
+#include <string_view>
+#include <vector>
 
 namespace svg {
 
@@ -20,9 +21,31 @@ struct Point {
     double y = 0;
 };
 
+// ---------- StrokeLineCap ------------------
+
+enum class StrokeLineCap {
+    BUTT,
+    ROUND,
+    SQUARE,
+};
+
+std::ostream& operator<<(std::ostream& stream, const StrokeLineCap& stroke_line_cap);
+
+// ---------- StrokeLineJoin ------------------
+
+enum class StrokeLineJoin {
+    ARCS,
+    BEVEL,
+    MITER,
+    MITER_CLIP,
+    ROUND,
+};
+
+std::ostream& operator<<(std::ostream& stream, const StrokeLineJoin& stroke_line_join);
+
 template <typename Owner>
 class PathProps {
-public:
+   public:
     Owner& SetFillColor(Color color) {
         fill_color_ = std::move(color);
         return AsOwner();
@@ -32,7 +55,22 @@ public:
         return AsOwner();
     }
 
-protected:
+    Owner& SetStrokeWidth(double width) {
+        stroke_width_ = std::move(width);
+        return AsOwner();
+    }
+
+    Owner& SetStrokeLineCap(StrokeLineCap line_cap) {
+        stroke_line_cap_ = std::move(line_cap);
+        return AsOwner();
+    }
+
+    Owner& SetStrokeLineJoin(StrokeLineJoin line_join) {
+        stroke_line_join_ = std::move(line_join);
+        return AsOwner();
+    }
+
+   protected:
     ~PathProps() = default;
 
     void RenderAttrs(std::ostream& out) const {
@@ -41,12 +79,25 @@ protected:
         if (fill_color_) {
             out << " fill=\""sv << *fill_color_ << "\""sv;
         }
+
         if (stroke_color_) {
             out << " stroke=\""sv << *stroke_color_ << "\""sv;
         }
+
+        if (stroke_width_) {
+            out << " stroke-width=\""sv << *stroke_width_ << "\""sv;
+        }
+
+        if (stroke_line_cap_) {
+            out << " stroke-linecap=\""sv << *stroke_line_cap_ << "\""sv;
+        }
+
+        if (stroke_line_join_) {
+            out << " stroke-linejoin=\""sv << *stroke_line_join_ << "\""sv;
+        }
     }
 
-private:
+   private:
     Owner& AsOwner() {
         // static_cast безопасно преобразует *this к Owner&,
         // если класс Owner — наследник PathProps
@@ -55,6 +106,9 @@ private:
 
     std::optional<Color> fill_color_;
     std::optional<Color> stroke_color_;
+    std::optional<double> stroke_width_;
+    std::optional<StrokeLineCap> stroke_line_cap_;
+    std::optional<StrokeLineJoin> stroke_line_join_;
 };
 
 /*

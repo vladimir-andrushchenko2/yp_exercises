@@ -1,7 +1,10 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include <string>
 
 #include "svg.h"  // Объявления классов библиотеки должны быть расположены в файле svg.h
+
+using namespace std::string_literals;
 
 namespace shapes {
 
@@ -37,7 +40,7 @@ class Star : public svg::Drawable {
             polyline.AddPoint({center_.x + inner_rad_ * sin(angle), center_.y - inner_rad_ * cos(angle)});
         }
 
-        container.Add(polyline);
+        container.Add(polyline.SetFillColor("red"s).SetStrokeColor("black"s));
     }
 
    private:
@@ -52,9 +55,13 @@ class Snowman : public svg::Drawable {
     Snowman(svg::Point center, double rad) : center_(center), rad_(rad) {}
 
     void Draw(svg::ObjectContainer& container) const override {
-        container.Add(svg::Circle(svg::Point{center_.x, center_.y + 5.0 * rad_}, rad_ * 2));
-        container.Add(svg::Circle(svg::Point{center_.x, center_.y + 2.0 * rad_}, rad_ * 1.5));
-        container.Add(svg::Circle(center_, rad_));
+        container.Add(svg::Circle(svg::Point{center_.x, center_.y + 5.0 * rad_}, rad_ * 2)
+                          .SetFillColor("rgb(240,240,240)"s)
+                          .SetStrokeColor("black"s));
+        container.Add(svg::Circle(svg::Point{center_.x, center_.y + 2.0 * rad_}, rad_ * 1.5)
+                          .SetFillColor("rgb(240,240,240)"s)
+                          .SetStrokeColor("black"s));
+        container.Add(svg::Circle(center_, rad_).SetFillColor("rgb(240,240,240)"s).SetStrokeColor("black"s));
     }
 
    private:
