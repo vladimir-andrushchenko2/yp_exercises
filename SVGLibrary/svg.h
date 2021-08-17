@@ -8,6 +8,12 @@
 
 namespace svg {
 
+// Интерфейс Drawable задаёт объекты, которые можно нарисовать с помощью Graphics
+// class Drawable {
+//    public:
+//     virtual void Draw(ObjectContainer& container) const = 0;
+// };
+
 struct Point {
     Point() = default;
     Point(double x, double y) : x(x), y(y) {}
@@ -120,7 +126,7 @@ class Text : public Object {
     std::string data_;
 };
 
-class Document {
+class ObjectContainer {
    public:
     /*
      Метод Add добавляет в svg-документ любой объект-наследник svg::Object.
@@ -131,18 +137,23 @@ class Document {
     template <typename Obj>
     void Add(Obj obj) {
         objects_.emplace_back(std::make_unique<Obj>(std::move(obj)));
-    }
+    };
 
+    virtual void AddPtr(std::unique_ptr<Object>&& obj) = 0;
+
+    virtual ~ObjectContainer() = default;
+
+   protected:
+    std::vector<std::unique_ptr<Object>> objects_;
+};
+
+class Document : public ObjectContainer {
+   public:
     // Добавляет в svg-документ объект-наследник svg::Object
-    void AddPtr(std::unique_ptr<Object>&& obj);
+    void AddPtr(std::unique_ptr<Object>&& obj) override;
 
     // Выводит в ostream svg-представление документа
     void Render(std::ostream& out) const;
-
-    // Прочие методы и данные, необходимые для реализации класса Document
-
-   private:
-    std::vector<std::unique_ptr<Object>> objects_;
 };
 
 }  // namespace svg

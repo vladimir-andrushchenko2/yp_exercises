@@ -1,7 +1,5 @@
 #include "svg.h"
 
-#include <sstream>
-
 namespace svg {
 
 using namespace std::literals;
