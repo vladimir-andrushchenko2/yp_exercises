@@ -8,11 +8,13 @@
 
 namespace svg {
 
+class ObjectContainer;
+
 // Интерфейс Drawable задаёт объекты, которые можно нарисовать с помощью Graphics
-// class Drawable {
-//    public:
-//     virtual void Draw(ObjectContainer& container) const = 0;
-// };
+class Drawable {
+   public:
+    virtual void Draw(ObjectContainer& container) const = 0;
+};
 
 struct Point {
     Point() = default;
