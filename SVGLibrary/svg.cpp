@@ -45,9 +45,12 @@ void Polyline::RenderObject(const RenderContext& context) const {
     auto& out = context.out;
     out << "<polyline points=\""sv;
     
-    for (const auto& point : points_){
-        out << " "sv << point.x << ","sv << point.y;
+    for (size_t i = 0; i < points_.size() - 1; ++i){
+        Point point = points_.at(i);
+        out << point.x << ","sv << point.y << " "sv;
     }
+
+    out << points_.back().x << ","sv << points_.back().y;
     
     out << "\" />"sv;
 }
