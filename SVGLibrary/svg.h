@@ -14,6 +14,8 @@ class ObjectContainer;
 class Drawable {
    public:
     virtual void Draw(ObjectContainer& container) const = 0;
+
+    virtual ~Drawable() = default;
 };
 
 struct Point {
@@ -67,13 +69,15 @@ class Object {
  */
 class Circle final : public Object {
    public:
+    Circle() = default;
+    Circle(Point center, double radius) : center_(center), radius_(radius) {}
     Circle& SetCenter(Point center);
     Circle& SetRadius(double radius);
 
    private:
     void RenderObject(const RenderContext& context) const override;
 
-    Point center_;
+    Point center_ = {0.0, 0.0};
     double radius_ = 1.0;
 };
 
@@ -139,7 +143,7 @@ class ObjectContainer {
     template <typename Obj>
     void Add(Obj obj) {
         objects_.emplace_back(std::make_unique<Obj>(std::move(obj)));
-    };
+    }
 
     virtual void AddPtr(std::unique_ptr<Object>&& obj) = 0;
 
