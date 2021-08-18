@@ -6,13 +6,58 @@
 #include <optional>
 #include <string>
 #include <string_view>
+#include <variant>
 #include <vector>
 
 namespace svg {
 
-using Color = std::string;
+using namespace std::string_view_literals;
 
-inline const Color NoneColor{"none"};
+// ---------- Color ------------------
+
+struct Rgb {
+    Rgb() = default;
+
+    Rgb(uint8_t r, uint8_t g, uint8_t b) : red(r), green(g), blue(b) {}
+
+    uint8_t red = 0;
+    uint8_t green = 0;
+    uint8_t blue = 0;
+};
+
+// ---------- Rgba ------------------
+
+struct Rgba : public Rgb {
+    Rgba() = default;
+
+    Rgba(uint8_t r, uint8_t g, uint8_t b, double a) : Rgb(r, g, b), opacity(a) {}
+
+    double opacity = 1.0;
+};
+
+using Color = std::variant<std::monostate, std::string, Rgb, Rgba>;
+
+inline const std::string NoneColor{"none"};
+
+struct OstreamColorPrinter {
+    std::ostream& out;
+
+    void operator()(std::monostate) const { out << NoneColor; }
+
+    void operator()(const std::string& color) const { out << color; }
+
+    void operator()(const Rgb& rgb) const {
+        out << "rgb("sv << static_cast<int>(rgb.red) << ","sv << static_cast<int>(rgb.green) << ","sv
+            << static_cast<int>(rgb.blue) << ")"sv;
+    }
+
+    void operator()(const Rgba& rgba) const {
+        out << "rgba("sv << static_cast<int>(rgba.red) << ","sv << static_cast<int>(rgba.green) << ","sv
+            << static_cast<int>(rgba.blue) << ","sv << rgba.opacity << ")"sv;
+    }
+};
+
+// ---------- Point ------------------
 
 struct Point {
     Point() = default;
@@ -77,11 +122,15 @@ class PathProps {
         using namespace std::literals;
 
         if (fill_color_) {
-            out << " fill=\""sv << *fill_color_ << "\""sv;
+            out << " fill=\""sv;
+            std::visit(OstreamColorPrinter{out}, *fill_color_);
+            out << "\""sv;
         }
 
         if (stroke_color_) {
-            out << " stroke=\""sv << *stroke_color_ << "\""sv;
+            out << " stroke=\""sv;
+            std::visit(OstreamColorPrinter{out}, *stroke_color_);
+            out << "\""sv;
         }
 
         if (stroke_width_) {

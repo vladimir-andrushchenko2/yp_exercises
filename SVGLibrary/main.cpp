@@ -89,27 +89,25 @@ uint8_t Lerp(uint8_t from, uint8_t to, double t) {
     return static_cast<uint8_t>(std::round((to - from) * t + from));
 }
 
+// Выполняет линейную интерполяцию Rgb цвета от from до to в зависимости от параметра t
+svg::Rgb Lerp(svg::Rgb from, svg::Rgb to, double t) {
+    return {Lerp(from.red, to.red, t), Lerp(from.green, to.green, t), Lerp(from.blue, to.blue, t)};
+}
+
 int main() {
     using namespace svg;
     using namespace std;
 
-    const uint8_t start_r = 0;
-    const uint8_t end_r = 20;
-    const uint8_t start_g = 255;
-    const uint8_t end_g = 20;
-    const uint8_t start_b = 30;
-    const uint8_t end_b = 150;
+    Rgb start_color{0, 255, 30};
+    Rgb end_color{20, 20, 150};
 
     const int num_circles = 10;
     Document doc;
     for (int i = 0; i < num_circles; ++i) {
         const double t = double(i) / (num_circles - 1);
 
-        const string r = to_string(Lerp(start_r, end_r, t));
-        const string g = to_string(Lerp(start_g, end_g, t));
-        const string b = to_string(Lerp(start_b, end_b, t));
+        const Rgb fill_color = Lerp(start_color, end_color, t);
 
-        string fill_color = "rgb("s + r + ","s + g + ","s + b + ")"s;
         doc.Add(Circle()
                     .SetFillColor(fill_color)
                     .SetStrokeColor("black"s)
