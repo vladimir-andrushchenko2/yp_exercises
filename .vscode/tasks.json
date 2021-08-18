@@ -9,8 +9,8 @@
 				"-std=c++17",
 				"-g",
 				"-Wall",
-				"../SVGLibrary/main.cpp",
-				"../SVGLibrary/svg.cpp",
+				"../JsonLoader/main.cpp",
+				"../JsonLoader/json.cpp",
 			],
 			"options": {
 				"cwd": "${fileDirname}"
