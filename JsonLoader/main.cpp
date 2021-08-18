@@ -1,51 +1,88 @@
-// не меняйте файлы json.h и json.cpp
-#include "json.h"
-
-#include <algorithm>
-#include <fstream>
+#include <cassert>
 #include <iostream>
-#include <string_view>
+#include <sstream>
+#include <string>
+#include <variant>
 #include <vector>
 
-using namespace std;
-
-struct Spending {
-    string category;
-    int amount;
+class ParsingError : public std::runtime_error {
+public:
+    using runtime_error::runtime_error;
 };
 
-int CalculateTotalSpendings(const vector<Spending>& spendings) {
-    int result = 0;
-    for (const Spending& s : spendings) {
-        result += s.amount;
-    }
-    return result;
-}
+using Number = std::variant<int, double>;
 
-string FindMostExpensiveCategory(const vector<Spending>& spendings) {
-    auto compare_by_amount = [](const Spending& lhs, const Spending& rhs) {
-        return lhs.amount < rhs.amount;
+Number LoadNumber(std::istream& input) {
+    using namespace std::literals;
+
+    std::string parsed_num;
+
+    // Считывает в parsed_num очередной символ из input
+    auto read_char = [&parsed_num, &input] {
+        parsed_num += static_cast<char>(input.get());
+        if (!input) {
+            throw ParsingError("Failed to read number from stream"s);
+        }
     };
-    return max_element(begin(spendings), end(spendings), compare_by_amount)->category;
-}
 
-vector<Spending> LoadFromJson(istream& input) {
-    const auto document = Load(input);
-    const auto root = document.GetRoot();
-    const auto map_of_spending = root.AsArray();
+    // Считывает одну или более цифр в parsed_num из input
+    auto read_digits = [&input, read_char] {
+        if (!std::isdigit(input.peek())) {
+            throw ParsingError("A digit is expected"s);
+        }
+        while (std::isdigit(input.peek())) {
+            read_char();
+        }
+    };
 
-    vector<Spending> output;
-    for (const auto& spending_info_node : map_of_spending) {
-        const auto spending_info = spending_info_node.AsMap();
-        output.push_back({spending_info.at("category").AsString(), spending_info.at("amount"s).AsInt()});
+    if (input.peek() == '-') {
+        read_char();
+    }
+    // Парсим целую часть числа
+    if (input.peek() == '0') {
+        read_char();
+        // После 0 в JSON не могут идти другие цифры
+    } else {
+        read_digits();
     }
 
-    return output;
+    bool is_int = true;
+    // Парсим дробную часть числа
+    if (input.peek() == '.') {
+        read_char();
+        read_digits();
+        is_int = false;
+    }
+
+    // Парсим экспоненциальную часть числа
+    if (int ch = input.peek(); ch == 'e' || ch == 'E') {
+        read_char();
+        if (ch = input.peek(); ch == '+' || ch == '-') {
+            read_char();
+        }
+        read_digits();
+        is_int = false;
+    }
+
+    try {
+        if (is_int) {
+            // Сначала пробуем преобразовать строку в int
+            try {
+                return std::stoi(parsed_num);
+            } catch (...) {
+                // В случае неудачи, например, при переполнении
+                // код ниже попробует преобразовать строку в double
+            }
+        }
+        return std::stod(parsed_num);
+    } catch (...) {
+        throw ParsingError("Failed to convert "s + parsed_num + " to number"s);
+    }
 }
 
 int main() {
-    // не меняйте main
-    const vector<Spending> spendings = LoadFromJson(cin);
-    cout << "Total "sv << CalculateTotalSpendings(spendings) << '\n';
-    cout << "Most expensive is "sv << FindMostExpensiveCategory(spendings) << '\n';
+    using namespace std;
+    istringstream strm("123.456"s);
+    auto value = LoadNumber(strm);
+    assert(value == Number{123.456});
 }

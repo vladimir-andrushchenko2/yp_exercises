@@ -2,50 +2,14 @@
 
 using namespace std;
 
-Node::Node(vector<Node> array)
-    : as_array_(move(array)) {
-}
+namespace json {
 
-Node::Node(map<string, Node> map)
-    : as_map_(move(map)) {
-}
-
-Node::Node(int value)
-    : as_int_(value) {
-}
-
-Node::Node(string value)
-    : as_string_(move(value)) {
-}
-
-const vector<Node>& Node::AsArray() const {
-    return as_array_;
-}
-
-const map<string, Node>& Node::AsMap() const {
-    return as_map_;
-}
-
-int Node::AsInt() const {
-    return as_int_;
-}
-
-const string& Node::AsString() const {
-    return as_string_;
-}
-
-Document::Document(Node root)
-    : root_(move(root)) {
-}
-
-const Node& Document::GetRoot() const {
-    return root_;
-}
+namespace {
 
 Node LoadNode(istream& input);
 
 Node LoadArray(istream& input) {
-    vector<Node> result;
+    Array result;
 
     for (char c; input >> c && c != ']';) {
         if (c != ',') {
@@ -73,7 +37,7 @@ Node LoadString(istream& input) {
 }
 
 Node LoadDict(istream& input) {
-    map<string, Node> result;
+    Dict result;
 
     for (char c; input >> c && c != '}';) {
         if (c == ',') {
@@ -104,6 +68,57 @@ Node LoadNode(istream& input) {
     }
 }
 
+}  // namespace
+
+Node::Node(Array array)
+    : as_array_(move(array)) {
+}
+
+Node::Node(Dict map)
+    : as_map_(move(map)) {
+}
+
+Node::Node(int value)
+    : as_int_(value) {
+}
+
+Node::Node(string value)
+    : as_string_(move(value)) {
+}
+
+const Array& Node::AsArray() const {
+    return as_array_;
+}
+
+const Dict& Node::AsMap() const {
+    return as_map_;
+}
+
+int Node::AsInt() const {
+    return as_int_;
+}
+
+const string& Node::AsString() const {
+    return as_string_;
+}
+
+Document::Document(Node root)
+    : root_(move(root)) {
+}
+
+const Node& Document::GetRoot() const {
+    return root_;
+}
+
 Document Load(istream& input) {
     return Document{LoadNode(input)};
 }
+
+void Print(const Document& doc, std::ostream& output) {
+    (void) &doc;
+    (void) &output;
+
+    // Реализуйте функцию самостоятельно
+}
+
+}  // namespace json

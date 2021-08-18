@@ -1,27 +1,38 @@
 #pragma once
 
-#include <istream>
+#include <iostream>
 #include <map>
 #include <string>
-#include <unordered_map>
 #include <vector>
+
+namespace json {
+
+class Node;
+using Dict = std::map<std::string, Node>;
+using Array = std::vector<Node>;
+
+// Эта ошибка должна выбрасываться при ошибках парсинга JSON
+class ParsingError : public std::runtime_error {
+public:
+    using runtime_error::runtime_error;
+};
 
 class Node {
 public:
-    explicit Node(std::vector<Node> array);
-    explicit Node(std::map<std::string, Node> map);
+    explicit Node(Array array);
+    explicit Node(Dict map);
     explicit Node(int value);
     explicit Node(std::string value);
 
-    const std::vector<Node>& AsArray() const;
-    const std::map<std::string, Node>& AsMap() const;
+    const Array& AsArray() const;
+    const Dict& AsMap() const;
     int AsInt() const;
     const std::string& AsString() const;
 
 private:
-    std::vector<Node> as_array_;
-    std::map<std::string, Node> as_map_;
-    int as_int_;
+    Array as_array_;
+    Dict as_map_;
+    int as_int_ = 0;
     std::string as_string_;
 };
 
@@ -36,3 +47,7 @@ private:
 };
 
 Document Load(std::istream& input);
+
+void Print(const Document& doc, std::ostream& output);
+
+}  // namespace json
