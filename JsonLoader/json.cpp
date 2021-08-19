@@ -21,6 +21,10 @@ Node LoadArray(istream& input) {
         result.push_back(LoadNode(input));
     }
 
+    if (!input) {
+        throw ParsingError("Array parsing error"s);
+    }
+
     return Node(move(result));
 }
 
@@ -125,13 +129,13 @@ Node LoadString(istream& input) {
                 output += 't';
             } else if (escaped_symbol == '\\') {
                 output += '\\';
-            // mb next condition will prove buggy
+                // mb next condition will prove buggy
             } else if (symbol == '\n' || symbol == '\r') {
                 throw ParsingError("Unexpected end of line"s);
             }
         }
     }
-
+    throw ParsingError("String parsing error");
     assert(false && "reached end of input without reading string successfully");
 }
 
@@ -146,8 +150,7 @@ Node LoadDict(istream& input) {
                     throw ParsingError("Duplicate key '"s + key + "' have been found");
                 }
                 dict.emplace(move(key), LoadNode(input));
-            }
-            else {
+            } else {
                 throw ParsingError(": is expected but '"s + c + "' has been found"s);
             }
         } else if (c != ',') {
@@ -230,6 +233,16 @@ Node::Node(string value) : value_(move(value)) {}
 NodeValue Node::GetValue() const { return value_; }
 
 bool operator==(Node left, Node right) { return left.GetValue() == right.GetValue(); }
+
+bool operator!=(Node left, Node right) { return !(left == right); }
+
+bool operator==(const Document& lhs, const Document& rhs) {
+    return lhs.GetRoot() == rhs.GetRoot();
+}
+
+bool operator!=(const Document& lhs, const Document& rhs) {
+    return !(lhs == rhs);
+}
 
 Document::Document(Node root) : root_(move(root)) {}
 

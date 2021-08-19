@@ -150,7 +150,6 @@ void TestMap() {
     assert(LoadJSON(Print(dict_node)).GetRoot() == dict_node);
 }
 
-/*
 void TestErrorHandling() {
     MustFailToLoad("["s);
     MustFailToLoad("]"s);
@@ -210,7 +209,6 @@ void Benchmark() {
     std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms"sv << std::endl;
 }
 
- */
 }  // namespace
 
 int main() {
@@ -220,9 +218,7 @@ int main() {
     TestBool();
     TestArray();
     TestMap();
-    /*
     TestErrorHandling();
     Benchmark();
-    */
     return 0;
 }
