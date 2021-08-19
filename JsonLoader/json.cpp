@@ -136,24 +136,28 @@ Node LoadString(istream& input) {
 }
 
 Node LoadDict(istream& input) {
-    Dict result;
+    Dict dict;
 
     for (char c; input >> c && c != '}';) {
-        if (c == ',') {
-            input >> c;
-        }
-
-        try {
-            std::string key = std::get<std::string>(LoadString(input).GetValue());
-            input >> c;
-            result.insert({move(key), LoadNode(input)});
-        } catch (const bad_variant_access& e) {
-            // Либо словим std::bad_variant_access в случае ошибки
-            std::cout << e.what() << std::endl;
+        if (c == '"') {
+            std::string key = LoadString(input).AsString();
+            if (input >> c && c == ':') {
+                if (dict.find(key) != dict.end()) {
+                    throw ParsingError("Duplicate key '"s + key + "' have been found");
+                }
+                dict.emplace(move(key), LoadNode(input));
+            }
+            else {
+                throw ParsingError(": is expected but '"s + c + "' has been found"s);
+            }
+        } else if (c != ',') {
+            throw ParsingError(R"(',' is expected but ')"s + c + "' has been found"s);
         }
     }
-
-    return Node(move(result));
+    if (!input) {
+        throw ParsingError("Dictionary parsing error"s);
+    }
+    return Node(move(dict));
 }
 
 std::string ReadAlphabetic(istream& input) {
@@ -242,7 +246,7 @@ struct OstreamNodeValuePrinter {
         out << '{';
         for (auto it = dict.begin(); it != dict.end(); ++it) {
             const auto& [key, value] = *it;
-            out << key << ':';
+            out << '"' << key << '"' << ':';
             std::visit(OstreamNodeValuePrinter{out}, value.GetValue());
             if (std::next(it) != dict.end()) {
                 out << ',';

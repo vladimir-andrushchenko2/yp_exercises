@@ -22,14 +22,14 @@ public:
 
 class Node {
 public:
-    explicit Node();
-    explicit Node(const nullptr_t&);
-    explicit Node(Array array);
-    explicit Node(Dict map);
-    explicit Node(bool value);
-    explicit Node(int value);
-    explicit Node(double value);
-    explicit Node(std::string value);
+    Node();
+    Node(const nullptr_t&);
+    Node(Array array);
+    Node(Dict map);
+    Node(bool value);
+    Node(int value);
+    Node(double value);
+    Node(std::string value);
 
     bool IsNull() const {
         return std::holds_alternative<nullptr_t>(value_);
@@ -69,6 +69,30 @@ public:
 
     bool AsBool() const {
         return std::get<bool>(value_);
+    }
+
+    bool IsArray() const {
+        return std::holds_alternative<Array>(value_);
+    }
+
+    Array& AsArray() {
+        return std::get<Array>(value_);
+    }
+
+    const Array& AsArray() const {
+        return std::get<Array>(value_);
+    }
+
+    bool IsMap() const {
+        return std::holds_alternative<Dict>(value_);
+    }
+
+    Dict& AsMap() {
+        return std::get<Dict>(value_);
+    }
+    
+    const Dict& AsMap() const {
+        return std::get<Dict>(value_);
     }
 
     NodeValue GetValue() const;
