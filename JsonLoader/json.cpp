@@ -96,16 +96,6 @@ Node LoadNumber(std::istream& input) {
     }
 }
 
-// Node LoadInt(istream& input) {
-//    int result = 0;
-//    while (isdigit(input.peek())) {
-//        result *= 10;
-//        result += input.get() - '0';
-//    }
-//    return Node(result);
-//}
-
-// this only mb works correctly
 Node LoadString(istream& input) {
     std::string output;
 
