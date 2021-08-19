@@ -102,9 +102,35 @@ Node LoadNumber(std::istream& input) {
 //}
 
 Node LoadString(istream& input) {
-    std::string line;
-    getline(input, line, '"');
-    return Node(move(line));
+    std::string output;
+    char symbol;
+    while (input.get(symbol)) {
+        if (symbol == '"') {
+            return Node(output);
+        }
+
+        if (symbol != '\\') {
+            output += symbol;
+        } else {
+            char escaped_symbol;
+            input.get(escaped_symbol);
+            if (escaped_symbol == 'n') {
+                output += '\n';
+            } else if (escaped_symbol == 'r') {
+                output += '\r';
+            } else if (escaped_symbol == '"') {
+                output += '"';
+            } else if (escaped_symbol == 't') {
+                output += 't';
+            } else if (escaped_symbol == '\\') {
+                output += '\\';
+            } else if (symbol == '\n' || symbol == '\r') {
+                throw ParsingError("Unexpected end of line"s);
+            }
+        }
+    }
+
+    assert(false && "reached end of input without reading string successfully");
 }
 
 Node LoadDict(istream& input) {
@@ -197,9 +223,7 @@ Node::Node(string value) : value_(move(value)) {}
 
 NodeValue Node::GetValue() const { return value_; }
 
-bool operator==(Node left, Node right) {
-    return left.GetValue() == right.GetValue();
-}
+bool operator==(Node left, Node right) { return left.GetValue() == right.GetValue(); }
 
 Document::Document(Node root) : root_(move(root)) {}
 
@@ -248,7 +272,24 @@ struct OstreamNodeValuePrinter {
 
     void operator()(std::string str) const {
         out << '"';
-        out << str;
+        for (const char c : str) {
+            switch (c) {
+                case '\r':
+                    out << "\\r"sv;
+                    break;
+                case '\n':
+                    out << "\\n"sv;
+                    break;
+                case '"':
+                    [[fallthrough]];
+                case '\\':
+                    out.put('\\');
+                    [[fallthrough]];
+                default:
+                    out.put(c);
+                    break;
+            }
+        }
         out << '"';
     }
 };

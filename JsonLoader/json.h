@@ -55,6 +55,14 @@ public:
         return IsPureDouble() ? std::get<double>(value_) : AsInt();
     }
 
+    bool IsString() const {
+        return std::holds_alternative<std::string>(value_);
+    }
+
+    std::string AsString() const {
+        return std::get<std::string>(value_);
+    }
+
     NodeValue GetValue() const;
 
 private:
