@@ -108,6 +108,7 @@ Node LoadNumber(std::istream& input) {
 // this only mb works correctly
 Node LoadString(istream& input) {
     std::string output;
+
     char symbol;
     while (input.get(symbol)) {
         if (symbol == '"') {
@@ -141,6 +142,7 @@ Node LoadString(istream& input) {
             throw ParsingError("Unexpected end of line"s);
         }
     }
+
     throw ParsingError("String parsing error");
 }
 
