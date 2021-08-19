@@ -118,25 +118,30 @@ Node LoadString(istream& input) {
             output += symbol;
         } else {
             char escaped_symbol;
-            input.get(escaped_symbol);
-            if (escaped_symbol == 'n') {
-                output += '\n';
-            } else if (escaped_symbol == 'r') {
-                output += '\r';
-            } else if (escaped_symbol == '"') {
-                output += '"';
-            } else if (escaped_symbol == 't') {
-                output += 't';
-            } else if (escaped_symbol == '\\') {
-                output += '\\';
-                // mb next condition will prove buggy
-            } else if (symbol == '\n' || symbol == '\r') {
-                throw ParsingError("Unexpected end of line"s);
+            if (input.get(escaped_symbol)) {
+                if (escaped_symbol == 'n') {
+                    output += '\n';
+                } else if (escaped_symbol == 'r') {
+                    output += '\r';
+                } else if (escaped_symbol == '"') {
+                    output += '"';
+                } else if (escaped_symbol == 't') {
+                    output += '\t';
+                } else if (escaped_symbol == '\\') {
+                    output += '\\';
+                } else {
+                    throw ParsingError("Unrecognized escape sequence \\"s + escaped_symbol);
+                }
+            } else {
+                throw ParsingError("String parsing error");
             }
+        }
+
+        if (symbol == '\n' || symbol == '\r') {
+            throw ParsingError("Unexpected end of line"s);
         }
     }
     throw ParsingError("String parsing error");
-    assert(false && "reached end of input without reading string successfully");
 }
 
 Node LoadDict(istream& input) {
@@ -236,13 +241,9 @@ bool operator==(Node left, Node right) { return left.GetValue() == right.GetValu
 
 bool operator!=(Node left, Node right) { return !(left == right); }
 
-bool operator==(const Document& lhs, const Document& rhs) {
-    return lhs.GetRoot() == rhs.GetRoot();
-}
+bool operator==(const Document& lhs, const Document& rhs) { return lhs.GetRoot() == rhs.GetRoot(); }
 
-bool operator!=(const Document& lhs, const Document& rhs) {
-    return !(lhs == rhs);
-}
+bool operator!=(const Document& lhs, const Document& rhs) { return !(lhs == rhs); }
 
 Document::Document(Node root) : root_(move(root)) {}
 
