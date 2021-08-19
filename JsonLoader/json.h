@@ -63,6 +63,14 @@ public:
         return std::get<std::string>(value_);
     }
 
+    bool IsBool() const {
+        return std::holds_alternative<bool>(value_);
+    }
+
+    bool AsBool() const {
+        return std::get<bool>(value_);
+    }
+
     NodeValue GetValue() const;
 
 private:

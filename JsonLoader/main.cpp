@@ -111,7 +111,6 @@ void TestStrings() {
     assert(LoadJSON(Print(str_node)).GetRoot() == str_node);
 }
 
-/*
 void TestBool() {
     Node true_node{true};
     assert(true_node.IsBool());
@@ -139,6 +138,7 @@ void TestArray() {
     assert(LoadJSON(Print(arr_node)).GetRoot() == arr_node);
 }
 
+/*
 void TestMap() {
     Node dict_node{Dict{{"key1"s, "value1"s}, {"key2"s, 42}}};
     assert(dict_node.IsMap());
@@ -217,9 +217,9 @@ int main() {
     TestNull();
     TestNumbers();
     TestStrings();
-    /*
     TestBool();
     TestArray();
+    /*
     TestMap();
     TestErrorHandling();
     Benchmark();

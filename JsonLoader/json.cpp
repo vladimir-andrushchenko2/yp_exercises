@@ -101,6 +101,7 @@ Node LoadNumber(std::istream& input) {
 //    return Node(result);
 //}
 
+// this only mb works correctly
 Node LoadString(istream& input) {
     std::string output;
     char symbol;
@@ -124,6 +125,7 @@ Node LoadString(istream& input) {
                 output += 't';
             } else if (escaped_symbol == '\\') {
                 output += '\\';
+            // mb next condition will prove buggy
             } else if (symbol == '\n' || symbol == '\r') {
                 throw ParsingError("Unexpected end of line"s);
             }
