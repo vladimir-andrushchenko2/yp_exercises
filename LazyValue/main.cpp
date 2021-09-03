@@ -1,18 +1,30 @@
 #include <cassert>
 #include <functional>
 #include <string>
+#include <optional>
 
 using namespace std;
 
 template <typename T>
 class LazyValue {
 public:
-    explicit LazyValue(function<T()> init);
+    explicit LazyValue(function<T()> init) : init_func_(init) {}
 
-    bool HasValue() const;
-    const T& Get() const;
+    bool HasValue() const {
+        return value_.has_value();
+    }
+
+    const T& Get() const {
+        if (!value_.has_value()) {
+            value_ = init_func_();
+        }
+
+        return value_.value();
+    }
 
 private:
+    mutable std::optional<T> value_;
+    function<T()> init_func_;
 };
 
 void UseExample() {
