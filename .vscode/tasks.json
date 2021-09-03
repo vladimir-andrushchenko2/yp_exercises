@@ -9,7 +9,7 @@
 				"-std=c++17",
 				"-g",
 				"-Wall",
-				"../IILE/*.cpp",
+				"../FileStreams/*.cpp",
 			],
 			"options": {
 				"cwd": "${fileDirname}"

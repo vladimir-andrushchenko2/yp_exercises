@@ -8,11 +8,22 @@ using namespace std;
 
 // реализуйте эту функцию:
 void CreateFiles(const string& config_file) {
-    ifstream in_file("test.txt"s);
-    ofstream out_file;
+    ifstream in_file(config_file);
 
-    for (std::string line; std::getline(in_file, line); ) {
-        if ()
+    std::string line;
+    std::getline(in_file, line);
+
+    ofstream out_file(line);
+
+    while (std::getline(in_file, line)) {
+        if (std::string_view sv = line; line.at(0) == '>') {
+            sv.remove_prefix(1);
+
+            out_file << sv << '\n';
+        } else {
+            out_file.close();
+            out_file.open(line);
+        }
     }
 }
 
