@@ -52,13 +52,17 @@ vector<Person> ReadPeople(istream& input) {
 }
 
 int main() {
-    vector<Person> people = ReadPeople(cin);
+    const vector<Person> people = []{
+    auto people = ReadPeople(cin);
 
     sort(people.begin(), people.end(),
         [](const Person& lhs, const Person& rhs) {
         return lhs.age < rhs.age;
     });
 
+    return people;
+    }();
+    
     for (string command; cin >> command;) {
         if (command == "AGE"s) {
             int adult_age;
@@ -75,25 +79,31 @@ int main() {
             int count;
             cin >> count;
 
-            auto head = Head(people, count);
+            auto people_copy = people;
 
-            partial_sort(head.begin(), head.end(), people.end(),
+            auto head = Head(people_copy, count);
+
+            partial_sort(head.begin(), head.end(), people_copy.end(),
                 [](const Person& lhs, const Person& rhs) {
                 return lhs.income > rhs.income;
             });
 
-            int total_income = accumulate(head.begin(), head.end(), 0, [](int cur, Person& p) {
-                return p.income += cur;
+            int total_income = accumulate(head.begin(), head.end(), 0, [](int cur, const Person& p) {
+                return p.income + cur;
             });
+
             cout << "Top-"s << count << " people have total income "s << total_income << '\n';
         } else if (command == "POPULAR_NAME"s) {
             char gender;
             cin >> gender;
 
-            IteratorRange range{people.begin(), partition(people.begin(), people.end(),
-                                [gender](Person& p) {
-                                    return p.is_male = (gender == 'M');
+            auto people_copy = people;
+
+            IteratorRange range{people_copy.begin(), partition(people_copy.begin(), people_copy.end(),
+                                [gender](const Person& p) {
+                                    return p.is_male == (gender == 'M');
                                 })};
+
             if (range.begin() == range.end()) {
                 cout << "No people of gender "s << gender << '\n';
             } else {
