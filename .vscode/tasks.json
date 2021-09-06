@@ -9,7 +9,7 @@
 				"-std=c++17",
 				"-g",
 				"-Wall",
-				"../FileStreams/*.cpp",
+				"../Proprocessor/*.cpp",
 			],
 			"options": {
 				"cwd": "${fileDirname}"
