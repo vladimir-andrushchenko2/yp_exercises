@@ -9,7 +9,7 @@
 				"-std=c++17",
 				"-g",
 				"-Wall",
-				"../Proprocessor/*.cpp",
+				"../FlightProvider/*.cpp",
 			],
 			"options": {
 				"cwd": "${fileDirname}"

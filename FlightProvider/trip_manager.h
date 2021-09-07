@@ -1,28 +1,41 @@
 #pragma once
-#include "flight_provider.h"
-#include "hotel_provider.h"
-
 #include <string>
 #include <vector>
 
+#include "flight_provider.h"
+#include "hotel_provider.h"
+
 class Trip {
-public:
-    ???
+   public:
+    Trip(HotelProvider& hp, FlightProvider& fp) : hp_(hp), fp_(fp) {}
+    Trip(const Trip&) = delete;
+    Trip(Trip&& other) = default;
+    Trip& operator=(const Trip&) = delete;
+    Trip& operator=(Trip&&) = delete;
+    void Cancel() {
+        for (const FlightProvider::BookingId flight_id : flights) {
+            fp_.Cancel(flight_id);
+        }
+        
+        for (const HotelProvider::BookingId hotel_id : hotels) {
+            hp_.Cancel(hotel_id);
+        }
+    }
+    ~Trip() {
+        Cancel();
+    }
 
-    Trip(HotelProvider& hp, FlightProvider& fp);
-    Trip(const Trip&);
-    Trip(Trip&&);
-    Trip& operator=(const Trip&);
-    Trip& operator=(Trip&&);
-    void Cancel();
-    ~Trip();
+   public:
+    std::vector<FlightProvider::BookingId> flights;
+    std::vector<HotelProvider::BookingId> hotels;
 
-private:
-    ???
+   private:
+    HotelProvider& hp_;
+    FlightProvider& fp_;
 };
 
 class TripManager {
-public:
+   public:
     using BookingId = std::string;
     struct BookingData {
         std::string city_from;
@@ -31,8 +44,8 @@ public:
         std::string date_to;
     };
 
-    Trip Book(const BookingData& data) {
-        Trip trip(???);
+    Trip Book(const BookingData&) {
+        Trip trip(hotel_provider_, flight_provider_);
         {
             FlightProvider::BookingData flight_booking_data;
             trip.flights.push_back(flight_provider_.Book(flight_booking_data));
@@ -48,11 +61,9 @@ public:
         return trip;
     }
 
-    void Cancel(Trip& trip) {
-        trip.Cancel();
-    }
+    void Cancel(Trip& trip) { trip.Cancel(); }
 
-private:
+   private:
     HotelProvider hotel_provider_;
     FlightProvider flight_provider_;
 };
