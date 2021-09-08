@@ -20,45 +20,22 @@ class ExpectsKeyOrEndDict {
 class Builder {
 public:
     Builder& Value(Node::Value value) {
-        // value == string
-        if (const std::string* val = std::get_if<std::string>(&value)) {
-            if (nodes_stack_.empty()) {
-                root_ = {*val};
-                return *this;
-            }
+        std::unique_ptr<Node> ptr;
+        visit([&ptr](auto&& val) {
+            ptr = std::make_unique<Node>(val);
+        }, value);
 
-            if (nodes_stack_.back()->IsArray()) {
-                nodes_stack_.back()->AsArray().emplace_back(*val);
-                return *this;
-            }
-
-            throw std::logic_error("couldn't put string into an Array"s);
-
-        // // value == Dict
-        // } else if (const json::Dict* val = std::get_if<json::Dict>(&value)) {
-        //     if (nodes_stack_.empty()) {
-        //         root_ = {*val};
-        //     } else {
-        //         auto ptr = std::make_unique<Node>();
-        //         *ptr = *val;
-        //         nodes_stack_.push_back(std::move(ptr));
-        //     }
-
-        // // value == Array
-        // } else if (const json::Array* val = std::get_if<json::Array>(&value)) {
-        //     if (nodes_stack_.empty()) {
-        //         root_ = {*val};
-        //     } else {
-        //         auto ptr = std::make_unique<Node>();
-        //         *ptr = *val;
-        //         nodes_stack_.push_back(std::move(ptr));
-        //     
-            
-        } else {
-            throw std::logic_error("Value method didn't accept string, dict, or array ar argument"s);
+        if (nodes_stack_.empty()) {
+            root_ = *ptr.release();
+            return *this;
         }
 
-        return *this;
+        if (nodes_stack_.back()->IsArray()) {
+            nodes_stack_.back()->AsArray().emplace_back(*ptr.release());
+            return *this;
+        }
+
+        throw std::logic_error("value couldn't be inserted"s);
     }
 
     Builder& StartArray() {

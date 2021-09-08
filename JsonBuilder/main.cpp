@@ -32,7 +32,9 @@ int main() {
             json::Builder{}
                 .StartArray()
                 .Value("Hello"s)
-                .Value("World"s)
+                    .StartArray()
+                    .Value("World"s)
+                    .EndArray()
                 .EndArray()
             .Build()
         },

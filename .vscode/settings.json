@@ -84,6 +84,7 @@
         "codecvt": "cpp",
         "fstream": "cpp",
         "stack": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "regex": "cpp"
     }
 }
