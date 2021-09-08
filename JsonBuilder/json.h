@@ -76,6 +76,15 @@ public:
         return std::get<Array>(*this);
     }
 
+    Array& AsArray() {
+        using namespace std::literals;
+        if (!IsArray()) {
+            throw std::logic_error("Not a map"s);
+        }
+
+        return std::get<Array>(*this);
+    }
+
     bool IsString() const {
         return std::holds_alternative<std::string>(*this);
     }
