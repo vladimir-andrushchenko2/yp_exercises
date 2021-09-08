@@ -35,6 +35,9 @@
 		75FD562A26E66DA00041A2F1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75FD562926E66DA00041A2F1 /* main.cpp */; };
 		75FD563526E67EB00041A2F1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75FD563426E67EB00041A2F1 /* main.cpp */; };
 		75FD564026E68AC20041A2F1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75FD563F26E68AC20041A2F1 /* main.cpp */; };
+		75FD565326E8BA850041A2F1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75FD565226E8BA850041A2F1 /* main.cpp */; };
+		75FD565926E8BAC60041A2F1 /* json_builder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75FD565826E8BAC60041A2F1 /* json_builder.cpp */; };
+		75FD565C26E8BAE90041A2F1 /* json.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75FD565B26E8BAE90041A2F1 /* json.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -245,6 +248,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		75FD564E26E8BA850041A2F1 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -311,6 +323,16 @@
 		75FD564426E68AD60041A2F1 /* trip_manager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = trip_manager.h; sourceTree = "<group>"; };
 		75FD564526E68AE10041A2F1 /* hotel_provider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = hotel_provider.h; sourceTree = "<group>"; };
 		75FD564626E68AF60041A2F1 /* flight_provider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = flight_provider.h; sourceTree = "<group>"; };
+		75FD564826E8B55A0041A2F1 /* new_trip_manager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = new_trip_manager.h; sourceTree = "<group>"; };
+		75FD564926E8B5740041A2F1 /* new_hotel_provider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = new_hotel_provider.h; sourceTree = "<group>"; };
+		75FD564A26E8B58D0041A2F1 /* new_flight_provider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = new_flight_provider.h; sourceTree = "<group>"; };
+		75FD564B26E8B59C0041A2F1 /* booking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = booking.h; sourceTree = "<group>"; };
+		75FD565026E8BA850041A2F1 /* JsonBuilder */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = JsonBuilder; sourceTree = BUILT_PRODUCTS_DIR; };
+		75FD565226E8BA850041A2F1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		75FD565726E8BAB70041A2F1 /* json_builder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = json_builder.h; sourceTree = "<group>"; };
+		75FD565826E8BAC60041A2F1 /* json_builder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = json_builder.cpp; sourceTree = "<group>"; };
+		75FD565A26E8BADC0041A2F1 /* json.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
+		75FD565B26E8BAE90041A2F1 /* json.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = json.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -475,6 +497,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		75FD564D26E8BA850041A2F1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -546,6 +575,7 @@
 				75FD562826E66DA00041A2F1 /* UniquePtr */,
 				75FD563326E67EB00041A2F1 /* HotelManager */,
 				75FD563E26E68AC20041A2F1 /* FlightProvider */,
+				75FD565126E8BA850041A2F1 /* JsonBuilder */,
 				750B0A6626A86E00002A522A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -576,6 +606,7 @@
 				75FD562726E66DA00041A2F1 /* UniquePtr */,
 				75FD563226E67EB00041A2F1 /* HotelManager */,
 				75FD563D26E68AC20041A2F1 /* FlightProvider */,
+				75FD565026E8BA850041A2F1 /* JsonBuilder */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -732,11 +763,27 @@
 			isa = PBXGroup;
 			children = (
 				75FD563F26E68AC20041A2F1 /* main.cpp */,
+				75FD564826E8B55A0041A2F1 /* new_trip_manager.h */,
+				75FD564926E8B5740041A2F1 /* new_hotel_provider.h */,
+				75FD564A26E8B58D0041A2F1 /* new_flight_provider.h */,
+				75FD564B26E8B59C0041A2F1 /* booking.h */,
 				75FD564426E68AD60041A2F1 /* trip_manager.h */,
 				75FD564526E68AE10041A2F1 /* hotel_provider.h */,
 				75FD564626E68AF60041A2F1 /* flight_provider.h */,
 			);
 			path = FlightProvider;
+			sourceTree = "<group>";
+		};
+		75FD565126E8BA850041A2F1 /* JsonBuilder */ = {
+			isa = PBXGroup;
+			children = (
+				75FD565226E8BA850041A2F1 /* main.cpp */,
+				75FD565726E8BAB70041A2F1 /* json_builder.h */,
+				75FD565826E8BAC60041A2F1 /* json_builder.cpp */,
+				75FD565A26E8BADC0041A2F1 /* json.h */,
+				75FD565B26E8BAE90041A2F1 /* json.cpp */,
+			);
+			path = JsonBuilder;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1133,6 +1180,23 @@
 			productReference = 75FD563D26E68AC20041A2F1 /* FlightProvider */;
 			productType = "com.apple.product-type.tool";
 		};
+		75FD564F26E8BA850041A2F1 /* JsonBuilder */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 75FD565426E8BA850041A2F1 /* Build configuration list for PBXNativeTarget "JsonBuilder" */;
+			buildPhases = (
+				75FD564C26E8BA850041A2F1 /* Sources */,
+				75FD564D26E8BA850041A2F1 /* Frameworks */,
+				75FD564E26E8BA850041A2F1 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JsonBuilder;
+			productName = JsonBuilder;
+			productReference = 75FD565026E8BA850041A2F1 /* JsonBuilder */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1211,6 +1275,9 @@
 					75FD563C26E68AC20041A2F1 = {
 						CreatedOnToolsVersion = 13.0;
 					};
+					75FD564F26E8BA850041A2F1 = {
+						CreatedOnToolsVersion = 13.0;
+					};
 				};
 			};
 			buildConfigurationList = 750B0A6026A86E00002A522A /* Build configuration list for PBXProject "yp_exercises" */;
@@ -1249,6 +1316,7 @@
 				75FD562626E66DA00041A2F1 /* UniquePtr */,
 				75FD563126E67EB00041A2F1 /* HotelManager */,
 				75FD563C26E68AC20041A2F1 /* FlightProvider */,
+				75FD564F26E8BA850041A2F1 /* JsonBuilder */,
 			);
 		};
 /* End PBXProject section */
@@ -1440,6 +1508,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				75FD564026E68AC20041A2F1 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75FD564C26E8BA850041A2F1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75FD565326E8BA850041A2F1 /* main.cpp in Sources */,
+				75FD565926E8BAC60041A2F1 /* json_builder.cpp in Sources */,
+				75FD565C26E8BAE90041A2F1 /* json.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1973,6 +2051,26 @@
 			};
 			name = Release;
 		};
+		75FD565526E8BA850041A2F1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		75FD565626E8BA850041A2F1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CODE_SIGN_STYLE = Automatic;
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2188,6 +2286,15 @@
 			buildConfigurations = (
 				75FD564226E68AC20041A2F1 /* Debug */,
 				75FD564326E68AC20041A2F1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		75FD565426E8BA850041A2F1 /* Build configuration list for PBXNativeTarget "JsonBuilder" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75FD565526E8BA850041A2F1 /* Debug */,
+				75FD565626E8BA850041A2F1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
