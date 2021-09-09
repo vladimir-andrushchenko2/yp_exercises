@@ -41,6 +41,7 @@ class Builder {
             return *this;
         }
 
+        // if root not
         throw std::logic_error("value couldn't be inserted"s);
     }
 
@@ -87,6 +88,18 @@ class Builder {
 
     // Dict
     Builder& StartDict() {
+        // not null for when it is the first element
+        if (!root_.IsNull()) {
+            throw std::logic_error("probably object has already been constructed"s);
+        }
+
+        // nodes_stack_ can be empty so Dict will be root or new dict can be an element in array or
+        // value to key in Dict
+        if (!(nodes_stack_.empty() || nodes_stack_.back()->IsArray() ||
+              nodes_stack_.back()->IsString())) {
+            throw std::logic_error("nodes stack is not empty"s);
+        }
+
         auto ptr = std::make_unique<Node>();
         *ptr = json::Dict{};
         nodes_stack_.push_back(std::move(ptr));
@@ -138,10 +151,22 @@ class Builder {
         throw std::logic_error("couldn't insert key"s);
     }
 
-    Node Build() { return root_; }
+    Node Build() const {
+        if (root_.IsNull()) {
+            // if object hasn't been constructed
+            throw std::logic_error("root is null"s);
+        }
+
+        if (!nodes_stack_.empty()) {
+            // if object is unfinished
+            throw std::logic_error("stack is not empty"s);
+        }
+
+        return root_;
+    }
 
    private:
-    Node root_;
+    Node root_ = nullptr;
     std::vector<std::unique_ptr<Node>> nodes_stack_;
 };
 
