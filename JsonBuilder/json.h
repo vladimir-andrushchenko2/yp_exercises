@@ -18,7 +18,7 @@ public:
 };
 
 class Node final
-    : public std::variant<std::nullptr_t, Array, Dict, bool, int, double, std::string> {
+: public std::variant<std::nullptr_t, Array, Dict, bool, int, double, std::string> {
 public:
     using variant::variant;
     using Value = variant;
@@ -109,6 +109,15 @@ public:
         return std::get<Dict>(*this);
     }
 
+    Dict& AsDict() {
+        using namespace std::literals;
+        if (!IsDict()) {
+            throw std::logic_error("Not a dict"s);
+        }
+
+        return std::get<Dict>(*this);
+    }
+
     bool operator==(const Node& rhs) const {
         return GetValue() == rhs.GetValue();
     }
@@ -125,7 +134,7 @@ inline bool operator!=(const Node& lhs, const Node& rhs) {
 class Document {
 public:
     explicit Document(Node root)
-        : root_(std::move(root)) {
+    : root_(std::move(root)) {
     }
 
     const Node& GetRoot() const {
