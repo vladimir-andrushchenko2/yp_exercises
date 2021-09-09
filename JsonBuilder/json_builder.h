@@ -47,6 +47,18 @@ class Builder {
 
     // Array
     Builder& StartArray() {
+        // not null for when it is the first element
+        if (!root_.IsNull()) {
+            throw std::logic_error("probably object has already been constructed"s);
+        }
+
+        // nodes_stack_ can be empty so Dict will be root or new dict can be an element in array or
+        // value to key in Dict
+        if (!(nodes_stack_.empty() || nodes_stack_.back()->IsArray() ||
+              nodes_stack_.back()->IsString())) {
+            throw std::logic_error("nodes stack is not empty"s);
+        }
+        
         auto ptr = std::make_unique<Node>();
         *ptr = json::Array{};
         nodes_stack_.push_back(std::move(ptr));
