@@ -16,12 +16,16 @@ class ExpectsKeyOrEndDict {};
 class Builder {
    public:
     Builder& Value(Node::Value value) {
+        if (!root_.IsNull()) {
+            throw std::logic_error("value has to be null when Value method is used"s);
+        }
         // Get node using value
         std::unique_ptr<Node> ptr;
         visit([&ptr](auto&& val) { ptr = std::make_unique<Node>(val); }, value);
 
         // For empty
         if (nodes_stack_.empty()) {
+            not_constructed_ = false;
             root_ = *ptr.release();
             return *this;
         }
@@ -58,7 +62,7 @@ class Builder {
               nodes_stack_.back()->IsString())) {
             throw std::logic_error("nodes stack is not empty"s);
         }
-        
+
         auto ptr = std::make_unique<Node>();
         *ptr = json::Array{};
         nodes_stack_.push_back(std::move(ptr));
@@ -67,12 +71,18 @@ class Builder {
     }
 
     Builder& EndArray() {
+        if (nodes_stack_.empty()
+            || !nodes_stack_.back()->IsArray()) {
+            throw std::logic_error("end dict problem"s);
+        }
+
         if (nodes_stack_.back()->IsArray()) {
             auto array_being_closed = std::move(nodes_stack_.back());
             nodes_stack_.pop_back();
 
             // if array is root element
             if (nodes_stack_.empty()) {
+                not_constructed_ = false;
                 root_ = *array_being_closed.release();
 
                 return *this;
@@ -120,11 +130,17 @@ class Builder {
     }
 
     Builder& EndDict() {
+        if (nodes_stack_.empty()
+            || !nodes_stack_.back()->IsDict()) {
+            throw std::logic_error("end dict problem"s);
+        }
+
         if (nodes_stack_.back()->IsDict()) {
             auto dict_being_closed = std::move(nodes_stack_.back());
             nodes_stack_.pop_back();
 
             if (nodes_stack_.empty()) {
+                not_constructed_ = false;
                 root_ = *dict_being_closed.release();
 
                 return *this;
@@ -152,6 +168,10 @@ class Builder {
     }
 
     Builder& Key(std::string key) {
+        if (nodes_stack_.empty() || !root_.IsNull()) {
+            throw std::logic_error("couldn't use Key"s);
+        }
+
         if (nodes_stack_.back()->IsDict()) {
             auto ptr = std::make_unique<Node>();
             *ptr = std::move(key);
@@ -169,6 +189,10 @@ class Builder {
             throw std::logic_error("root is null"s);
         }
 
+        if (not_constructed_) {
+            throw std::logic_error("hasn't been constructed"s);
+        }
+
         if (!nodes_stack_.empty()) {
             // if object is unfinished
             throw std::logic_error("stack is not empty"s);
@@ -178,6 +202,7 @@ class Builder {
     }
 
    private:
+    bool not_constructed_ = true;
     Node root_ = nullptr;
     std::vector<std::unique_ptr<Node>> nodes_stack_;
 };

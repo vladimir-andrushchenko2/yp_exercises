@@ -5,6 +5,32 @@
 using namespace std;
 
 int main() {
+    try {
+        json::Print(
+            json::Document{
+                json::Builder{}.Build()
+            },
+            cout
+        );
+        cout << endl;
+    } catch (std::logic_error& e) {
+        std::cout << e.what() << std::endl;
+    }
+
+    try {
+        json::Print(
+            json::Document{
+                json::Builder{}.StartArray().Value("lol"s).Build()
+            },
+            cout
+        );
+        cout << endl;
+    } catch (std::logic_error& e) {
+        std::cout << e.what() << std::endl;
+    }
+
+
+
     json::Print(
         json::Document{
             json::Builder{}
