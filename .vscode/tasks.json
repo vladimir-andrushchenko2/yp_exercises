@@ -9,7 +9,7 @@
 				"-std=c++17",
 				"-g",
 				"-Wall",
-				"../FlightProvider/*.cpp",
+				"../JsonBuilder/*.cpp",
 			],
 			"options": {
 				"cwd": "${fileDirname}"

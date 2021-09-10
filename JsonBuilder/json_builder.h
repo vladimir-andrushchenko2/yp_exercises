@@ -25,7 +25,6 @@ class Builder {
 
         // For empty
         if (nodes_stack_.empty()) {
-            not_constructed_ = false;
             root_ = *ptr.release();
             return *this;
         }
@@ -82,7 +81,6 @@ class Builder {
 
             // if array is root element
             if (nodes_stack_.empty()) {
-                not_constructed_ = false;
                 root_ = *array_being_closed.release();
 
                 return *this;
@@ -140,7 +138,6 @@ class Builder {
             nodes_stack_.pop_back();
 
             if (nodes_stack_.empty()) {
-                not_constructed_ = false;
                 root_ = *dict_being_closed.release();
 
                 return *this;
@@ -189,10 +186,6 @@ class Builder {
             throw std::logic_error("root is null"s);
         }
 
-        if (not_constructed_) {
-            throw std::logic_error("hasn't been constructed"s);
-        }
-
         if (!nodes_stack_.empty()) {
             // if object is unfinished
             throw std::logic_error("stack is not empty"s);
@@ -202,7 +195,6 @@ class Builder {
     }
 
    private:
-    bool not_constructed_ = true;
     Node root_ = nullptr;
     std::vector<std::unique_ptr<Node>> nodes_stack_;
 };
