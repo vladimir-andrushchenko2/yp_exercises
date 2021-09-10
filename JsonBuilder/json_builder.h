@@ -70,8 +70,7 @@ class Builder {
     }
 
     Builder& EndArray() {
-        if (nodes_stack_.empty()
-            || !nodes_stack_.back()->IsArray()) {
+        if (nodes_stack_.empty()) {
             throw std::logic_error("end dict problem"s);
         }
 
@@ -128,8 +127,7 @@ class Builder {
     }
 
     Builder& EndDict() {
-        if (nodes_stack_.empty()
-            || !nodes_stack_.back()->IsDict()) {
+        if (nodes_stack_.empty()) {
             throw std::logic_error("end dict problem"s);
         }
 
