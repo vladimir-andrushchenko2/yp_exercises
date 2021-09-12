@@ -73,18 +73,17 @@ class Builder {
     // After value that followed after Key(...)
     class AfterValueInDictContext {
        public:
-        AfterValueInDictContext(AfterKeyContext& key_item_context)
-            : after_key_context_(key_item_context) {}
+        AfterValueInDictContext(Builder& builder)
+            : builder_(builder) {}
 
         auto& Key(std::string value) {
-            after_key_context_.builder_.Key(value);
-            return after_key_context_;
+            return builder_.Key(value);
         }
 
-        auto& EndDict() { return after_key_context_.builder_.EndDict(); }
+        auto& EndDict() { return builder_.EndDict(); }
 
        private:
-        AfterKeyContext& after_key_context_;
+        Builder& builder_;
     };
 
     class AfterKeyContext {
@@ -107,7 +106,7 @@ class Builder {
         Builder& builder_;
 
         // to return after Value(...)
-        AfterValueInDictContext after_value_in_dict_context_{*this};
+        AfterValueInDictContext after_value_in_dict_context_{builder_};
     };
 
    public:
