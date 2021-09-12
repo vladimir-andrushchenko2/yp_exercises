@@ -34,9 +34,9 @@ class Builder {
         auto& EndArray() { return builder_.EndArray(); }
     };
 
-    class AfterStartArrayContext {
+    class AfterStartArrayContext final : public BuilderBaseContext {
        public:
-        AfterStartArrayContext(Builder& builder) : builder_(builder) {}
+        AfterStartArrayContext(Builder& builder) : BuilderBaseContext(builder) {}
 
         auto& Value(Node::Value value) {
             builder_.Value(value);
@@ -50,38 +50,27 @@ class Builder {
         auto& EndArray() { return builder_.EndArray(); }
 
        private:
-        Builder& builder_;
         AfterValueInArrayContext after_value_in_array_context_{builder_};
     };
 
-    class AfterStartDictContext {
+    class AfterStartDictContext final : public BuilderBaseContext {
        public:
-        AfterStartDictContext(Builder& builder) : builder_(builder) {}
-
         auto& Key(std::string key) { return builder_.Key(key); }
 
         Builder& EndDict() { return builder_.EndDict(); }
-
-       private:
-        Builder& builder_;
     };
 
     // After value that followed after Key(...)
-    class AfterValueInDictContext {
+    class AfterValueInDictContext final : public BuilderBaseContext {
        public:
-        AfterValueInDictContext(Builder& builder) : builder_(builder) {}
-
         auto& Key(std::string value) { return builder_.Key(value); }
 
         auto& EndDict() { return builder_.EndDict(); }
-
-       private:
-        Builder& builder_;
     };
 
-    class AfterKeyContext {
+    class AfterKeyContext final : public BuilderBaseContext {
        public:
-        AfterKeyContext(Builder& builder) : builder_(builder) {}
+        AfterKeyContext(Builder& builder) : BuilderBaseContext(builder) {}
 
         auto& Value(Node::Value value) {
             builder_.Value(value);
@@ -93,7 +82,6 @@ class Builder {
         auto& StartDict() { return builder_.StartDict(); }
 
        private:
-        Builder& builder_;
         AfterValueInDictContext after_value_in_dict_context_{builder_};
     };
 
