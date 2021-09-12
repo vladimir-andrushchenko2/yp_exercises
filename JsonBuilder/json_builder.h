@@ -11,6 +11,25 @@ namespace json {
 
 class Builder {
    public:
+    class AfterStartArrayContext {
+       public:
+        AfterStartArrayContext(Builder& builder) : builder_(builder) {}
+
+        auto& Value(Node::Value value) {
+            // ill have to return AfterValueInArrayContext
+            return builder_.Value(value);
+        }
+
+        auto& StartDict() { return builder_.StartDict(); }
+
+        auto& StartArray() { return builder_.StartArray(); }
+
+        auto& EndArray() { return builder_.EndArray(); }
+
+       private:
+        Builder& builder_;
+    };
+
     class AfterStartDictContext {
        public:
         AfterStartDictContext(Builder& builder) : builder_(builder) {}
@@ -23,47 +42,20 @@ class Builder {
         Builder& builder_;
     };
 
-    class AfterStartArrayContext {
-        public:
-        AfterStartArrayContext(Builder& builder) : builder_(builder) {}
-
-        auto& Value(Node::Value value) {
-            // ill have to return AfterValueInArrayContext
-            return builder_.Value(value);
-        }
-
-        auto& StartDict() {
-            return builder_.StartDict();
-        }
-
-        auto& StartArray() {
-            return builder_.StartArray();
-        }
-
-        auto& EndArray() {
-            return builder_.EndArray();
-        }
-
-        // auto& 
-        private:
-        Builder& builder_;
-    };
-
     class AfterKeyContext;
 
     // After value that followed after Key(...)
     class AfterValueInDictContext {
        public:
-        AfterValueInDictContext(AfterKeyContext& key_item_context) : after_key_context_(key_item_context) {}
+        AfterValueInDictContext(AfterKeyContext& key_item_context)
+            : after_key_context_(key_item_context) {}
 
         auto& Key(std::string value) {
             after_key_context_.builder_.Key(value);
             return after_key_context_;
         }
 
-        auto& EndDict() {
-            return after_key_context_.builder_.EndDict();
-        }
+        auto& EndDict() { return after_key_context_.builder_.EndDict(); }
 
        private:
         AfterKeyContext& after_key_context_;
