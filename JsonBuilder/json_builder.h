@@ -9,12 +9,25 @@ using namespace std::string_literals;
 
 namespace json {
 
-class ExpectsValueOrStartDictOfStartArray {};
-
-class ExpectsKeyOrEndDict {};
-
 class Builder {
-   public:
+public:
+    class DictItemContext {
+    public:
+        DictItemContext(Builder& builder) : builder_(builder) {}
+
+        Builder& Key(std::string key) {
+            return builder_.Key(key);
+        }
+
+        Builder& EndDict() {
+            return builder_.EndDict();
+        }
+
+    private:
+        Builder& builder_;
+    };
+
+public:
     Builder& Value(Node::Value value) {
         if (!root_.IsNull()) {
             throw std::logic_error("value has to be null when Value method is used"s);
@@ -106,7 +119,7 @@ class Builder {
     }
 
     // Dict
-    Builder& StartDict() {
+    DictItemContext& StartDict() {
         // not null for when it is the first element
         if (!root_.IsNull()) {
             throw std::logic_error("probably object has already been constructed"s);
@@ -123,7 +136,7 @@ class Builder {
         *ptr = json::Dict{};
         nodes_stack_.push_back(std::move(ptr));
 
-        return *this;
+        return dict_item_context_;
     }
 
     Builder& EndDict() {
@@ -144,7 +157,7 @@ class Builder {
             // dict element of array
             if (nodes_stack_.back()->IsArray()) {
                 nodes_stack_.back()->AsArray().push_back(
-                    *dict_being_closed.release());  // mb emplace_back
+                                                         *dict_being_closed.release());  // mb emplace_back
 
                 return *this;
             }
@@ -177,7 +190,7 @@ class Builder {
 
         throw std::logic_error("couldn't insert key"s);
     }
-
+    
     Node Build() const {
         if (root_.IsNull()) {
             // if object hasn't been constructed
@@ -192,9 +205,11 @@ class Builder {
         return root_;
     }
 
-   private:
+private:
     Node root_ = nullptr;
     std::vector<std::unique_ptr<Node>> nodes_stack_;
+
+    DictItemContext dict_item_context_{*this};
 };
 
 }  // namespace json
