@@ -8,84 +8,63 @@
 using namespace std::string_literals;
 
 namespace json {
+
 class Builder;
+class AfterStartDictContext;
+class AfterStartArrayContext;
+class AfterKeyContext;
 
 class BuilderBaseContext {
-   public:
-    BuilderBaseContext(Builder& builder) : builder_(builder) {}
+public:
+    BuilderBaseContext(Builder& builder);
 
-   protected:
+protected:
     Builder& builder_;
 };
 
+class InsideArrayActions : public BuilderBaseContext {
+public:
+    InsideArrayActions Value(Node::Value value);
+
+    InsideArrayActions StartArray();
+
+    AfterStartDictContext StartDict();
+
+    Builder& EndArray();
+};
+
+class AfterStartDictContext final : public BuilderBaseContext {
+public:
+    AfterKeyContext Key(std::string key);
+
+    Builder& EndDict();
+};
+
+// After value that followed after Key(...)
+class AfterValueInDictContext final : public BuilderBaseContext {
+public:
+    AfterKeyContext Key(std::string value);
+
+    Builder& EndDict();
+};
+
+class AfterKeyContext final : public BuilderBaseContext {
+public:
+    AfterKeyContext(Builder& builder) : BuilderBaseContext(builder) {}
+
+    AfterValueInDictContext Value(Node::Value value);
+
+    InsideArrayActions StartArray();
+
+    AfterStartDictContext StartDict();
+
+private:
+    AfterValueInDictContext after_value_in_dict_context_{builder_};
+};
+
+
 class Builder {
-   public:
-    class AfterValueInArrayContext final : public BuilderBaseContext {
-       public:
-        auto& Value(Node::Value value) {
-            builder_.Value(value);
-            return *this;
-        }
-
-        auto& StartArray() { return builder_.StartArray(); }
-
-        auto& StartDict() { return builder_.StartDict(); }
-
-        auto& EndArray() { return builder_.EndArray(); }
-    };
-
-    class AfterStartArrayContext final : public BuilderBaseContext {
-       public:
-        AfterStartArrayContext(Builder& builder) : BuilderBaseContext(builder) {}
-
-        auto& Value(Node::Value value) {
-            builder_.Value(value);
-            return after_value_in_array_context_;
-        }
-
-        auto& StartDict() { return builder_.StartDict(); }
-
-        auto& StartArray() { return builder_.StartArray(); }
-
-        auto& EndArray() { return builder_.EndArray(); }
-
-       private:
-        AfterValueInArrayContext after_value_in_array_context_{builder_};
-    };
-
-    class AfterStartDictContext final : public BuilderBaseContext {
-       public:
-        auto& Key(std::string key) { return builder_.Key(key); }
-
-        Builder& EndDict() { return builder_.EndDict(); }
-    };
-
-    // After value that followed after Key(...)
-    class AfterValueInDictContext final : public BuilderBaseContext {
-       public:
-        auto& Key(std::string value) { return builder_.Key(value); }
-
-        auto& EndDict() { return builder_.EndDict(); }
-    };
-
-    class AfterKeyContext final : public BuilderBaseContext {
-       public:
-        AfterKeyContext(Builder& builder) : BuilderBaseContext(builder) {}
-
-        auto& Value(Node::Value value) {
-            builder_.Value(value);
-            return after_value_in_dict_context_;
-        }
-
-        auto& StartArray() { return builder_.StartArray(); }
-
-        auto& StartDict() { return builder_.StartDict(); }
-
-       private:
-        AfterValueInDictContext after_value_in_dict_context_{builder_};
-    };
-
-   public:
+public:
     Builder& Value(Node::Value value) {
         if (!root_.IsNull()) {
             throw std::logic_error("value has to be null when Value method is used"s);
@@ -120,7 +99,7 @@ class Builder {
     }
 
     // Array
-    AfterStartArrayContext& StartArray() {
+    InsideArrayActions StartArray() {
         // not null for when it is the first element
         if (!root_.IsNull()) {
             throw std::logic_error("probably object has already been constructed"s);
@@ -262,13 +241,13 @@ class Builder {
         return root_;
     }
 
-   private:
+private:
     Node root_ = nullptr;
     std::vector<std::unique_ptr<Node>> nodes_stack_;
 
     AfterStartDictContext dict_item_context_{*this};
     AfterKeyContext key_item_context_{*this};
-    AfterStartArrayContext after_start_array_context_{*this};
+    InsideArrayActions after_start_array_context_{*this};
 };
 
 }  // namespace json
