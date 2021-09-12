@@ -68,8 +68,6 @@ class Builder {
         Builder& builder_;
     };
 
-    class AfterKeyContext;
-
     // After value that followed after Key(...)
     class AfterValueInDictContext {
        public:
