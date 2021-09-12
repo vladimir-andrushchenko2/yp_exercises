@@ -44,7 +44,7 @@ class Builder {
     };
 
     class AfterKeyContext {
-        // friend to avoid passing builder in DictValueContext constructor;
+        // friend to avoid passing builder in AfterValueAfterKeyContext constructor;
         friend AfterValueAfterKeyContext;
 
        public:
