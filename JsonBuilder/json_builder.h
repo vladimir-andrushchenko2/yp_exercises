@@ -25,6 +25,7 @@ class Builder {
 
     class KeyItemContext;
 
+    // After value that followed after Key(...)
     class DictValueContext {
        public:
         DictValueContext(KeyItemContext& key_item_context) : key_item_context_(key_item_context) {}
@@ -60,6 +61,8 @@ class Builder {
 
        private:
         Builder& builder_;
+
+        // to return after Value(...)
         DictValueContext dict_value_context_{*this};
     };
 
