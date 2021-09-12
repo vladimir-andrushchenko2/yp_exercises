@@ -11,9 +11,9 @@ namespace json {
 
 class Builder {
    public:
-    class DictItemContext {
+    class AfterStartDictContext {
        public:
-        DictItemContext(Builder& builder) : builder_(builder) {}
+        AfterStartDictContext(Builder& builder) : builder_(builder) {}
 
         auto& Key(std::string key) { return builder_.Key(key); }
 
@@ -23,36 +23,36 @@ class Builder {
         Builder& builder_;
     };
 
-    class KeyItemContext;
+    class AfterKeyContext;
 
     // After value that followed after Key(...)
-    class DictValueContext {
+    class AfterValueAfterKeyContext {
        public:
-        DictValueContext(KeyItemContext& key_item_context) : key_item_context_(key_item_context) {}
+        AfterValueAfterKeyContext(AfterKeyContext& key_item_context) : after_key_context_(key_item_context) {}
 
         auto& Key(std::string value) {
-            key_item_context_.builder_.Key(value);
-            return key_item_context_;
+            after_key_context_.builder_.Key(value);
+            return after_key_context_;
         }
 
         auto& EndDict() {
-            return key_item_context_.builder_.EndDict();
+            return after_key_context_.builder_.EndDict();
         }
 
        private:
-        KeyItemContext& key_item_context_;
+        AfterKeyContext& after_key_context_;
     };
 
-    class KeyItemContext {
+    class AfterKeyContext {
         // friend to avoid passing builder in DictValueContext constructor;
-        friend DictValueContext;
+        friend AfterValueAfterKeyContext;
 
        public:
-        KeyItemContext(Builder& builder) : builder_(builder) {}
+        AfterKeyContext(Builder& builder) : builder_(builder) {}
 
         auto& Value(Node::Value value) {
             builder_.Value(value);
-            return dict_value_context_;
+            return after_value_after_key_context_;
         }
 
         Builder& StartArray() { return builder_.StartArray(); }
@@ -63,7 +63,7 @@ class Builder {
         Builder& builder_;
 
         // to return after Value(...)
-        DictValueContext dict_value_context_{*this};
+        AfterValueAfterKeyContext after_value_after_key_context_{*this};
     };
 
    public:
@@ -158,7 +158,7 @@ class Builder {
     }
 
     // Dict
-    DictItemContext& StartDict() {
+    AfterStartDictContext& StartDict() {
         // not null for when it is the first element
         if (!root_.IsNull()) {
             throw std::logic_error("probably object has already been constructed"s);
@@ -213,7 +213,7 @@ class Builder {
         throw std::logic_error("couldn't close dict"s);
     }
 
-    KeyItemContext& Key(std::string key) {
+    AfterKeyContext& Key(std::string key) {
         if (nodes_stack_.empty() || !root_.IsNull()) {
             throw std::logic_error("couldn't use Key"s);
         }
@@ -247,8 +247,8 @@ class Builder {
     Node root_ = nullptr;
     std::vector<std::unique_ptr<Node>> nodes_stack_;
 
-    DictItemContext dict_item_context_{*this};
-    KeyItemContext key_item_context_{*this};
+    AfterStartDictContext dict_item_context_{*this};
+    AfterKeyContext key_item_context_{*this};
 };
 
 }  // namespace json
