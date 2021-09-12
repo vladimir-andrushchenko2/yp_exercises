@@ -23,12 +23,38 @@ class Builder {
         Builder& builder_;
     };
 
+    class AfterStartArrayContext {
+        public:
+        AfterStartArrayContext(Builder& builder) : builder_(builder) {}
+
+        auto& Value(Node::Value value) {
+            // ill have to return AfterValueInArrayContext
+            return builder_.Value(value);
+        }
+
+        auto& StartDict() {
+            return builder_.StartDict();
+        }
+
+        auto& StartArray() {
+            return builder_.StartArray();
+        }
+
+        auto& EndArray() {
+            return builder_.EndArray();
+        }
+
+        // auto& 
+        private:
+        Builder& builder_;
+    };
+
     class AfterKeyContext;
 
     // After value that followed after Key(...)
-    class AfterValueAfterKeyContext {
+    class AfterValueInDictContext {
        public:
-        AfterValueAfterKeyContext(AfterKeyContext& key_item_context) : after_key_context_(key_item_context) {}
+        AfterValueInDictContext(AfterKeyContext& key_item_context) : after_key_context_(key_item_context) {}
 
         auto& Key(std::string value) {
             after_key_context_.builder_.Key(value);
@@ -44,18 +70,18 @@ class Builder {
     };
 
     class AfterKeyContext {
-        // friend to avoid passing builder in AfterValueAfterKeyContext constructor;
-        friend AfterValueAfterKeyContext;
+        // friend to avoid passing builder in AfterValueInDictContext constructor;
+        friend AfterValueInDictContext;
 
        public:
         AfterKeyContext(Builder& builder) : builder_(builder) {}
 
         auto& Value(Node::Value value) {
             builder_.Value(value);
-            return after_value_after_key_context_;
+            return after_value_in_dict_context_;
         }
 
-        Builder& StartArray() { return builder_.StartArray(); }
+        auto& StartArray() { return builder_.StartArray(); }
 
         auto& StartDict() { return builder_.StartDict(); }
 
@@ -63,7 +89,7 @@ class Builder {
         Builder& builder_;
 
         // to return after Value(...)
-        AfterValueAfterKeyContext after_value_after_key_context_{*this};
+        AfterValueInDictContext after_value_in_dict_context_{*this};
     };
 
    public:
@@ -101,7 +127,7 @@ class Builder {
     }
 
     // Array
-    Builder& StartArray() {
+    AfterStartArrayContext& StartArray() {
         // not null for when it is the first element
         if (!root_.IsNull()) {
             throw std::logic_error("probably object has already been constructed"s);
@@ -118,7 +144,7 @@ class Builder {
         *ptr = json::Array{};
         nodes_stack_.push_back(std::move(ptr));
 
-        return *this;
+        return after_start_array_context_;
     }
 
     Builder& EndArray() {
@@ -249,6 +275,7 @@ class Builder {
 
     AfterStartDictContext dict_item_context_{*this};
     AfterKeyContext key_item_context_{*this};
+    AfterStartArrayContext after_start_array_context_{*this};
 };
 
 }  // namespace json
