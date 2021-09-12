@@ -10,24 +10,34 @@ using namespace std::string_literals;
 namespace json {
 
 class Builder {
-public:
+   public:
     class DictItemContext {
-    public:
+       public:
         DictItemContext(Builder& builder) : builder_(builder) {}
 
-        Builder& Key(std::string key) {
-            return builder_.Key(key);
-        }
+        auto& Key(std::string key) { return builder_.Key(key); }
 
-        Builder& EndDict() {
-            return builder_.EndDict();
-        }
+        Builder& EndDict() { return builder_.EndDict(); }
 
-    private:
+       private:
         Builder& builder_;
     };
 
-public:
+    class KeyItemContext {
+       public:
+        KeyItemContext(Builder& builder) : builder_(builder) {}
+
+        Builder& Value(Node::Value value) { return builder_.Value(value); }
+
+        Builder& StartArray() { return builder_.StartArray(); }
+
+        auto& StartDict() { return builder_.StartDict(); }
+
+       private:
+        Builder& builder_;
+    };
+
+   public:
     Builder& Value(Node::Value value) {
         if (!root_.IsNull()) {
             throw std::logic_error("value has to be null when Value method is used"s);
@@ -157,7 +167,7 @@ public:
             // dict element of array
             if (nodes_stack_.back()->IsArray()) {
                 nodes_stack_.back()->AsArray().push_back(
-                                                         *dict_being_closed.release());  // mb emplace_back
+                    *dict_being_closed.release());
 
                 return *this;
             }
@@ -175,7 +185,7 @@ public:
         throw std::logic_error("couldn't close dict"s);
     }
 
-    Builder& Key(std::string key) {
+    KeyItemContext& Key(std::string key) {
         if (nodes_stack_.empty() || !root_.IsNull()) {
             throw std::logic_error("couldn't use Key"s);
         }
@@ -185,12 +195,12 @@ public:
             *ptr = std::move(key);
             nodes_stack_.push_back(std::move(ptr));
 
-            return *this;
+            return key_item_context_;
         }
 
         throw std::logic_error("couldn't insert key"s);
     }
-    
+
     Node Build() const {
         if (root_.IsNull()) {
             // if object hasn't been constructed
@@ -205,11 +215,12 @@ public:
         return root_;
     }
 
-private:
+   private:
     Node root_ = nullptr;
     std::vector<std::unique_ptr<Node>> nodes_stack_;
 
     DictItemContext dict_item_context_{*this};
+    KeyItemContext key_item_context_{*this};
 };
 
 }  // namespace json
