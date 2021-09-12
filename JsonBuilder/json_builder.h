@@ -85,9 +85,6 @@ class Builder {
     };
 
     class AfterKeyContext {
-        // friend to avoid passing builder in AfterValueInDictContext constructor;
-        friend AfterValueInDictContext;
-
        public:
         AfterKeyContext(Builder& builder) : builder_(builder) {}
 
@@ -102,8 +99,6 @@ class Builder {
 
        private:
         Builder& builder_;
-
-        // to return after Value(...)
         AfterValueInDictContext after_value_in_dict_context_{builder_};
     };
 
