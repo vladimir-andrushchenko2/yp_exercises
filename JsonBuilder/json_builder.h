@@ -11,13 +11,38 @@ namespace json {
 
 class Builder {
    public:
+    class AfterValueInArrayContext {
+        public:
+        AfterValueInArrayContext(Builder& builder) : builder_(builder) {}
+
+        auto& Value(Node::Value value) {
+            builder_.Value(value);
+            return *this;
+        }
+
+        auto& StartArray() {
+            return builder_.StartArray();
+        }
+
+        auto& StartDict() {
+            return builder_.StartDict();
+        }
+
+        auto& EndArray() {
+            return builder_.EndArray();
+        }
+
+        private:
+        Builder& builder_;
+    };
+
     class AfterStartArrayContext {
        public:
         AfterStartArrayContext(Builder& builder) : builder_(builder) {}
 
         auto& Value(Node::Value value) {
-            // ill have to return AfterValueInArrayContext
-            return builder_.Value(value);
+            builder_.Value(value);
+            return after_value_in_array_context_;
         }
 
         auto& StartDict() { return builder_.StartDict(); }
@@ -28,6 +53,7 @@ class Builder {
 
        private:
         Builder& builder_;
+        AfterValueInArrayContext after_value_in_array_context_{builder_};
     };
 
     class AfterStartDictContext {
