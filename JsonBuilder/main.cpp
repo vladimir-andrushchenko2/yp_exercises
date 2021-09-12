@@ -71,7 +71,7 @@ int main() {
     json::Print(
         json::Document{
             json::Builder{}
-            .StartDict().Key("hello world"s).Value("rise and shine"s).EndDict()
+            .StartDict().Key("Hello world"s).Value("You are beautifull"s).EndDict()
             .Build()
         },
         std::cout

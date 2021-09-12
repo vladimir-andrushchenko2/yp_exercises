@@ -23,11 +23,36 @@ class Builder {
         Builder& builder_;
     };
 
+    class KeyItemContext;
+
+    class DictValueContext {
+       public:
+        DictValueContext(KeyItemContext& key_item_context) : key_item_context_(key_item_context) {}
+
+        auto& Key(std::string value) {
+            key_item_context_.builder_.Key(value);
+            return key_item_context_;
+        }
+
+        auto& EndDict() {
+            return key_item_context_.builder_.EndDict();
+        }
+
+       private:
+        KeyItemContext& key_item_context_;
+    };
+
     class KeyItemContext {
+        // friend to avoid passing builder in DictValueContext constructor;
+        friend DictValueContext;
+
        public:
         KeyItemContext(Builder& builder) : builder_(builder) {}
 
-        Builder& Value(Node::Value value) { return builder_.Value(value); }
+        auto& Value(Node::Value value) {
+            builder_.Value(value);
+            return dict_value_context_;
+        }
 
         Builder& StartArray() { return builder_.StartArray(); }
 
@@ -35,6 +60,7 @@ class Builder {
 
        private:
         Builder& builder_;
+        DictValueContext dict_value_context_{*this};
     };
 
    public:
@@ -166,8 +192,7 @@ class Builder {
 
             // dict element of array
             if (nodes_stack_.back()->IsArray()) {
-                nodes_stack_.back()->AsArray().push_back(
-                    *dict_being_closed.release());
+                nodes_stack_.back()->AsArray().push_back(*dict_being_closed.release());
 
                 return *this;
             }
