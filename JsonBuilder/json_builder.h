@@ -8,32 +8,30 @@
 using namespace std::string_literals;
 
 namespace json {
+class Builder;
+
+class BuilderBaseContext {
+   public:
+    BuilderBaseContext(Builder& builder) : builder_(builder) {}
+
+   protected:
+    Builder& builder_;
+};
 
 class Builder {
    public:
-    class AfterValueInArrayContext {
-        public:
-        AfterValueInArrayContext(Builder& builder) : builder_(builder) {}
-
+    class AfterValueInArrayContext final : public BuilderBaseContext {
+       public:
         auto& Value(Node::Value value) {
             builder_.Value(value);
             return *this;
         }
 
-        auto& StartArray() {
-            return builder_.StartArray();
-        }
+        auto& StartArray() { return builder_.StartArray(); }
 
-        auto& StartDict() {
-            return builder_.StartDict();
-        }
+        auto& StartDict() { return builder_.StartDict(); }
 
-        auto& EndArray() {
-            return builder_.EndArray();
-        }
-
-        private:
-        Builder& builder_;
+        auto& EndArray() { return builder_.EndArray(); }
     };
 
     class AfterStartArrayContext {
@@ -71,12 +69,9 @@ class Builder {
     // After value that followed after Key(...)
     class AfterValueInDictContext {
        public:
-        AfterValueInDictContext(Builder& builder)
-            : builder_(builder) {}
+        AfterValueInDictContext(Builder& builder) : builder_(builder) {}
 
-        auto& Key(std::string value) {
-            return builder_.Key(value);
-        }
+        auto& Key(std::string value) { return builder_.Key(value); }
 
         auto& EndDict() { return builder_.EndDict(); }
 
