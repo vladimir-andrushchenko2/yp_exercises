@@ -55,29 +55,34 @@ class Book {
 };
 
 namespace cheer {
-    void Cheer(std::ostream& output_stream, int book_reader_id, const Book& book) {
-        if (!book.ContainsReader(book_reader_id)) {
-                output_stream << 0 << std::endl;
-                return;
-            }
-
-            int page_user_is_on = book.GetReadersCurrentPage(book_reader_id);
-
-            // -1 to exclude current user
-            double users_reached_page = book.GetNumberOfReadersWhoReadPage(page_user_is_on) - 1;
-            double all_users = book.GetNumberOfReaders() - 1;
-
-            if (all_users <= 0) {
-                output_stream << 1 << std::endl;
-                return;
-            }
-
-            double share_of_users_that_reached_page_excluding_cheered_person =
-                users_reached_page / all_users;
-
-            output_stream << 1 - share_of_users_that_reached_page_excluding_cheered_person << std::endl;
+void Cheer(std::ostream& output_stream, int book_reader_id, const Book& book) {
+    // if cheered person hasn't read book, then he is ahead of 0 people
+    if (!book.ContainsReader(book_reader_id)) {
+        output_stream << 0 << std::endl;
+        return;
     }
+
+    int page_user_is_on = book.GetReadersCurrentPage(book_reader_id);
+
+    // -1 to exclude current user
+    double n_other_people_who_read_page = book.GetNumberOfReadersWhoReadPage(page_user_is_on) - 1;
+    double n_other_users = book.GetNumberOfReaders() - 1;
+
+    // if cheered person is the only person to have read the book, then he is ahead of all people
+    if (n_other_users == 0) {
+        output_stream << 1 << std::endl;
+        return;
+    }
+
+    // share of people read page the cheered person is currently on
+    double share_of_readers_read_page =
+        n_other_people_who_read_page / n_other_users;
+
+    // for example if 60% of people read the page the cheered person is on, then he is ahead of 40% of people
+    // for this reason (1 - share_of_readers_read_page)
+    output_stream << 1 - share_of_readers_read_page << std::endl;
 }
+}  // namespace cheer
 
 int main() {
     int n_requests;
