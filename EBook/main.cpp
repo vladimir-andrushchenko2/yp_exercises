@@ -30,7 +30,18 @@ public:
 
         return id_to_page.at(id);
     }
+    
+    bool ContainsReader(int id) const {
+        return id_to_page.count(id) > 0;
+    }
 
+    int GetUsersCurrentPage(int id) const {
+        if (id_to_page.count(id) == 0) {
+            return 0;
+        }
+        return id_to_page.at(id);
+    }
+private:
     void UpdateReadersProgress(int id, int new_page_number) {
         assert(new_page_number >= GetReadersCurrentPage(id));
         id_to_page[id] = new_page_number;
@@ -60,12 +71,12 @@ int main() {
             int user_id;
             std::cin >> user_id;
 
-            if (book.id_to_page.count(user_id) == 0) {
+            if (!book.ContainsReader(user_id)) {
                 std::cout << 0 << std::endl;
                 continue;
             }
 
-            int page_user_is_on = book.id_to_page[user_id];
+            int page_user_is_on = book.GetUsersCurrentPage(user_id);
 
             // -1 to exclude current user
             double users_reached_page = book.n_users_reached_page[page_user_is_on] - 1;

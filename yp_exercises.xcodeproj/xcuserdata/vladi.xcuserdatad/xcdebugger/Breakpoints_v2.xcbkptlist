@@ -208,7 +208,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "43"
             endingLineNumber = "43"
-            landmarkName = "UpdatePagesReadCount(pages_begin, pages_end)"
+            landmarkName = "GetUsersCurrentPage(id)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
