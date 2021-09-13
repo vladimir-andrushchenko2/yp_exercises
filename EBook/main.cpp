@@ -41,6 +41,11 @@ public:
         }
         return id_to_page.at(id);
     }
+
+    int GetNumberOfReaders() const {
+        return static_cast<int>(id_to_page.size());
+    }
+
 private:
     void UpdateReadersProgress(int id, int new_page_number) {
         assert(new_page_number >= GetReadersCurrentPage(id));
@@ -80,7 +85,7 @@ int main() {
 
             // -1 to exclude current user
             double users_reached_page = book.n_users_reached_page[page_user_is_on] - 1;
-            double all_users = book.id_to_page.size() - 1;
+            double all_users = book.GetNumberOfReaders() - 1;
 
             if (all_users <= 0) {
                 std::cout << 1 << std::endl;
