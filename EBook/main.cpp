@@ -62,7 +62,7 @@ private:
         }
     }
 
-public:
+private:
     std::map<int, int> id_to_page;
     std::vector<int> n_users_reached_page;
 };
