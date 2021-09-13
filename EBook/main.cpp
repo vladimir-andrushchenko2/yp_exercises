@@ -1,16 +1,15 @@
 #include <iostream>
-//#include <array>
-#include <map>
-#include <string>
-#include <vector>
 #include <cassert>
-#include <array>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 using namespace std::string_literals;
 
 class Book {
-public:
-    Book() : n_users_reached_page(1001) {}
+   public:
+    // size needs to be 1001 because max possible page index is 1000
+    Book() : unique_people_read_page(1001) {}
 
     void UpdateReader(int id, int new_page_number) {
         const int previously_reached_page = GetReadersCurrentPage(id);
@@ -24,47 +23,45 @@ public:
     }
 
     int GetReadersCurrentPage(int id) const {
-        if (id_to_page.count(id) == 0) {
+        if (reader_id_to_her_current_page.count(id) == 0) {
             return 0;
         }
 
-        return id_to_page.at(id);
+        return reader_id_to_her_current_page.at(id);
     }
 
-    bool ContainsReader(int id) const {
-        return id_to_page.count(id) > 0;
-    }
+    bool ContainsReader(int id) const { return reader_id_to_her_current_page.count(id) > 0; }
 
     int GetUsersCurrentPage(int id) const {
-        if (id_to_page.count(id) == 0) {
+        if (reader_id_to_her_current_page.count(id) == 0) {
             return 0;
         }
-        return id_to_page.at(id);
+        return reader_id_to_her_current_page.at(id);
     }
 
     int GetNumberOfReaders() const {
-        return static_cast<int>(id_to_page.size());
+        return static_cast<int>(reader_id_to_her_current_page.size());
     }
 
-    int GetNumberOfReadersWhoReadPage(int page) const {
-        return n_users_reached_page.at(page);
-    }
+    int GetNumberOfReadersWhoReadPage(int page) const { return unique_people_read_page.at(page); }
 
-private:
+   private:
     void UpdateReadersProgress(int id, int new_page_number) {
         assert(new_page_number >= GetReadersCurrentPage(id));
-        id_to_page[id] = new_page_number;
+        reader_id_to_her_current_page[id] = new_page_number;
     }
 
     void UpdatePagesReadCount(int pages_begin, int pages_end) {
         for (int i = pages_begin; i < pages_end; ++i) {
-            ++n_users_reached_page[i];
+            ++unique_people_read_page[i];
         }
     }
 
-private:
-    std::map<int, int> id_to_page;
-    std::vector<int> n_users_reached_page;
+   private:
+    std::unordered_map<int, int> reader_id_to_her_current_page;
+
+    // index is page number, value is how many people read the page
+    std::vector<int> unique_people_read_page;
 };
 
 int main() {
@@ -96,9 +93,8 @@ int main() {
                 continue;
             }
 
-            double share_of_users_that_reached_page_excluding_cheered_person =  users_reached_page / all_users;
-
-
+            double share_of_users_that_reached_page_excluding_cheered_person =
+                users_reached_page / all_users;
 
             std::cout << 1 - share_of_users_that_reached_page_excluding_cheered_person << std::endl;
 
