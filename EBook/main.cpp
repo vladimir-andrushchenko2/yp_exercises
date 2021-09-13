@@ -15,15 +15,12 @@ public:
     void UpdateReader(int id, int new_page_number) {
         const int previously_reached_page = GetReadersCurrentPage(id);
 
-        // assert(new_page_number >= previously_reached_page);
-
-        // id_to_page[id] = new_page_number;
         UpdateReadersProgress(id, new_page_number);
 
+        int pages_to_update_begin = previously_reached_page + 1;
         int read_pages_end = new_page_number + 1;
-        for (int i = previously_reached_page + 1; i < read_pages_end; ++i) {
-            ++n_users_reached_page[i];
-        }
+
+        UpdateReadersProgress(pages_to_update_begin, read_pages_end);
     }
 
     int GetReadersCurrentPage(int id) const {
@@ -37,6 +34,12 @@ public:
     void UpdateReadersProgress(int id, int new_page_number) {
         assert(new_page_number >= GetReadersCurrentPage(id));
         id_to_page[id] = new_page_number;
+    }
+
+    void UpdatePagesReadCount(int pages_begin, int pages_end) {
+        for (int i = pages_begin; i < pages_end; ++i) {
+            ++n_users_reached_page[i];
+        }
     }
 
 public:
