@@ -20,7 +20,7 @@ public:
         int pages_to_update_begin = previously_reached_page + 1;
         int read_pages_end = new_page_number + 1;
 
-        UpdateReadersProgress(pages_to_update_begin, read_pages_end);
+        UpdatePagesReadCount(pages_to_update_begin, read_pages_end);
     }
 
     int GetReadersCurrentPage(int id) const {
