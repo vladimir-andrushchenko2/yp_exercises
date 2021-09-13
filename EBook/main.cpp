@@ -13,16 +13,30 @@ public:
     Book() : n_users_reached_page(1000) {}
 
     void UpdateReader(int id, int new_page_number) {
-        const int previously_reached_page = id_to_page[id];
+        const int previously_reached_page = GetReadersCurrentPage(id);
 
-        assert(new_page_number >= previously_reached_page);
+        // assert(new_page_number >= previously_reached_page);
 
-        id_to_page[id] = new_page_number;
+        // id_to_page[id] = new_page_number;
+        UpdateReadersProgress(id, new_page_number);
 
         int read_pages_end = new_page_number + 1;
         for (int i = previously_reached_page + 1; i < read_pages_end; ++i) {
             ++n_users_reached_page[i];
         }
+    }
+
+    int GetReadersCurrentPage(int id) const {
+        if (id_to_page.count(id) == 0) {
+            return 0;
+        }
+
+        return id_to_page.at(id);
+    }
+
+    void UpdateReadersProgress(int id, int new_page_number) {
+        assert(new_page_number >= GetReadersCurrentPage(id));
+        id_to_page[id] = new_page_number;
     }
 
 public:
@@ -33,11 +47,6 @@ public:
 int main() {
     int n_requests;
     std::cin >> n_requests;
-
-//    std::array<int, 100'000> user_id_to_page_he_reached;
-//    std::array<double, 1000> n_users_reached_page;
-//    std::map<int, int> id_to_page;
-//    std::vector<int> n_users_reached_page(1000);
 
     Book book;
 
