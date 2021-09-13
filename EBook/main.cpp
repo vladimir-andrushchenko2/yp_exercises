@@ -10,7 +10,7 @@ using namespace std::string_literals;
 
 class Book {
 public:
-    Book() : n_users_reached_page(1000) {}
+    Book() : n_users_reached_page(1001) {}
 
     void UpdateReader(int id, int new_page_number) {
         const int previously_reached_page = GetReadersCurrentPage(id);
@@ -30,7 +30,7 @@ public:
 
         return id_to_page.at(id);
     }
-    
+
     bool ContainsReader(int id) const {
         return id_to_page.count(id) > 0;
     }
@@ -44,6 +44,10 @@ public:
 
     int GetNumberOfReaders() const {
         return static_cast<int>(id_to_page.size());
+    }
+
+    int GetNumberOfReadersWhoReadPage(int page) const {
+        return n_users_reached_page.at(page);
     }
 
 private:
@@ -84,7 +88,7 @@ int main() {
             int page_user_is_on = book.GetUsersCurrentPage(user_id);
 
             // -1 to exclude current user
-            double users_reached_page = book.n_users_reached_page[page_user_is_on] - 1;
+            double users_reached_page = book.GetNumberOfReadersWhoReadPage(page_user_is_on) - 1;
             double all_users = book.GetNumberOfReaders() - 1;
 
             if (all_users <= 0) {
@@ -103,7 +107,7 @@ int main() {
             std::cin >> id >> page;
 
             book.UpdateReader(id, page);
-            
+
         } else {
             throw std::logic_error("bad request type "s + request_type);
         }
