@@ -25,6 +25,7 @@ class Book {
     bool ContainsReader(int id) const { return reader_id_to_her_current_page.count(id) > 0; }
 
     int GetReadersCurrentPage(int id) const {
+        // if book is not read by user then his page is 0
         return ContainsReader(id) ? reader_id_to_her_current_page.at(id) : 0;
     }
 
@@ -53,6 +54,31 @@ class Book {
     std::vector<int> unique_people_read_page;
 };
 
+namespace cheer {
+    void Cheer(std::ostream& output_stream, int book_reader_id, const Book& book) {
+        if (!book.ContainsReader(book_reader_id)) {
+                output_stream << 0 << std::endl;
+                return;
+            }
+
+            int page_user_is_on = book.GetReadersCurrentPage(book_reader_id);
+
+            // -1 to exclude current user
+            double users_reached_page = book.GetNumberOfReadersWhoReadPage(page_user_is_on) - 1;
+            double all_users = book.GetNumberOfReaders() - 1;
+
+            if (all_users <= 0) {
+                output_stream << 1 << std::endl;
+                return;
+            }
+
+            double share_of_users_that_reached_page_excluding_cheered_person =
+                users_reached_page / all_users;
+
+            output_stream << 1 - share_of_users_that_reached_page_excluding_cheered_person << std::endl;
+    }
+}
+
 int main() {
     int n_requests;
     std::cin >> n_requests;
@@ -66,26 +92,7 @@ int main() {
             int user_id;
             std::cin >> user_id;
 
-            if (!book.ContainsReader(user_id)) {
-                std::cout << 0 << std::endl;
-                continue;
-            }
-
-            int page_user_is_on = book.GetReadersCurrentPage(user_id);
-
-            // -1 to exclude current user
-            double users_reached_page = book.GetNumberOfReadersWhoReadPage(page_user_is_on) - 1;
-            double all_users = book.GetNumberOfReaders() - 1;
-
-            if (all_users <= 0) {
-                std::cout << 1 << std::endl;
-                continue;
-            }
-
-            double share_of_users_that_reached_page_excluding_cheered_person =
-                users_reached_page / all_users;
-
-            std::cout << 1 - share_of_users_that_reached_page_excluding_cheered_person << std::endl;
+            cheer::Cheer(std::cout, user_id, book);
 
         } else if ("READ"s == request_type) {
             int id, page;
