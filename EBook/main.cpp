@@ -25,18 +25,7 @@ class Book {
     bool ContainsReader(int id) const { return reader_id_to_her_current_page.count(id) > 0; }
 
     int GetReadersCurrentPage(int id) const {
-        if (!ContainsReader(id)) {
-            return 0;
-        }
-
-        return reader_id_to_her_current_page.at(id);
-    }
-
-    int GetUsersCurrentPage(int id) const {
-        if (!ContainsReader(id)) {
-            return 0;
-        }
-        return reader_id_to_her_current_page.at(id);
+        return ContainsReader(id) ? reader_id_to_her_current_page.at(id) : 0;
     }
 
     int GetNumberOfReaders() const {
@@ -82,7 +71,7 @@ int main() {
                 continue;
             }
 
-            int page_user_is_on = book.GetUsersCurrentPage(user_id);
+            int page_user_is_on = book.GetReadersCurrentPage(user_id);
 
             // -1 to exclude current user
             double users_reached_page = book.GetNumberOfReadersWhoReadPage(page_user_is_on) - 1;
