@@ -1,5 +1,5 @@
-#include <iostream>
 #include <cassert>
+#include <iostream>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -22,18 +22,18 @@ class Book {
         UpdatePagesReadCount(pages_to_update_begin, read_pages_end);
     }
 
+    bool ContainsReader(int id) const { return reader_id_to_her_current_page.count(id) > 0; }
+
     int GetReadersCurrentPage(int id) const {
-        if (reader_id_to_her_current_page.count(id) == 0) {
+        if (!ContainsReader(id)) {
             return 0;
         }
 
         return reader_id_to_her_current_page.at(id);
     }
 
-    bool ContainsReader(int id) const { return reader_id_to_her_current_page.count(id) > 0; }
-
     int GetUsersCurrentPage(int id) const {
-        if (reader_id_to_her_current_page.count(id) == 0) {
+        if (!ContainsReader(id)) {
             return 0;
         }
         return reader_id_to_her_current_page.at(id);
