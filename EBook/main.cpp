@@ -9,7 +9,7 @@ using namespace std::string_literals;
 class Book {
    public:
     // size needs to be 1001 because max possible page index is 1000
-    Book() : unique_people_read_page(1001) {}
+    Book() : unique_people_read_page(kMaxBookSize) {}
 
     void UpdateReader(int id, int new_page_number) {
         const int previously_reached_page = GetReadersCurrentPage(id);
@@ -48,6 +48,9 @@ class Book {
     }
 
    private:
+    static constexpr int kMaxBookSize = 1001;
+
+   private:
     std::unordered_map<int, int> reader_id_to_her_current_page;
 
     // index is page number, value is how many people read the page
@@ -75,11 +78,10 @@ void Cheer(std::ostream& output_stream, int book_reader_id, const Book& book) {
     }
 
     // share of people read page the cheered person is currently on
-    double share_of_readers_read_page =
-        n_other_people_who_read_page / n_other_users;
+    double share_of_readers_read_page = n_other_people_who_read_page / n_other_users;
 
-    // for example if 60% of people read the page the cheered person is on, then he is ahead of 40% of people
-    // for this reason (1 - share_of_readers_read_page)
+    // for example if 60% of people read the page the cheered person is on, then he is ahead of 40%
+    // of people. For this reason (1 - share_of_readers_read_page)
     output_stream << 1 - share_of_readers_read_page << std::endl;
 }
 }  // namespace cheer
