@@ -16,10 +16,10 @@ class Book {
 
         UpdateReadersProgress(id, new_page_number);
 
-        int pages_to_update_begin = previously_reached_page + 1;
-        int read_pages_end = new_page_number + 1;
+        int pages_to_mark_as_read_begin = previously_reached_page + 1;
+        int pages_to_mark_as_read_end = new_page_number + 1;
 
-        UpdatePagesReadCount(pages_to_update_begin, read_pages_end);
+        UpdatePagesReadCount(pages_to_mark_as_read_begin, pages_to_mark_as_read_end);
     }
 
     bool ContainsReader(int id) const { return reader_id_to_her_current_page.count(id) > 0; }
