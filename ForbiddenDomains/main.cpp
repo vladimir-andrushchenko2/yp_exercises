@@ -13,7 +13,9 @@ class Domain {
 
     bool operator==(const Domain& other) const { return domain_ == other.domain_; }
 
-    bool operator<(const Domain& other) const { return domain_ < other.domain_; }
+    bool operator<(const Domain& other) const {
+        return std::lexicographical_compare(domain_.rbegin(), domain_.rend(), other.domain_.rbegin(), other.domain_.rend());
+    }
 
     bool IsSubdomain(const Domain& larger_domain) const {
         // larger domain has less letters the domain
@@ -108,8 +110,7 @@ Number ReadNumberOnLine(istream& input) {
     return num;
 }
 
-const string test_string = R"delim(
-4
+const string test_string = R"delim(4
 gdz.ru
 maps.me
 m.gdz.ru
