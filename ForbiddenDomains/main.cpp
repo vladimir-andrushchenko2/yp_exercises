@@ -56,7 +56,7 @@ class DomainChecker {
         // aa.ru < aaa.ru
         auto new_end =
             std::unique(forbidden_domains_.begin(), forbidden_domains_.end(),
-                        [](const Domain& left, const Domain& right) { right.IsSubdomain(left); });
+                        [](const Domain& left, const Domain& right) { return right.IsSubdomain(left); });
 
         forbidden_domains_.erase(new_end, forbidden_domains_.end());
     }
@@ -108,11 +108,29 @@ Number ReadNumberOnLine(istream& input) {
     return num;
 }
 
+const string test_string = R"delim(
+4
+gdz.ru
+maps.me
+m.gdz.ru
+com
+7
+gdz.ru
+gdz.com
+m.maps.me
+alg.m.gdz.ru
+maps.com
+maps.ru
+gdz.ua
+)delim";
+
+std::istringstream test_input{test_string};
+
 int main() {
-    const std::vector<Domain> forbidden_domains = ReadDomains(cin, ReadNumberOnLine<size_t>(cin));
+    const std::vector<Domain> forbidden_domains = ReadDomains(test_input, ReadNumberOnLine<size_t>(test_input));
     DomainChecker checker(forbidden_domains.begin(), forbidden_domains.end());
 
-    const std::vector<Domain> test_domains = ReadDomains(cin, ReadNumberOnLine<size_t>(cin));
+    const std::vector<Domain> test_domains = ReadDomains(test_input, ReadNumberOnLine<size_t>(test_input));
     for (const Domain& domain : test_domains) {
         cout << (checker.IsForbidden(domain) ? "Bad"sv : "Good"sv) << endl;
     }
