@@ -6,26 +6,26 @@
 
 using namespace std;
 
-// void ParseAndProcessQuery(BudgetManager& manager, string_view line) {
-//     // разработайте функцию чтения и обработки запроса
-// }
+ void ParseAndProcessQuery(BudgetManager& manager, string_view line) {
+     // разработайте функцию чтения и обработки запроса
+ }
 
-// int ReadNumberOnLine(istream& input) {
-//     std::string line;
-//     std::getline(input, line);
-//     return std::stoi(line);
-// }
+ int ReadNumberOnLine(istream& input) {
+     std::string line;
+     std::getline(input, line);
+     return std::stoi(line);
+ }
 
 int main() {
     TestBudgetManager();
 
-    // BudgetManager manager;
+     BudgetManager manager;
 
-    // const int query_count = ReadNumberOnLine(cin);
+     const int query_count = ReadNumberOnLine(cin);
 
-    // for (int i = 0; i < query_count; ++i) {
-    //     std::string line;
-    //     std::getline(cin, line);
-    //     ParseAndProcessQuery(manager, line);
-    // }
+     for (int i = 0; i < query_count; ++i) {
+         std::string line;
+         std::getline(cin, line);
+         ParseAndProcessQuery(manager, line);
+     }
 }

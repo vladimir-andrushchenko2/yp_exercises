@@ -6,11 +6,11 @@ struct DayInfo {
 };
 
 class BudgetManager {
-   public:
+public:
     inline static const Date START_DATE{2000, 1, 1};
     inline static const Date END_DATE{2100, 1, 1};
 
-   public:
+public:
     BudgetManager() { days_.resize(Date::ComputeDistance(START_DATE, END_DATE)); }
 
     void Earn(Date begin, Date end, double total_earnings) {
@@ -35,7 +35,8 @@ class BudgetManager {
             day.earnings *= kTaxMultiplier;
         });
     }
-
+    
+private:
     template <typename Predicate>
     void ForEachDay(Date begin, Date end, Predicate predicate) {
         const int first_day_index = Date::ComputeDistance(START_DATE, begin);
@@ -46,7 +47,7 @@ class BudgetManager {
         }
     }
 
-   private:
+private:
     std::vector<DayInfo> days_;
 };
 
