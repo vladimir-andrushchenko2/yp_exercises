@@ -400,6 +400,7 @@
 		75FD56C126F63B730041A2F1 /* date.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = date.h; sourceTree = "<group>"; };
 		75FD56C226F63B810041A2F1 /* parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = parser.h; sourceTree = "<group>"; };
 		75FD56C326F63B980041A2F1 /* parser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = parser.cpp; sourceTree = "<group>"; };
+		75FD56C526F675670041A2F1 /* test_budget_manager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_budget_manager.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -935,6 +936,7 @@
 			children = (
 				75FD56B926F63B0B0041A2F1 /* main.cpp */,
 				75FD56BE26F63B540041A2F1 /* budget_manager.h */,
+				75FD56C526F675670041A2F1 /* test_budget_manager.h */,
 				75FD56BF26F63B650041A2F1 /* budget_manager.cpp */,
 				75FD56C126F63B730041A2F1 /* date.h */,
 				75FD56C226F63B810041A2F1 /* parser.h */,

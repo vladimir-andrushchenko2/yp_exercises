@@ -9,7 +9,7 @@
 				"-std=c++17",
 				"-g",
 				"-Wall",
-				"../JsonBuilder/*.cpp",
+				"*.cpp",
 			],
 			"options": {
 				"cwd": "${fileDirname}"
