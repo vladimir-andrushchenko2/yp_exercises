@@ -40,8 +40,6 @@ class Domain {
         return true;
     }
 
-    const std::string& Get() const { return domain_; }
-
    private:
     std::string domain_;
 };
@@ -50,12 +48,13 @@ class DomainChecker {
    public:
     template <typename Iterator>
     DomainChecker(Iterator begin, Iterator end) : forbidden_domains_(begin, end) {
+        // domains have overwritten operator<
         std::sort(forbidden_domains_.begin(), forbidden_domains_.end());
 
         // delete subdomains
         // If one range is a prefix of another, the shorter range is lexicographically less than the
         // other.
-        // aa.ru < aaa.ru
+        // aa.ru < aaa.ru domain have overwritten operator< so actually it is (ur.aa < ur.aaa)
         auto new_end =
             std::unique(forbidden_domains_.begin(), forbidden_domains_.end(),
                         [](const Domain& left, const Domain& right) { return right.IsSubdomain(left); });
@@ -63,7 +62,6 @@ class DomainChecker {
         forbidden_domains_.erase(new_end, forbidden_domains_.end());
     }
 
-    // разработайте метод IsForbidden, возвращающий true, если домен запрещён
     bool IsForbidden(const Domain& domain) {
         if (forbidden_domains_.empty()) {
             return false;
