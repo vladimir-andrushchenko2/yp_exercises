@@ -33,8 +33,8 @@ int StringViewToInt(std::string_view text) {
 
     if (ec == std::errc())
     {
-        std::cout << "Result: " << result << ", ptr -> " << std::quoted(ptr) << '\n';
-        throw std::logic_error("couldn't parse int"s);
+//        std::cout << "Result: " << result << ", ptr -> " << std::quoted(ptr) << '\n';
+//        throw std::logic_error("couldn't parse int"s);
     }
     else if (ec == std::errc::invalid_argument)
     {
@@ -52,6 +52,10 @@ int StringViewToInt(std::string_view text) {
     return result;
 }
 
+double StringViewToDouble(std::string_view text) {
+    return stod(static_cast<std::string>(text));
+}
+
 Date ParseDateFromString(std::string_view text) {
     auto date_month_day = Split(text, '-');
 
@@ -65,9 +69,22 @@ Date ParseDateFromString(std::string_view text) {
 void ParseAndProcessQuery(BudgetManager& manager, string_view line) {
     auto command = Split(line, ' ');
 
-    if (command.at(0) == "Earn"sv) {
+    Date begin = ParseDateFromString(command.at(1));
+    Date end = ParseDateFromString(command.at(2));
 
-    } else if () {
+    if (command.at(0) == "Earn"sv) {
+        int earnings = StringViewToDouble(command.at(3));
+
+        manager.Earn(begin, end, earnings);
+
+    } else if (command.at(0) == "ComputeIncome"sv) {
+        std::cout << manager.ComputeIncome(begin, end) << std::endl;
+
+    } else if (command.at(0) == "PayTax"sv) {
+        manager.PayTax(begin, end);
+    } else {
+        assert(false);
+    }
 }
 
 int ReadNumberOnLine(istream& input) {
@@ -77,7 +94,7 @@ int ReadNumberOnLine(istream& input) {
 }
 
 int main() {
-    TestBudgetManager();
+//    TestBudgetManager();
 
     BudgetManager manager;
 
