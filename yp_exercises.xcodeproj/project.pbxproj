@@ -326,7 +326,7 @@
 		7500983D26F74E670005CEF6 /* BudgetEfficient */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BudgetEfficient; sourceTree = BUILT_PRODUCTS_DIR; };
 		7500983F26F74E670005CEF6 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		7500984426F74F2A0005CEF6 /* budget_manager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = budget_manager.h; sourceTree = "<group>"; };
-		7500984526F74F3E0005CEF6 /* bulk_updateer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bulk_updateer.h; sourceTree = "<group>"; };
+		7500984526F74F3E0005CEF6 /* bulk_updater.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bulk_updater.h; sourceTree = "<group>"; };
 		7500984626F74F4E0005CEF6 /* date.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = date.h; sourceTree = "<group>"; };
 		7500984726F74F600005CEF6 /* entities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = entities.h; sourceTree = "<group>"; };
 		7500984826F74FB40005CEF6 /* parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = parser.h; sourceTree = "<group>"; };
@@ -642,7 +642,7 @@
 			children = (
 				7500983F26F74E670005CEF6 /* main.cpp */,
 				7500984426F74F2A0005CEF6 /* budget_manager.h */,
-				7500984526F74F3E0005CEF6 /* bulk_updateer.h */,
+				7500984526F74F3E0005CEF6 /* bulk_updater.h */,
 				7500984626F74F4E0005CEF6 /* date.h */,
 				7500984726F74F600005CEF6 /* entities.h */,
 				7500984826F74FB40005CEF6 /* parser.h */,
@@ -1907,6 +1907,7 @@
 		7500984126F74E670005CEF6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CODE_SIGN_STYLE = Automatic;
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1916,6 +1917,7 @@
 		7500984226F74E670005CEF6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CODE_SIGN_STYLE = Automatic;
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				PRODUCT_NAME = "$(TARGET_NAME)";

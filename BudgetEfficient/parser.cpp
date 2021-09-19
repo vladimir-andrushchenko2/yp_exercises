@@ -57,6 +57,7 @@ public:
     public:
         std::unique_ptr<Query> Construct(std::string_view config) const override {
             auto parts = Split(config, ' ');
+//            double payload = std::stod(std::string(parts[2]));
             return std::make_unique<PayTax>(Date::FromString(parts[0]), Date::FromString(parts[1]));
         }
     };
