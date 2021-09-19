@@ -33,8 +33,8 @@ int StringViewToInt(std::string_view text) {
 
     if (ec == std::errc())
     {
-//        std::cout << "Result: " << result << ", ptr -> " << std::quoted(ptr) << '\n';
-//        throw std::logic_error("couldn't parse int"s);
+        //        std::cout << "Result: " << result << ", ptr -> " << std::quoted(ptr) << '\n';
+        //        throw std::logic_error("couldn't parse int"s);
     }
     else if (ec == std::errc::invalid_argument)
     {
@@ -81,7 +81,14 @@ void ParseAndProcessQuery(BudgetManager& manager, string_view line) {
         std::cout << manager.ComputeIncome(begin, end) << std::endl;
 
     } else if (command.at(0) == "PayTax"sv) {
-        manager.PayTax(begin, end);
+        int tax_rate = StringViewToInt(command.at(3));
+
+        manager.PayTax(begin, end, tax_rate);
+
+    } else if (command.at(0) == "Spend"sv) {
+        double spendings = StringViewToDouble(command.at(3));
+
+        manager.Spend(begin, end, spendings);
     } else {
         assert(false);
     }
@@ -94,7 +101,7 @@ int ReadNumberOnLine(istream& input) {
 }
 
 int main() {
-//    TestBudgetManager();
+    //    TestBudgetManager();
 
     BudgetManager manager;
 

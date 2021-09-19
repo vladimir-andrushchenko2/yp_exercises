@@ -3,6 +3,7 @@
 
 struct DayInfo {
     double earnings = 0.0;
+    double spendings = 0.0;
 };
 
 class BudgetManager {
@@ -14,7 +15,7 @@ public:
     BudgetManager() { days_.resize(Date::ComputeDistance(START_DATE, END_DATE)); }
 
     void Earn(Date begin, Date end, double total_earnings) {
-        double earnings_per_day = total_earnings / (Date::ComputeDistance(begin, end) + 1);
+        double earnings_per_day = total_earnings / DaysFromFirstToLast(begin, end);
 
         ForEachDay(begin, end,
                    [earnings_per_day](DayInfo& day) { day.earnings += earnings_per_day; });
@@ -23,16 +24,26 @@ public:
     double ComputeIncome(Date begin, Date end) {
         double output{};
 
-        ForEachDay(begin, end, [&output](const DayInfo day) { output += day.earnings; });
+        ForEachDay(begin, end, [&output](const DayInfo day) { output += day.earnings - day.spendings; });
 
         return output;
     }
 
-    void PayTax(Date begin, Date end) {
-        ForEachDay(begin, end, [](DayInfo& day) {
-            constexpr double kTaxMultiplier = 0.87;
+    void PayTax(Date begin, Date end, int tax_rate) {
+        assert(tax_rate <= 100 && tax_rate >= 0);
 
-            day.earnings *= kTaxMultiplier;
+        double tax_multiplier = 1.0 - (static_cast<double>(tax_rate) / 100.0);
+
+        ForEachDay(begin, end, [tax_multiplier](DayInfo& day) {
+            day.earnings *= tax_multiplier;
+        });
+    }
+
+    void Spend(Date begin, Date end, double spendings) {
+        double spendings_per_day = spendings / DaysFromFirstToLast(begin, end);
+
+        ForEachDay(begin, end, [spendings_per_day](DayInfo& day){
+            day.spendings += spendings_per_day;
         });
     }
     
@@ -45,6 +56,11 @@ private:
         for (int i = first_day_index; i <= last_day_index; ++i) {
             predicate(days_[i]);
         }
+    }
+
+    int DaysFromFirstToLast(Date begin, Date end) {
+        // +1 to accomodate for the first day
+        return Date::ComputeDistance(begin, end) + 1;
     }
 
 private:
