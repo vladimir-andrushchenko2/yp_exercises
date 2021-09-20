@@ -352,6 +352,7 @@
 		750B0A8026A9AD66002A522A /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		750B0A8926AA918A002A522A /* TreeIterator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TreeIterator; sourceTree = BUILT_PRODUCTS_DIR; };
 		750B0A8B26AA918A002A522A /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		750C1B3326F8719900E48DD5 /* efficient_budget_test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = efficient_budget_test.h; sourceTree = "<group>"; };
 		7578D90F26C50C1D00B16B95 /* Cache */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Cache; sourceTree = BUILT_PRODUCTS_DIR; };
 		7578D91126C50C1D00B16B95 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		7578D91A26C5553C00B16B95 /* HouseBuilder */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = HouseBuilder; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -641,6 +642,7 @@
 			isa = PBXGroup;
 			children = (
 				7500983F26F74E670005CEF6 /* main.cpp */,
+				750C1B3326F8719900E48DD5 /* efficient_budget_test.h */,
 				7500984426F74F2A0005CEF6 /* budget_manager.h */,
 				7500984526F74F3E0005CEF6 /* bulk_updater.h */,
 				7500984626F74F4E0005CEF6 /* date.h */,

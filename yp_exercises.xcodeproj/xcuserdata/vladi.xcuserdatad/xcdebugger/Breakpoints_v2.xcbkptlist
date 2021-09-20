@@ -199,112 +199,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "399C61BD-D50B-456B-AF42-F7B2EF72CD1D"
+            uuid = "48A08BA3-3206-47BA-B26E-834A0962030B"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BudgetEfficient/main.cpp"
+            filePath = "BudgetEfficient/parser.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "24"
-            endingLineNumber = "24"
-            landmarkName = "main()"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "0374459B-39F9-4AA7-A54B-298DC66334EF"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BudgetEfficient/main.cpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "8"
-            endingLineNumber = "8"
-            landmarkName = "ParseAndProcessQuery(manager, line)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "CFD67708-7885-4DFC-A656-11671102B590"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BudgetEfficient/bulk_updater.h"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "38"
-            endingLineNumber = "38"
-            landmarkName = "BulkLinearUpdater"
-            landmarkType = "3">
-            <Locations>
-               <Location
-                  uuid = "CFD67708-7885-4DFC-A656-11671102B590 - ff1a45af51198a22"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "BulkLinearUpdater::BulkLinearUpdater(BulkMoneySpender const&amp;)"
-                  moduleName = "BudgetEfficient"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/vladi/Desktop/workdir/yp_exercises/BudgetEfficient/bulk_updater.h"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "38"
-                  endingLineNumber = "38"
-                  offsetFromSymbolStart = "20">
-               </Location>
-               <Location
-                  uuid = "CFD67708-7885-4DFC-A656-11671102B590 - ff1a45af51198a22"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "BulkLinearUpdater::BulkLinearUpdater(BulkMoneySpender const&amp;)"
-                  moduleName = "BudgetEfficient"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/vladi/Desktop/workdir/yp_exercises/BudgetEfficient/bulk_updater.h"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "38"
-                  endingLineNumber = "38"
-                  offsetFromSymbolStart = "24">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "20481DB8-7CDD-4447-866C-AD62E28F8C3E"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BudgetEfficient/summing_segment_tree.h"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "38"
-            endingLineNumber = "38"
-            landmarkName = "AddBulkOperation(segment, operation)"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
+            landmarkName = "Construct(config)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "6388426B-A4AE-4193-AF92-4B12B7C5DE9F"
-            shouldBeEnabled = "Yes"
+            uuid = "2309E7D0-DD2F-4368-8FAB-E96700FE88C7"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BudgetEfficient/bulk_updater.h"
+            filePath = "BudgetEfficient/parser.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
-            landmarkName = "CombineWith(other)"
+            startingLineNumber = "65"
+            endingLineNumber = "65"
+            landmarkName = "Construct(config)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -77,7 +77,7 @@ public:
     , tax_multiplier_(tax_multiplier) {}
 
     void Process(BudgetManager& budget) const override {
-        budget.AddBulkOperation(GetFrom(), GetTo(), BulkTaxApplier{1, tax_multiplier_});
+        budget.AddBulkOperation(GetFrom(), GetTo(), BulkTaxApplier{tax_multiplier_});
     }
 
     class Factory : public QueryFactory {

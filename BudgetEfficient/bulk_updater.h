@@ -15,11 +15,6 @@ struct BulkMoneySpender {
 };
 
 struct BulkTaxApplier {
-    double ComputeFactor() const {
-        return std::pow(factor, count);
-    }
-
-    int count = 0;
     double factor = 1.0;
 };
 
@@ -38,13 +33,13 @@ public:
     BulkLinearUpdater(const BulkMoneySpender& spend) : spend_(spend) {}
 
     void CombineWith(const BulkLinearUpdater& other) {
-        tax_.count += other.tax_.count;
-        add_.delta = add_.delta * other.tax_.ComputeFactor() + other.add_.delta;
+        tax_.factor *= other.tax_.factor;
+        add_.delta = add_.delta * other.tax_.factor + other.add_.delta;
         spend_.delta += other.spend_.delta;
     }
 
     DayInfo Collapse(DayInfo origin, IndexSegment segment) const {
-        origin.earned = origin.earned * tax_.ComputeFactor() + add_.delta * static_cast<double>(segment.length());
+        origin.earned = origin.earned * tax_.factor + add_.delta * static_cast<double>(segment.length());
         origin.spent = origin.spent + spend_.delta * static_cast<double>(segment.length());
         return origin;
     }
