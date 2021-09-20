@@ -108,23 +108,6 @@ Number ReadNumberOnLine(istream& input) {
     return num;
 }
 
-//const string test_string = R"delim(4
-//gdz.ru
-//maps.me
-//m.gdz.ru
-//com
-//7
-//gdz.ru
-//gdz.com
-//m.maps.me
-//alg.m.gdz.ru
-//maps.com
-//maps.ru
-//gdz.ua
-//)delim";
-//
-//std::istringstream test_input{test_string};
-
 int main() {
     const std::vector<Domain> forbidden_domains = ReadDomains(std::cin, ReadNumberOnLine<size_t>(std::cin));
     DomainChecker checker(forbidden_domains.begin(), forbidden_domains.end());
