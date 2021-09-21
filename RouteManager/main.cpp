@@ -6,6 +6,7 @@
 #include <vector>
 #include <set>
 #include <unordered_map>
+#include <sstream>
 
 using namespace std;
 
@@ -15,32 +16,55 @@ public:
         reachable_lists_[start].insert(finish);
         reachable_lists_[finish].insert(start);
     }
+
     int FindNearestFinish(int start, int finish) const {
         int result = abs(start - finish);
+
         if (reachable_lists_.count(start) < 1) {
             return result;
         }
+
         const set<int>& reachable_stations = reachable_lists_.at(start);
+
         if (!reachable_stations.empty()) {
-            result = min(
-                         result,
-                         abs(
-                             finish - *min_element(
-                                                   reachable_stations.begin(),
-                                                   reachable_stations.end(),
-                                                   [finish](int lhs, int rhs) {
-                return abs(lhs - finish) < abs(rhs - finish);
+            auto it = lower_bound(reachable_stations.begin(), reachable_stations.end(), finish);
+
+            if (*it == finish) {
+                return 0;
             }
-                                                   )
-                             )
-                         );
+
+            if (it == reachable_stations.end()) {
+                result = std::min(result, std::abs(*(--it) - finish));
+            } else if (it == reachable_stations.begin()) {
+                result = std::min(result, std::abs(*it - finish));
+            } else {
+                result = std::min({result,
+                    std::abs(*it - finish),
+                    std::abs(*(--it) - finish)
+                });
+            }
         }
+
         return result;
     }
 
 private:
     unordered_map<int, set<int>> reachable_lists_;
 };
+
+/*
+const std::string test = R"d(7
+ADD -2 5
+ADD 10 4
+ADD 5 8
+GO 4 10
+GO 4 -2
+GO 5 0
+GO 5 100
+)d";
+
+std::istringstream test_input{test};
+*/
 
 int main() {
     RouteManager routes;
