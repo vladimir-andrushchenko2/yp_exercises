@@ -4,21 +4,23 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <set>
+#include <unordered_map>
 
 using namespace std;
 
 class RouteManager {
 public:
     void AddRoute(int start, int finish) {
-        reachable_lists_[start].push_back(finish);
-        reachable_lists_[finish].push_back(start);
+        reachable_lists_[start].insert(finish);
+        reachable_lists_[finish].insert(start);
     }
     int FindNearestFinish(int start, int finish) const {
         int result = abs(start - finish);
         if (reachable_lists_.count(start) < 1) {
             return result;
         }
-        const vector<int>& reachable_stations = reachable_lists_.at(start);
+        const set<int>& reachable_stations = reachable_lists_.at(start);
         if (!reachable_stations.empty()) {
             result = min(
                          result,
@@ -37,7 +39,7 @@ public:
     }
 
 private:
-    map<int, vector<int>> reachable_lists_;
+    unordered_map<int, set<int>> reachable_lists_;
 };
 
 int main() {
