@@ -27,16 +27,26 @@ public:
         const set<int>& reachable_stations = reachable_lists_.at(start);
 
         if (!reachable_stations.empty()) {
-            auto it = lower_bound(reachable_stations.begin(), reachable_stations.end(), finish);
+            auto it = reachable_stations.lower_bound(finish);
 
+            // если есть прямой экспресс возвращаю 0
             if (*it == finish) {
                 return 0;
             }
 
+            // если нужно добраться из 5 в 0 при возможной отправке только в -2
+            // lower_bound не найдет числа не меньше 0 и укажет на end
+            // поэтому проверяю станцию по адресу меньшую 0 и нахожу -2
             if (it == reachable_stations.end()) {
                 result = std::min(result, std::abs(*(--it) - finish));
+
+            // в случае из 4 в -2 с доступной станции из 4 только в 10
+            // it указывает на begin, все доступные станции больше нужного адреса
             } else if (it == reachable_stations.begin()) {
                 result = std::min(result, std::abs(*it - finish));
+
+            // если it указывает на число большее чем finish
+            // проверяю так же число меньшее чем финиш
             } else {
                 result = std::min({result,
                     std::abs(*it - finish),
