@@ -35,38 +35,38 @@ private:
     mutable mt19937 engine_;
 };
 
-const std::string test = R"d(10
-INSERT 1
-INSERT 2
-INSERT 3
-HAS 2
-RAND
-RAND
-REMOVE 3
-HAS 3
-RAND
-RAND)d";
-
-std::istringstream test_input{test};
+//const std::string test = R"d(10
+//INSERT 1
+//INSERT 2
+//INSERT 3
+//HAS 2
+//RAND
+//RAND
+//REMOVE 3
+//HAS 3
+//RAND
+//RAND)d";
+//
+//std::istringstream test_input{test};
 
 int main() {
     RandomContainer container;
     int query_num = 0;
-    test_input >> query_num;
+    cin >> query_num;
     for (int query_id = 0; query_id < query_num; query_id++) {
         string query_type;
-        test_input >> query_type;
+        cin >> query_type;
         if (query_type == "INSERT"s) {
             int value = 0;
-            test_input >> value;
+            cin >> value;
             container.Insert(value);
         } else if (query_type == "REMOVE"s) {
             int value = 0;
-            test_input >> value;
+            cin >> value;
             container.Remove(value);
         } else if (query_type == "HAS"s) {
             int value = 0;
-            test_input >> value;
+            cin >> value;
             if (container.Has(value)) {
                 cout << "true"s << endl;
             } else {
