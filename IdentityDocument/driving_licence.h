@@ -6,23 +6,69 @@
 
 using namespace std::string_view_literals;
 
-class DrivingLicence : public IdentityDocument {
+class DrivingLicence {
 public:
     DrivingLicence() {
+        parent_.SetVTablePtr(&vtable_);
         std::cout << "DrivingLicence::Ctor()"sv << std::endl;
     }
 
     DrivingLicence(const DrivingLicence& other)
-        : IdentityDocument(other) 
+        : parent_(other.parent_)
     {
         std::cout << "DrivingLicence::CCtor()"sv << std::endl;
     }
 
     ~DrivingLicence() {
+        parent_.ResetVTablePtr();
         std::cout << "DrivingLicence::Dtor()"sv << std::endl;
     }
 
-    void PrintID() const {
-        std::cout << "DrivingLicence::PrintID() : "sv << GetID() << std::endl;
+    operator const IdentityDocument* () const {
+        return &parent_;
     }
+
+    operator IdentityDocument() {
+        IdentityDocument identity_document;
+        identity_document.ResetVTablePtr();
+        return identity_document;
+    }
+
+    void PrintID() const{
+        std::cout << "DrivingLicence::PrintID() : "sv << parent_.GetID() << std::endl;
+    }
+
+    void Delete() {
+        this->~DrivingLicence();
+    }
+
+    int GetID() const {
+        return parent_.GetID();
+    }
+
+    void SetVTablePtr(void* new_ptr) {
+        vtable_ptr_ = new_ptr;
+    }
+
+    void ResetVTablePtr() {
+        vtable_ptr_ = &vtable_;
+    }
+
+
+private:
+    struct VTable {
+        using T = void (DrivingLicence::*) () const;
+        using U = void (DrivingLicence::*) () ;
+
+        T print_id = { &DrivingLicence::PrintID };
+        U delete_impl = { &DrivingLicence::Delete };
+    };
+
+private:
+    IdentityDocument parent_;
+
+    static VTable vtable_;
+    void* vtable_ptr_ = { &vtable_ };
 };
+
+DrivingLicence::VTable DrivingLicence::vtable_ = {};

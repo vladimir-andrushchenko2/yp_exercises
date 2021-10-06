@@ -6,23 +6,54 @@
 
 using namespace std::string_view_literals;
 
-class InternationalDrivingLicence : public DrivingLicence {
+class InternationalDrivingLicence {
 public:
     InternationalDrivingLicence() {
+        parent_.SetVTablePtr(&vtable_);
         std::cout << "InternationalDrivingLicence::Ctor()"sv << std::endl;
     }
 
     InternationalDrivingLicence(const InternationalDrivingLicence& other)
-        : DrivingLicence(other) 
+        : parent_(other.parent_)
     {
         std::cout << "InternationalDrivingLicence::CCtor()"sv << std::endl;
     }
 
     ~InternationalDrivingLicence() {
+        parent_.ResetVTablePtr();
         std::cout << "InternationalDrivingLicence::Dtor()"sv << std::endl;
     }
 
-    void PrintID() const {
-        std::cout << "InternationalDrivingLicence::PrintID() : "sv << GetID() << std::endl;
+    operator const DrivingLicence* () const {
+        return &parent_;
     }
+
+    operator DrivingLicence() {
+        DrivingLicence driving_license;
+        driving_license.ResetVTablePtr();
+        return driving_license;
+    }
+
+    void PrintID() const {
+        std::cout << "InternationalDrivingLicence::PrintID() : "sv << parent_.GetID() << std::endl;
+    }
+
+    void Delete() {
+        this->~InternationalDrivingLicence();
+    }
+
+private:
+    struct VTable {
+        using T = void (InternationalDrivingLicence::*)() const;
+        using U = void (InternationalDrivingLicence::*)();
+
+        T print_id = {&InternationalDrivingLicence::PrintID };
+        U delete_impl = {&InternationalDrivingLicence::Delete };
+    };
+
+private:
+    DrivingLicence parent_;
+    static VTable vtable_;
 };
+
+InternationalDrivingLicence::VTable InternationalDrivingLicence::vtable_ = {};

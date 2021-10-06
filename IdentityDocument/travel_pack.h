@@ -6,19 +6,18 @@
 
 using namespace std::string_view_literals;
 
-class TravelPack : public IdentityDocument {
+class TravelPack {
 public:
     TravelPack()
-        : identity_doc1_(new Passport())
-        , identity_doc2_(new DrivingLicence()) 
+        : identity_doc1_((IdentityDocument*) new Passport())
+        , identity_doc2_((IdentityDocument*) new DrivingLicence())
     {
         std::cout << "TravelPack::Ctor()"sv << std::endl;
     }
 
     TravelPack(const TravelPack& other)
-        : IdentityDocument(other)
-        , identity_doc1_(new Passport(*dynamic_cast<Passport*>(other.identity_doc1_)))
-        , identity_doc2_(new DrivingLicence(*dynamic_cast<DrivingLicence*>(other.identity_doc2_)))
+        : identity_doc1_((IdentityDocument*) new Passport(*reinterpret_cast<Passport*>(other.identity_doc1_)))
+        , identity_doc2_((IdentityDocument*) new Passport(*reinterpret_cast<Passport*>(other.identity_doc2_)))
         , additional_pass_(other.additional_pass_)
         , additional_dr_licence_(other.additional_dr_licence_) 
     {
@@ -31,7 +30,7 @@ public:
         std::cout << "TravelPack::Dtor()"sv << std::endl;
     }
 
-    void PrintID() const {
+    void PrintID() const{
         identity_doc1_->PrintID();
         identity_doc2_->PrintID();
         additional_pass_.PrintID();
