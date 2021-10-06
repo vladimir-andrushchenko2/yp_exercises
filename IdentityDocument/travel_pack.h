@@ -6,7 +6,7 @@
 
 using namespace std::string_view_literals;
 
-class TravelPack/* : public IdentityDocument*/ {
+class TravelPack : public IdentityDocument {
 public:
     TravelPack()
         : identity_doc1_(new Passport())
