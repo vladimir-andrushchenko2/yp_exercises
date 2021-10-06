@@ -6,7 +6,7 @@
 
 using namespace std::string_view_literals;
 
-class DrivingLicence : public IdentityDocument {
+class DrivingLicence /*: public IdentityDocument */{
 public:
     DrivingLicence() {
         std::cout << "DrivingLicence::Ctor()"sv << std::endl;

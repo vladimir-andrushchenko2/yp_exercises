@@ -6,7 +6,7 @@
 
 using namespace std::string_view_literals;
 
-class InternationalDrivingLicence : public DrivingLicence {
+class InternationalDrivingLicence /*: public DrivingLicence*/ {
 public:
     InternationalDrivingLicence() {
         std::cout << "InternationalDrivingLicence::Ctor()"sv << std::endl;

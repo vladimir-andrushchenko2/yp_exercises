@@ -7,7 +7,7 @@
 
 using namespace std::string_view_literals;
 
-class Passport : public IdentityDocument {
+class Passport /*: public IdentityDocument*/ {
 public:
     Passport()
         : expiration_date_(GetExpirationDate()) 
