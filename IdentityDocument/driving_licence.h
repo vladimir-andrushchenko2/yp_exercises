@@ -57,11 +57,11 @@ public:
 
 private:
     struct VTable {
-        using T = void (DrivingLicence::*) () const;
-        using U = void (DrivingLicence::*) () ;
+        using PrintIDType = void (DrivingLicence::*) () const;
+        using DeleteType = void (DrivingLicence::*) () ;
 
-        T print_id = { &DrivingLicence::PrintID };
-        U delete_impl = { &DrivingLicence::Delete };
+        PrintIDType print_id = { &DrivingLicence::PrintID };
+        DeleteType delete_impl = { &DrivingLicence::Delete };
     };
 
 private:

@@ -12,6 +12,7 @@ public:
         : identity_doc1_((IdentityDocument*) new Passport())
         , identity_doc2_((IdentityDocument*) new DrivingLicence())
     {
+        parent_.SetVTablePtr(&vtable_);
         std::cout << "TravelPack::Ctor()"sv << std::endl;
     }
 
@@ -25,8 +26,9 @@ public:
     }
 
     ~TravelPack() {
-        delete identity_doc1_;
-        delete identity_doc2_;
+        identity_doc1_->Delete();
+        identity_doc2_->Delete();
+        parent_.ResetVTablePtr();
         std::cout << "TravelPack::Dtor()"sv << std::endl;
     }
 
@@ -37,9 +39,28 @@ public:
         additional_dr_licence_.PrintID();
     }
 
+    void Delete() {
+        this->~TravelPack();
+    }
+
 private:
+    struct VTable {
+        using PrintIDType = void (TravelPack::*) () const;
+        using DeleteType = void (TravelPack::*) () ;
+
+        PrintIDType print_id = { &TravelPack::PrintID };
+        DeleteType delete_impl = { &TravelPack::Delete };
+    };
+
+private:
+    static VTable vtable_;
+
+    IdentityDocument parent_;
+
     IdentityDocument* identity_doc1_;
     IdentityDocument* identity_doc2_;
     Passport additional_pass_;
     DrivingLicence additional_dr_licence_;
 };
+
+TravelPack::VTable TravelPack::vtable_ = {};
