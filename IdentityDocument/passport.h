@@ -32,13 +32,17 @@ public:
         return &parent_;
     }
 
+    operator IdentityDocument* () {
+        return &parent_;
+    }
+
     operator IdentityDocument() {
         IdentityDocument identity_document;
         identity_document.ResetVTablePtr();
         return identity_document;
     }
 
-    void PrintID()const {
+    void PrintID() const {
         std::cout << "Passport::PrintID() : "sv << parent_.GetID();
         std::cout << " expiration date : "sv << expiration_date_.tm_mday << "/"sv << expiration_date_.tm_mon << "/"sv
                   << expiration_date_.tm_year + 1900 << std::endl;
