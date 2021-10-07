@@ -34,6 +34,17 @@ public:
         vtable_ptr_ = &vtable_;
     }
 
+//    static void SetVTable(IdentityDocument* obj) {
+//        /* Указатель vptr хранится в самом начале объекта,
+//         поэтому чтобы получить к нему доступ,
+//         можно воспользоваться C-style преобразованием */
+//        /* obj - указатель. При этом в начале объекта тоже лежит указатель - vptr.
+//         То есть можно сказать, что obj - это указатель на указатель. Иначе говоря,
+//         двойной указатель. Укажем это явно, а потом разыменуем, чтобы задать адрес,
+//         на который указывает vptr */
+//        *(IdentityDocument::VTable**) obj = &IdentityDocument::VTable;
+//    }
+
     void PrintID() const {
         auto print_id_ptr = static_cast<VTable*>(vtable_ptr_)->print_id;
         (this->*print_id_ptr)();
@@ -78,6 +89,6 @@ private:
     int unique_id_;
 };
 
-IdentityDocument::VTable IdentityDocument::vtable_ = {};
+IdentityDocument::VTable IdentityDocument::vtable_ = { IdentityDocument::PrintIDImpl, IdentityDocument::DeleteImpl };
 
 int IdentityDocument::unique_id_count_ = 0;

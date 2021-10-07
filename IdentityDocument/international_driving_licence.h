@@ -16,6 +16,7 @@ public:
     InternationalDrivingLicence(const InternationalDrivingLicence& other)
         : parent_(other.parent_)
     {
+        parent_.SetVTablePtr(&vtable_);
         std::cout << "InternationalDrivingLicence::CCtor()"sv << std::endl;
     }
 
@@ -29,9 +30,7 @@ public:
     }
 
     operator DrivingLicence() {
-        DrivingLicence driving_license;
-        driving_license.ResetVTablePtr();
-        return driving_license;
+        return {parent_};
     }
 
     void PrintID() const {
@@ -56,4 +55,4 @@ private:
     static VTable vtable_;
 };
 
-InternationalDrivingLicence::VTable InternationalDrivingLicence::vtable_ = {};
+InternationalDrivingLicence::VTable InternationalDrivingLicence::vtable_ = {InternationalDrivingLicence::PrintID, InternationalDrivingLicence::Delete };

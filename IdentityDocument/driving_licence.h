@@ -16,6 +16,7 @@ public:
     DrivingLicence(const DrivingLicence& other)
         : parent_(other.parent_)
     {
+        parent_.SetVTablePtr(&vtable_);
         std::cout << "DrivingLicence::CCtor()"sv << std::endl;
     }
 
@@ -28,11 +29,7 @@ public:
         return &parent_;
     }
 
-    operator IdentityDocument() {
-        IdentityDocument identity_document;
-        identity_document.ResetVTablePtr();
-        return identity_document;
-    }
+    operator IdentityDocument() { return {parent_}; }
 
     void PrintID() const{
         std::cout << "DrivingLicence::PrintID() : "sv << parent_.GetID() << std::endl;
@@ -67,8 +64,8 @@ private:
 private:
     IdentityDocument parent_;
 
-    static VTable vtable_;
+    static DrivingLicence::VTable vtable_;
     void* vtable_ptr_ = { &vtable_ };
 };
 
-DrivingLicence::VTable DrivingLicence::vtable_ = {};
+DrivingLicence::VTable DrivingLicence::vtable_ = { DrivingLicence::PrintID, DrivingLicence::PrintID };

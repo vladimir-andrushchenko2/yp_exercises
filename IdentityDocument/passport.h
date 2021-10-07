@@ -25,6 +25,7 @@ public:
         : parent_(other.parent_)
         , expiration_date_(other.expiration_date_) 
     {
+        parent_.SetVTablePtr(&vtable_);
         std::cout << "Passport::CCtor()"sv << std::endl;
     }
 
@@ -36,11 +37,7 @@ public:
         return &parent_;
     }
 
-    operator IdentityDocument() {
-        IdentityDocument identity_document;
-        identity_document.ResetVTablePtr();
-        return identity_document;
-    }
+    operator IdentityDocument() { return {parent_}; }
 
     void PrintID() const {
         std::cout << "Passport::PrintID() : "sv << parent_.GetID();
@@ -102,4 +99,4 @@ private:
 	}
 };
 
-Passport::VTable Passport::vtable_ = {};
+Passport::VTable Passport::vtable_ = { Passport::PrintID, Passport::Delete, Passport::PrintVisa };

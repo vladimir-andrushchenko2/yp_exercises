@@ -22,6 +22,7 @@ public:
         , additional_pass_(other.additional_pass_)
         , additional_dr_licence_(other.additional_dr_licence_) 
     {
+        parent_.SetVTablePtr(&vtable_);
         std::cout << "TravelPack::CCtor()"sv << std::endl;
     }
 
@@ -38,6 +39,8 @@ public:
         additional_pass_.PrintID();
         additional_dr_licence_.PrintID();
     }
+
+    operator IdentityDocument() { return {parent_}; }
 
     void Delete() {
         this->~TravelPack();
@@ -63,4 +66,4 @@ private:
     DrivingLicence additional_dr_licence_;
 };
 
-TravelPack::VTable TravelPack::vtable_ = {};
+TravelPack::VTable TravelPack::vtable_ = { TravelPack::PrintID, TravelPack::Delete };
