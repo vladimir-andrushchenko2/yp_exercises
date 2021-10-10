@@ -5,17 +5,38 @@
 
 using namespace std;
 
+byte Negative(byte c) {
+    return static_cast<byte>(255 - to_integer<int>(c));
+}
+
+void NegativeInplace(img_lib::Image& image) {
+    using namespace img_lib;
+
+    for (int y = 0; y < image.GetHeight(); ++y) {
+        Color* begin_line = image.GetLine(y);
+        const Color * end_line = begin_line + image.GetWidth();
+
+        for (Color* pixel = begin_line; pixel != end_line; ++pixel) {
+            pixel->r = Negative(pixel->r);
+            pixel->g = Negative(pixel->g);
+            pixel->b = Negative(pixel->b);
+        }
+    }
+}
+
 int main(int argc, const char** argv) {
     if (argc != 3) {
         cerr << "Usage: "sv << argv[0] << " <input image> <output image>"sv << endl;
         return 1;
     }
 
-    const auto image = img_lib::LoadPPM(argv[1]);
+    auto image = img_lib::LoadPPM(argv[1]);
     if (!image) {
         cerr << "Error loading image"sv << endl;
         return 2;
     }
+
+    NegativeInplace(image);
 
     if (!img_lib::SavePPM(argv[2], image)) {
         cerr << "Error saving image"sv << endl;
