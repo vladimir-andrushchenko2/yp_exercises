@@ -19,20 +19,17 @@ bool SavePPM(const Path& file, const Image& image) {
         output << PPM_SIG << ' ' << image.GetWidth() << ' ' << image.GetHeight() << ' ' << PPM_MAX << endl;
 
         std::vector<char> buff(3 * image.GetWidth());
-        char* line = buff.data();
 
         for (int y = 0; y < image.GetHeight(); ++y) {
-            const Color* image_line_start = image.GetLine(y);
-
             for (int x = 0; x < image.GetWidth(); ++x) {
-                const Color* image_pixel = image_line_start + x;
+                const Color& image_pixel = image.GetPixel(x, y);
 
-                *(line + x) = static_cast<char>(image_pixel->r);
-                *(line + x + 1) = static_cast<char>(image_pixel->g);
-                *(line + x + 2) = static_cast<char>(image_pixel->b);
+                buff[x * 3] = static_cast<char>(image_pixel.r);
+                buff[x * 3 + 1] = static_cast<char>(image_pixel.r);
+                buff[x * 3 + 2] = static_cast<char>(image_pixel.r);
             }
 
-            output.write(line, buff.size());
+            output.write(buff.data(), buff.size());
         }
 
     } catch(...) {
