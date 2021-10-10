@@ -34,6 +34,10 @@ public:
         std::cout << "unique_id_count_ : "sv << unique_id_count_ << std::endl;
     }
 
+    struct VTable {
+
+    };
+
 protected:
     int GetID() const {
         return unique_id_;
