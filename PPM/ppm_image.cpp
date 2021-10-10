@@ -16,7 +16,7 @@ bool SavePPM(const Path& file, const Image& image) {
     try {
         std::ofstream output(file, ios::binary);
 
-        output << PPM_SIG << ' ' << image.GetWidth() << ' ' << image.GetHeight() << ' ' << PPM_MAX << endl;
+        output << PPM_SIG << '\n' << image.GetWidth() << ' ' << image.GetHeight() << '\n' << PPM_MAX << endl;
 
         std::vector<char> buff(3 * image.GetWidth());
 
@@ -25,8 +25,8 @@ bool SavePPM(const Path& file, const Image& image) {
                 const Color& image_pixel = image.GetPixel(x, y);
 
                 buff[x * 3] = static_cast<char>(image_pixel.r);
-                buff[x * 3 + 1] = static_cast<char>(image_pixel.r);
-                buff[x * 3 + 2] = static_cast<char>(image_pixel.r);
+                buff[x * 3 + 1] = static_cast<char>(image_pixel.g);
+                buff[x * 3 + 2] = static_cast<char>(image_pixel.b);
             }
 
             output.write(buff.data(), buff.size());
