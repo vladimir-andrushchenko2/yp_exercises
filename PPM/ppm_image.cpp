@@ -12,7 +12,35 @@ static const string_view PPM_SIG = "P6"sv;
 static const int PPM_MAX = 255;
 
 // реализуйте эту функцию самостоятельно
-bool SavePPM(const Path& file, const Image& image);
+bool SavePPM(const Path& file, const Image& image) {
+    try {
+        std::ofstream output(file, ios::binary);
+
+        output << PPM_SIG << ' ' << image.GetWidth() << ' ' << image.GetHeight() << ' ' << PPM_MAX << endl;
+
+        std::vector<char> buff(3 * image.GetWidth());
+        char* line = buff.data();
+
+        for (int y = 0; y < image.GetHeight(); ++y) {
+            const Color* image_line_start = image.GetLine(y);
+
+            for (int x = 0; x < image.GetWidth(); ++x) {
+                const Color* image_pixel = image_line_start + x;
+
+                *(line + x) = static_cast<char>(image_pixel->r);
+                *(line + x + 1) = static_cast<char>(image_pixel->g);
+                *(line + x + 2) = static_cast<char>(image_pixel->b);
+            }
+
+            output.write(line, buff.size());
+        }
+
+    } catch(...) {
+        return false;
+    }
+
+    return true;
+}
 
 Image LoadPPM(const Path& file) {
     // открываем поток с флагом ios::binary
