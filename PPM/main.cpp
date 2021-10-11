@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string_view>
 #include <algorithm>
+#include <cmath>
 
 using namespace std;
 
@@ -37,6 +38,89 @@ void HMirrInplace(img_lib::Image& image) {
     }
 }
 
+int GetBrightness(const img_lib::Color* color) {
+    int output = 0;
+
+    output += static_cast<int>(color->r);
+    output += static_cast<int>(color->g);
+    output += static_cast<int>(color->b);
+ 
+    return output;
+}
+
+std::vector<int> GetBrightness(const img_lib::Image& image) {
+    using namespace img_lib;
+
+    std::vector<int> brightness(image.GetWidth(), image.GetHeight());
+
+    for (int y = 0; y < image.GetHeight(); ++y) {
+        const Color* line_begin = image.GetLine(y);
+
+        for (int x = 0; x < image.GetWidth(); ++x) {
+            brightness[y * image.GetWidth() + x] = GetBrightness(line_begin + x);
+        }
+    }
+
+    return brightness;
+}
+
+struct BrightnessGrid {
+    BrightnessGrid(const img_lib::Image& image): h(image.GetHeight()), w(image.GetWidth()) {
+        brightness = GetBrightness(image);
+    }
+
+    std::vector<int> brightness;
+    int h, w;
+
+    int At(int x, int y) {
+        if (x < 0 || x > w || y < 0 || y > h) {
+            return 0;
+        }
+        
+        return brightness[y * w + x];
+    }
+};
+
+img_lib::Color GetSobelAsColor(const std::byte val) {
+    return {val, val, val, static_cast<std::byte>(255)};
+}
+
+// реализуйте оператор Собеля
+img_lib::Image Sobel(const img_lib::Image& image) {
+    using namespace img_lib;
+
+    Image output(image.GetWidth(), image.GetHeight(), Color::Black());
+
+    BrightnessGrid brightness_grid(image);
+
+    int gx, gy;
+
+    for (int y = 0; y < image.GetHeight(); ++y) {
+        Color* line_begin = output.GetLine(y);
+
+        for (int x = 0; x < image.GetWidth(); ++x) {
+            int tl = brightness_grid.At(x - 1, y - 1);
+            int tc = brightness_grid.At(x - 0, y - 1);
+            int tr = brightness_grid.At(x + 1, y - 1);
+
+            int cl = brightness_grid.At(x - 1, y);
+            int cr = brightness_grid.At(x + 1, y);
+
+            int bl = brightness_grid.At(x - 1, y + 1);
+            int bc = brightness_grid.At(x - 0, y + 1);
+            int br = brightness_grid.At(x + 1, y + 1);
+
+            gx = -tl -2 * tc - tr + bl + 2 * bc + br;
+
+            gy = -tl -2 * cl - bl + tr + 2 * cr + br;
+
+            *(line_begin + x) = GetSobelAsColor(static_cast<std::byte>(std::clamp<double>(std::sqrt(gx*gx + gy+gy), 0., 255.)));
+        }
+    } 
+
+    return output;
+}
+
 // реализуйте вертикальное отражение
 void VMirrInplace(img_lib::Image& image) {
     using namespace img_lib;
@@ -66,7 +150,8 @@ int main(int argc, const char** argv) {
     }
 
     // NegativeInplace(image); 
-    VMirrInplace(image);
+    // VMirrInplace(image);
+    image = Sobel(image);
 
     if (!img_lib::SavePPM(argv[2], image)) {
         cerr << "Error saving image"sv << endl;
