@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string_view>
+#include <algorithm>
 
 using namespace std;
 
@@ -24,6 +25,18 @@ void NegativeInplace(img_lib::Image& image) {
     }
 }
 
+// реализуйте горизонтальное отражение
+void HMirrInplace(img_lib::Image& image) {
+    using namespace img_lib;
+
+    for (int y = 0; y < image.GetHeight(); ++y) {
+        Color* begin_line = image.GetLine(y);
+        Color* end_line = begin_line + image.GetWidth();
+
+        std::reverse(begin_line, end_line);
+    }
+}
+
 int main(int argc, const char** argv) {
     if (argc != 3) {
         cerr << "Usage: "sv << argv[0] << " <input image> <output image>"sv << endl;
@@ -36,7 +49,8 @@ int main(int argc, const char** argv) {
         return 2;
     }
 
-    NegativeInplace(image);
+    // NegativeInplace(image); 
+    HMirrInplace(image);
 
     if (!img_lib::SavePPM(argv[2], image)) {
         cerr << "Error saving image"sv << endl;
