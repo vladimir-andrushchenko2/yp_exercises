@@ -38,73 +38,12 @@ void HMirrInplace(img_lib::Image& image) {
     }
 }
 
-int GetBrightness(const img_lib::Color* color) {
-    int output = 0;
-
-    output += static_cast<int>(color->r);
-    output += static_cast<int>(color->g);
-    output += static_cast<int>(color->b);
- 
-    return output;
+int Sum(img_lib::Color c) {
+    return to_integer<int>(c.r) + to_integer<int>(c.g) + to_integer<int>(c.b);
 }
-
-std::vector<int> GetBrightness(const img_lib::Image& image) {
-    using namespace img_lib;
-
-    std::vector<int> brightness(image.GetWidth(), image.GetHeight());
-
-    for (int y = 0; y < image.GetHeight(); ++y) {
-        const Color* line_begin = image.GetLine(y);
-
-        for (int x = 0; x < image.GetWidth(); ++x) {
-            brightness[y * image.GetWidth() + x] = GetBrightness(line_begin + x);
-        }
-    }
-
-    return brightness;
-}
-
-struct BrightnessGrid {
-    BrightnessGrid(const img_lib::Image& image): h(image.GetHeight()), w(image.GetWidth()) {
-        brightness = GetBrightness(image);
-    }
-
-    std::vector<int> brightness;
-    int h, w;
-
-    int At(int x, int y) {
-        if (x < 0 || x > w || y < 0 || y > h) {
-            return 0;
-        }
-        
-        return brightness[y * w + x];
-    }
-};
 
 img_lib::Color GetSobelAsColor(const std::byte val) {
     return {val, val, val, static_cast<std::byte>(255)};
-}
-
-void AddBlackFrame(img_lib::Image& image) {
-    using namespace img_lib;
-
-    Color* begin_line = image.GetLine(0);
-    Color* end_line = begin_line + image.GetWidth();
-
-    std::fill(begin_line, end_line, Color::Black());
-
-    for (int y = 1; y < image.GetHeight(); ++y) {
-        begin_line = image.GetLine(y);
-        end_line = begin_line + image.GetWidth();
-
-        *begin_line = Color::Black();
-        *(end_line - 1) = Color::Black();
-    }
-
-    begin_line = image.GetLine(image.GetHeight() - 1);
-    end_line = begin_line + image.GetWidth();
-
-    std::fill(begin_line, end_line, Color::Black());
 }
 
 // реализуйте оператор Собеля
@@ -113,24 +52,22 @@ img_lib::Image Sobel(const img_lib::Image& image) {
 
     Image output(image.GetWidth(), image.GetHeight(), Color::Black());
 
-    BrightnessGrid brightness_grid(image);
-
     int gx, gy;
 
-    for (int y = 0; y < image.GetHeight(); ++y) {
+    for (int y = 1; y < image.GetHeight() - 1; ++y) {
         Color* line_begin = output.GetLine(y);
 
-        for (int x = 0; x < image.GetWidth(); ++x) {
-            int tl = brightness_grid.At(x - 1, y - 1);
-            int tc = brightness_grid.At(x - 0, y - 1);
-            int tr = brightness_grid.At(x + 1, y - 1);
+        for (int x = 1; x < image.GetWidth() - 1; ++x) {
+            int tl = Sum(image.GetPixel(x - 1, y - 1));
+            int tc = Sum(image.GetPixel(x - 0, y - 1));
+            int tr = Sum(image.GetPixel(x + 1, y - 1));
 
-            int cl = brightness_grid.At(x - 1, y);
-            int cr = brightness_grid.At(x + 1, y);
+            int cl = Sum(image.GetPixel(x - 1, y));
+            int cr = Sum(image.GetPixel(x + 1, y));
 
-            int bl = brightness_grid.At(x - 1, y + 1);
-            int bc = brightness_grid.At(x - 0, y + 1);
-            int br = brightness_grid.At(x + 1, y + 1);
+            int bl = Sum(image.GetPixel(x - 1, y + 1));
+            int bc = Sum(image.GetPixel(x - 0, y + 1));
+            int br = Sum(image.GetPixel(x + 1, y + 1));
 
             gx = -tl -2 * tc - tr + bl + 2 * bc + br;
 
@@ -139,8 +76,6 @@ img_lib::Image Sobel(const img_lib::Image& image) {
             *(line_begin + x) = GetSobelAsColor(static_cast<std::byte>(std::clamp<double>(std::sqrt(gx*gx + gy*gy), 0., 255.)));
         }
     } 
-
-    AddBlackFrame(output);
 
     return output;
 }
@@ -173,8 +108,6 @@ int main(int argc, const char** argv) {
         return 2;
     }
 
-    // NegativeInplace(image); 
-    // VMirrInplace(image);
     image = Sobel(image);
 
     if (!img_lib::SavePPM(argv[2], image)) {
@@ -184,3 +117,19 @@ int main(int argc, const char** argv) {
 
     cout << "Image saved successfully!"sv << endl;
 }
+
+/*
+struct BrightnessCalculator {
+    BrightnessCalculator(const img_lib::Image& image) : image(image) {}
+
+    int At(int x, int y) const {
+        if (x < 0 || x > image.GetWidth() || y < 0 || y > image.GetHeight()) {
+            return 0;
+        }
+        
+        return Sum(image.GetPixel(x, y));
+    }
+
+    const img_lib::Image& image;
+};
+*/
