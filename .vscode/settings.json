@@ -85,7 +85,8 @@
         "fstream": "cpp",
         "stack": "cpp",
         "variant": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "charconv": "cpp"
     },
     "cmake.configureOnOpen": false
 }

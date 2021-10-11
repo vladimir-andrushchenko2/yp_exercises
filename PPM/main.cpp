@@ -85,6 +85,28 @@ img_lib::Color GetSobelAsColor(const std::byte val) {
     return {val, val, val, static_cast<std::byte>(255)};
 }
 
+void AddBlackFrame(img_lib::Image& image) {
+    using namespace img_lib;
+
+    Color* begin_line = image.GetLine(0);
+    Color* end_line = begin_line + image.GetWidth();
+
+    std::fill(begin_line, end_line, Color::Black());
+
+    for (int y = 1; y < image.GetHeight(); ++y) {
+        begin_line = image.GetLine(y);
+        end_line = begin_line + image.GetWidth();
+
+        *begin_line = Color::Black();
+        *(end_line - 1) = Color::Black();
+    }
+
+    begin_line = image.GetLine(image.GetHeight() - 1);
+    end_line = begin_line + image.GetWidth();
+
+    std::fill(begin_line, end_line, Color::Black());
+}
+
 // реализуйте оператор Собеля
 img_lib::Image Sobel(const img_lib::Image& image) {
     using namespace img_lib;
@@ -114,9 +136,11 @@ img_lib::Image Sobel(const img_lib::Image& image) {
 
             gy = -tl -2 * cl - bl + tr + 2 * cr + br;
 
-            *(line_begin + x) = GetSobelAsColor(static_cast<std::byte>(std::clamp<double>(std::sqrt(gx*gx + gy+gy), 0., 255.)));
+            *(line_begin + x) = GetSobelAsColor(static_cast<std::byte>(std::clamp<double>(std::sqrt(gx*gx + gy*gy), 0., 255.)));
         }
     } 
+
+    AddBlackFrame(output);
 
     return output;
 }
