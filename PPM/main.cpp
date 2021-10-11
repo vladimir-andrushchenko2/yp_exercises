@@ -37,6 +37,22 @@ void HMirrInplace(img_lib::Image& image) {
     }
 }
 
+// реализуйте вертикальное отражение
+void VMirrInplace(img_lib::Image& image) {
+    using namespace img_lib;
+
+    int bottom = image.GetHeight() - 1;
+
+    for (int top = 0; top < bottom; ++top, --bottom) {
+        Color* begin_line_top = image.GetLine(top);
+        Color* end_line_top = begin_line_top + image.GetWidth();
+
+        Color* begin_line_bottom = image.GetLine(bottom);
+
+        std::swap_ranges(begin_line_top, end_line_top, begin_line_bottom);
+    }
+}
+
 int main(int argc, const char** argv) {
     if (argc != 3) {
         cerr << "Usage: "sv << argv[0] << " <input image> <output image>"sv << endl;
@@ -50,7 +66,7 @@ int main(int argc, const char** argv) {
     }
 
     // NegativeInplace(image); 
-    HMirrInplace(image);
+    VMirrInplace(image);
 
     if (!img_lib::SavePPM(argv[2], image)) {
         cerr << "Error saving image"sv << endl;
