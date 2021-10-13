@@ -40,6 +40,9 @@
 		7578D94C26C833E100B16B95 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7578D94B26C833E100B16B95 /* main.cpp */; };
 		7583EC4C27174BCD006E6646 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7583EC4B27174BCD006E6646 /* main.cpp */; };
 		7583EC5627174D01006E6646 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7583EC5527174D01006E6646 /* libjpeg.a */; };
+		7583EC5D27174E75006E6646 /* ppm_image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7583EC5A27174E75006E6646 /* ppm_image.cpp */; };
+		7583EC5E27174E75006E6646 /* jpeg_image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7583EC5B27174E75006E6646 /* jpeg_image.cpp */; };
+		7583EC5F27174E75006E6646 /* img_lib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7583EC5C27174E75006E6646 /* img_lib.cpp */; };
 		759BCBE426E657CF00D38797 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 759BCBE326E657CF00D38797 /* main.cpp */; };
 		75D43FBB26CAAB270026E6F4 /* svg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75D43FBA26CAAB270026E6F4 /* svg.cpp */; };
 		75D43FC426CEBCDA0026E6F4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75D43FC326CEBCDA0026E6F4 /* main.cpp */; };
@@ -522,6 +525,12 @@
 		7583EC5227174CD0006E6646 /* jpeglib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jpeglib.h; sourceTree = "<group>"; };
 		7583EC5327174CD0006E6646 /* jerror.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jerror.h; sourceTree = "<group>"; };
 		7583EC5527174D01006E6646 /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = ../../../../../usr/local/Cellar/jpeg/9d/lib/libjpeg.a; sourceTree = "<group>"; };
+		7583EC5727174E75006E6646 /* ppm_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ppm_image.h; sourceTree = "<group>"; };
+		7583EC5827174E75006E6646 /* img_lib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = img_lib.h; sourceTree = "<group>"; };
+		7583EC5927174E75006E6646 /* jpeg_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jpeg_image.h; sourceTree = "<group>"; };
+		7583EC5A27174E75006E6646 /* ppm_image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ppm_image.cpp; sourceTree = "<group>"; };
+		7583EC5B27174E75006E6646 /* jpeg_image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jpeg_image.cpp; sourceTree = "<group>"; };
+		7583EC5C27174E75006E6646 /* img_lib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = img_lib.cpp; sourceTree = "<group>"; };
 		759BCBE126E657CF00D38797 /* Proprocessor */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Proprocessor; sourceTree = BUILT_PRODUCTS_DIR; };
 		759BCBE326E657CF00D38797 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		75D43FBA26CAAB270026E6F4 /* svg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = svg.cpp; sourceTree = "<group>"; };
@@ -1206,6 +1215,12 @@
 			isa = PBXGroup;
 			children = (
 				7583EC4B27174BCD006E6646 /* main.cpp */,
+				7583EC5C27174E75006E6646 /* img_lib.cpp */,
+				7583EC5827174E75006E6646 /* img_lib.h */,
+				7583EC5B27174E75006E6646 /* jpeg_image.cpp */,
+				7583EC5927174E75006E6646 /* jpeg_image.h */,
+				7583EC5A27174E75006E6646 /* ppm_image.cpp */,
+				7583EC5727174E75006E6646 /* ppm_image.h */,
 				7583EC5027174CD0006E6646 /* jconfig.h */,
 				7583EC5327174CD0006E6646 /* jerror.h */,
 				7583EC5127174CD0006E6646 /* jmorecfg.h */,
@@ -2469,6 +2484,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				7583EC4C27174BCD006E6646 /* main.cpp in Sources */,
+				7583EC5E27174E75006E6646 /* jpeg_image.cpp in Sources */,
+				7583EC5D27174E75006E6646 /* ppm_image.cpp in Sources */,
+				7583EC5F27174E75006E6646 /* img_lib.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3208,6 +3226,7 @@
 		7583EC4D27174BCD006E6646 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CODE_SIGN_STYLE = Automatic;
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3217,6 +3236,7 @@
 		7583EC4E27174BCD006E6646 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CODE_SIGN_STYLE = Automatic;
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				PRODUCT_NAME = "$(TARGET_NAME)";
