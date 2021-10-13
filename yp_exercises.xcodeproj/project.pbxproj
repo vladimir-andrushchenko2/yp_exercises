@@ -38,6 +38,8 @@
 		7578D93626C804F300B16B95 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7578D93526C804F300B16B95 /* main.cpp */; };
 		7578D94126C8169200B16B95 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7578D94026C8169200B16B95 /* main.cpp */; };
 		7578D94C26C833E100B16B95 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7578D94B26C833E100B16B95 /* main.cpp */; };
+		7583EC4C27174BCD006E6646 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7583EC4B27174BCD006E6646 /* main.cpp */; };
+		7583EC5627174D01006E6646 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7583EC5527174D01006E6646 /* libjpeg.a */; };
 		759BCBE426E657CF00D38797 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 759BCBE326E657CF00D38797 /* main.cpp */; };
 		75D43FBB26CAAB270026E6F4 /* svg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75D43FBA26CAAB270026E6F4 /* svg.cpp */; };
 		75D43FC426CEBCDA0026E6F4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 75D43FC326CEBCDA0026E6F4 /* main.cpp */; };
@@ -297,6 +299,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
+		7583EC4727174BCD006E6646 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		759BCBDF26E657CF00D38797 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -504,6 +515,13 @@
 		7578D94B26C833E100B16B95 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		7578D95026C8340D00B16B95 /* people.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = people.h; sourceTree = "<group>"; };
 		7578D95126C8341700B16B95 /* supervisor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = supervisor.h; sourceTree = "<group>"; };
+		7583EC4927174BCD006E6646 /* LibJpeg */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = LibJpeg; sourceTree = BUILT_PRODUCTS_DIR; };
+		7583EC4B27174BCD006E6646 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		7583EC5027174CD0006E6646 /* jconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jconfig.h; sourceTree = "<group>"; };
+		7583EC5127174CD0006E6646 /* jmorecfg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jmorecfg.h; sourceTree = "<group>"; };
+		7583EC5227174CD0006E6646 /* jpeglib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jpeglib.h; sourceTree = "<group>"; };
+		7583EC5327174CD0006E6646 /* jerror.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jerror.h; sourceTree = "<group>"; };
+		7583EC5527174D01006E6646 /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = ../../../../../usr/local/Cellar/jpeg/9d/lib/libjpeg.a; sourceTree = "<group>"; };
 		759BCBE126E657CF00D38797 /* Proprocessor */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Proprocessor; sourceTree = BUILT_PRODUCTS_DIR; };
 		759BCBE326E657CF00D38797 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		75D43FBA26CAAB270026E6F4 /* svg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = svg.cpp; sourceTree = "<group>"; };
@@ -662,6 +680,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7583EC5627174D01006E6646 /* libjpeg.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -736,6 +755,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		7578D94626C833E100B16B95 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7583EC4627174BCD006E6646 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -944,7 +970,9 @@
 				755C1B8F270D8C0E00A4B4EA /* Nucleotide */,
 				755C1B9A270DA0F500A4B4EA /* IdentityDocument */,
 				751559FD2712ED9700A18805 /* PPM */,
+				7583EC4A27174BCD006E6646 /* LibJpeg */,
 				750B0A6626A86E00002A522A /* Products */,
+				7583EC5427174D01006E6646 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -991,6 +1019,7 @@
 				755C1B8E270D8C0E00A4B4EA /* Nucleotide */,
 				755C1B99270DA0F500A4B4EA /* IdentityDocument */,
 				751559FC2712ED9700A18805 /* PPM */,
+				7583EC4927174BCD006E6646 /* LibJpeg */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1171,6 +1200,26 @@
 				7578D95126C8341700B16B95 /* supervisor.h */,
 			);
 			path = WorkerHappinessObserver;
+			sourceTree = "<group>";
+		};
+		7583EC4A27174BCD006E6646 /* LibJpeg */ = {
+			isa = PBXGroup;
+			children = (
+				7583EC4B27174BCD006E6646 /* main.cpp */,
+				7583EC5027174CD0006E6646 /* jconfig.h */,
+				7583EC5327174CD0006E6646 /* jerror.h */,
+				7583EC5127174CD0006E6646 /* jmorecfg.h */,
+				7583EC5227174CD0006E6646 /* jpeglib.h */,
+			);
+			path = LibJpeg;
+			sourceTree = "<group>";
+		};
+		7583EC5427174D01006E6646 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7583EC5527174D01006E6646 /* libjpeg.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		759BCBE226E657CF00D38797 /* Proprocessor */ = {
@@ -1753,6 +1802,23 @@
 			productReference = 7578D94926C833E100B16B95 /* WorkerHappinessObserver */;
 			productType = "com.apple.product-type.tool";
 		};
+		7583EC4827174BCD006E6646 /* LibJpeg */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7583EC4F27174BCD006E6646 /* Build configuration list for PBXNativeTarget "LibJpeg" */;
+			buildPhases = (
+				7583EC4527174BCD006E6646 /* Sources */,
+				7583EC4627174BCD006E6646 /* Frameworks */,
+				7583EC4727174BCD006E6646 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LibJpeg;
+			productName = LibJpeg;
+			productReference = 7583EC4927174BCD006E6646 /* LibJpeg */;
+			productType = "com.apple.product-type.tool";
+		};
 		759BCBE026E657CF00D38797 /* Proprocessor */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 759BCBE726E657CF00D38797 /* Build configuration list for PBXNativeTarget "Proprocessor" */;
@@ -2078,6 +2144,9 @@
 					7578D94826C833E100B16B95 = {
 						CreatedOnToolsVersion = 13.0;
 					};
+					7583EC4827174BCD006E6646 = {
+						CreatedOnToolsVersion = 13.0;
+					};
 					759BCBE026E657CF00D38797 = {
 						CreatedOnToolsVersion = 13.0;
 					};
@@ -2175,6 +2244,7 @@
 				755C1B8D270D8C0E00A4B4EA /* Nucleotide */,
 				755C1B98270DA0F500A4B4EA /* IdentityDocument */,
 				751559FB2712ED9700A18805 /* PPM */,
+				7583EC4827174BCD006E6646 /* LibJpeg */,
 			);
 		};
 /* End PBXProject section */
@@ -2391,6 +2461,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				7578D94C26C833E100B16B95 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7583EC4527174BCD006E6646 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7583EC4C27174BCD006E6646 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2900,6 +2978,10 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CODE_SIGN_STYLE = Automatic;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/jpeg/9d/lib,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -2910,6 +2992,10 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CODE_SIGN_STYLE = Automatic;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/jpeg/9d/lib,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -3115,6 +3201,24 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		7583EC4D27174BCD006E6646 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		7583EC4E27174BCD006E6646 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				MACOSX_DEPLOYMENT_TARGET = 11.5;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -3623,6 +3727,15 @@
 			buildConfigurations = (
 				7578D94E26C833E100B16B95 /* Debug */,
 				7578D94F26C833E100B16B95 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7583EC4F27174BCD006E6646 /* Build configuration list for PBXNativeTarget "LibJpeg" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7583EC4D27174BCD006E6646 /* Debug */,
+				7583EC4E27174BCD006E6646 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

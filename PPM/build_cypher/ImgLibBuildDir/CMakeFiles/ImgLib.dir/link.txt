@@ -1,0 +1,2 @@
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc libImgLib.a CMakeFiles/ImgLib.dir/img_lib.cpp.o CMakeFiles/ImgLib.dir/ppm_image.cpp.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib libImgLib.a
