@@ -1,11 +1,11 @@
-#include "ppm_image.h"
+#include <setjmp.h>
+#include <stdio.h>
 
 #include <array>
 #include <fstream>
-#include <stdio.h>
-#include <setjmp.h>
 
 #include "jpeglib.h"
+#include "ppm_image.h"
 
 using namespace std;
 
@@ -21,10 +21,27 @@ typedef struct my_error_mgr* my_error_ptr;
 
 // функция из примера LibJPEG
 METHODDEF(void)
-my_error_exit (j_common_ptr cinfo) {
-    my_error_ptr myerr = (my_error_ptr) cinfo->err;
-    (*cinfo->err->output_message) (cinfo);
+my_error_exit(j_common_ptr cinfo) {
+    my_error_ptr myerr = (my_error_ptr)cinfo->err;
+    (*cinfo->err->output_message)(cinfo);
     longjmp(myerr->setjmp_buffer, 1);
+}
+
+// !!! finish this
+// i barely started here
+void ConvertRowToJpeg(std::vector<JSAMPLE>& row, int y, const Image& image) {
+    const Color* image_begin = image.GetLine(y);
+    const Color* image_end = image_begin + image.GetWidth();
+
+    int index = 0;
+
+    for (;image_begin < image_end; ++image_begin) {
+        row[index] = static_cast<JSAMPLE>(image_begin->r);
+        row[index + 1] = static_cast<JSAMPLE>(image_begin->g);
+        row[index + 2] = static_cast<JSAMPLE>(image_begin->b);
+
+        index += 3;
+    }
 }
 
 
@@ -33,33 +50,33 @@ my_error_exit (j_common_ptr cinfo) {
 // Задание качества уберите - будет использовано качество по умолчанию
 bool SaveJPEG(const Path& file, const Image& image) {
     /* This struct contains the JPEG compression parameters and pointers to
-    * working space (which is allocated as needed by the JPEG library).
-    * It is possible to have several such structures, representing multiple
-    * compression/decompression processes, in existence at once.  We refer
-    * to any one struct (and its associated working data) as a "JPEG object".
-    */
-    struct jpeg_compress_struct cinfo;
+     * working space (which is allocated as needed by the JPEG library).
+     * It is possible to have several such structures, representing multiple
+     * compression/decompression processes, in existence at once.  We refer
+     * to any one struct (and its associated working data) as a "JPEG object".
+     */
+    jpeg_compress_struct cinfo;
     /* This struct represents a JPEG error handler.  It is declared separately
-    * because applications often want to supply a specialized error handler
-    * (see the second half of this file for an example).  But here we just
-    * take the easy way out and use the standard error handler, which will
-    * print a message on stderr and call exit() if compression fails.
-    * Note that this struct must live as long as the main JPEG parameter
-    * struct, to avoid dangling-pointer problems.
-    */
-    struct jpeg_error_mgr jerr;
+     * because applications often want to supply a specialized error handler
+     * (see the second half of this file for an example).  But here we just
+     * take the easy way out and use the standard error handler, which will
+     * print a message on stderr and call exit() if compression fails.
+     * Note that this struct must live as long as the main JPEG parameter
+     * struct, to avoid dangling-pointer problems.
+     */
+    jpeg_error_mgr jerr;
     /* More stuff */
-    FILE * outfile;       /* target file */
-    JSAMPROW row_pointer[1];  /* pointer to JSAMPLE row[s] */
-    int row_stride;       /* physical row width in image buffer */
+    FILE* outfile;           /* target file */
+    JSAMPROW row_pointer[1]; /* pointer to JSAMPLE row[s] */
+    int row_stride;          /* physical row width in image buffer */
 
     /* Step 1: allocate and initialize JPEG compression object */
 
     /* We have to set up the error handler first, in case the initialization
-    * step fails.  (Unlikely, but it could happen if you are out of memory.)
-    * This routine fills in the contents of struct jerr, and returns jerr's
-    * address which we place into the link field in cinfo.
-    */
+     * step fails.  (Unlikely, but it could happen if you are out of memory.)
+     * This routine fills in the contents of struct jerr, and returns jerr's
+     * address which we place into the link field in cinfo.
+     */
     cinfo.err = jpeg_std_error(&jerr);
     /* Now we can initialize the JPEG compression object. */
     jpeg_create_compress(&cinfo);
@@ -68,59 +85,67 @@ bool SaveJPEG(const Path& file, const Image& image) {
     /* Note: steps 2 and 3 can be done in either order. */
 
     /* Here we use the library-supplied code to send compressed data to a
-    * stdio stream.  You can also write your own code to do something else.
-    * VERY IMPORTANT: use "b" option to fopen() if you are on a machine that
-    * requires it in order to write binary files.
-    */
-    if ((outfile = fopen(filename, "wb")) == NULL) {
-    fprintf(stderr, "can't open %s\n", filename);
-    exit(1);
+     * stdio stream.  You can also write your own code to do something else.
+     * VERY IMPORTANT: use "b" option to fopen() if you are on a machine that
+     * requires it in order to write binary files.
+     */
+    if ((outfile = fopen(file.string().c_str(), "wb")) == NULL) {
+        fprintf(stderr, "can't open %s\n", file.string().c_str());
+        return false;
     }
+
     jpeg_stdio_dest(&cinfo, outfile);
 
     /* Step 3: set parameters for compression */
 
     /* First we supply a description of the input image.
-    * Four fields of the cinfo struct must be filled in:
-    */
-    cinfo.image_width = image_width;  /* image width and height, in pixels */
-    cinfo.image_height = image_height;
-    cinfo.input_components = 3;       /* # of color components per pixel */
-    cinfo.in_color_space = JCS_RGB;   /* colorspace of input image */
+     * Four fields of the cinfo struct must be filled in:
+     */
+    cinfo.image_width = image.GetWidth(); /* image width and height, in pixels */
+    cinfo.image_height = image.GetHeight();
+    cinfo.input_components = 3;     /* # of color components per pixel */
+    cinfo.in_color_space = JCS_RGB; /* colorspace of input image */
     /* Now use the library's routine to set default compression parameters.
-    * (You must set at least cinfo.in_color_space before calling this,
-    * since the defaults depend on the source color space.)
-    */
+     * (You must set at least cinfo.in_color_space before calling this,
+     * since the defaults depend on the source color space.)
+     */
     jpeg_set_defaults(&cinfo);
     /* Now you can set any non-default parameters you wish to.
-    * Here we just illustrate the use of quality (quantization table) scaling:
-    */
-    jpeg_set_quality(&cinfo, quality, TRUE /* limit to baseline-JPEG values */);
+     * Here we just illustrate the use of quality (quantization table) scaling:
+     */
+    // jpeg_set_quality(&cinfo, quality, TRUE /* limit to baseline-JPEG values */);
 
     /* Step 4: Start compressor */
 
     /* TRUE ensures that we will write a complete interchange-JPEG file.
-    * Pass TRUE unless you are very sure of what you're doing.
-    */
+     * Pass TRUE unless you are very sure of what you're doing.
+     */
     jpeg_start_compress(&cinfo, TRUE);
 
     /* Step 5: while (scan lines remain to be written) */
     /*           jpeg_write_scanlines(...); */
 
     /* Here we use the library's state variable cinfo.next_scanline as the
-    * loop counter, so that we don't have to keep track ourselves.
-    * To keep things simple, we pass one scanline per call; you can pass
-    * more if you wish, though.
-    */
-    row_stride = image_width * 3; /* JSAMPLEs per row in image_buffer */
+     * loop counter, so that we don't have to keep track ourselves.
+     * To keep things simple, we pass one scanline per call; you can pass
+     * more if you wish, though.
+     */
+    row_stride = image.GetWidth() * 3; /* JSAMPLEs per row in image_buffer */
+
+    std::vector<JSAMPLE> buffer(row_stride);
 
     while (cinfo.next_scanline < cinfo.image_height) {
-    /* jpeg_write_scanlines expects an array of pointers to scanlines.
-     * Here the array is only one element long, but you could pass
-     * more than one scanline at a time if that's more convenient.
-     */
-    row_pointer[0] = & image_buffer[cinfo.next_scanline * row_stride];
-    (void) jpeg_write_scanlines(&cinfo, row_pointer, 1);
+        int y = cinfo.next_scanline;
+        /* jpeg_write_scanlines expects an array of pointers to scanlines.
+         * Here the array is only one element long, but you could pass
+         * more than one scanline at a time if that's more convenient.
+         */
+
+
+        ConvertRowToJpeg(buffer, y, image);
+
+        row_pointer[0] = buffer.data();
+        (void)jpeg_write_scanlines(&cinfo, row_pointer, 1);
     }
 
     /* Step 6: Finish compression */
@@ -135,6 +160,7 @@ bool SaveJPEG(const Path& file, const Image& image) {
     jpeg_destroy_compress(&cinfo);
 
     /* And we're done! */
+    return true;
 }
 
 // тип JSAMPLE фактически псевдоним для unsigned char
@@ -149,7 +175,7 @@ void SaveSсanlineToImage(const JSAMPLE* row, int y, Image& out_image) {
 Image LoadJPEG(const Path& file) {
     jpeg_decompress_struct cinfo;
     my_error_mgr jerr;
-    
+
     FILE* infile;
     JSAMPARRAY buffer;
     int row_stride;
@@ -185,7 +211,7 @@ Image LoadJPEG(const Path& file) {
 
     /* Шаг 3: читаем параметры изображения через jpeg_read_header() */
 
-    (void) jpeg_read_header(&cinfo, TRUE);
+    (void)jpeg_read_header(&cinfo, TRUE);
 
     /* Шаг 4: устанавливаем параметры декодирования */
 
@@ -195,12 +221,11 @@ Image LoadJPEG(const Path& file) {
 
     /* Шаг 5: начинаем декодирование */
 
-    (void) jpeg_start_decompress(&cinfo);
-    
+    (void)jpeg_start_decompress(&cinfo);
+
     row_stride = cinfo.output_width * cinfo.output_components;
-    
-    buffer = (*cinfo.mem->alloc_sarray)
-                ((j_common_ptr) &cinfo, JPOOL_IMAGE, row_stride, 1);
+
+    buffer = (*cinfo.mem->alloc_sarray)((j_common_ptr)&cinfo, JPOOL_IMAGE, row_stride, 1);
 
     /* Шаг 5a: выделим изображение ImgLib */
     Image result(cinfo.output_width, cinfo.output_height, Color::Black());
@@ -210,14 +235,14 @@ Image LoadJPEG(const Path& file) {
 
     while (cinfo.output_scanline < cinfo.output_height) {
         int y = cinfo.output_scanline;
-        (void) jpeg_read_scanlines(&cinfo, buffer, 1);
+        (void)jpeg_read_scanlines(&cinfo, buffer, 1);
 
         SaveSсanlineToImage(buffer[0], y, result);
     }
 
     /* Шаг 7: Останавливаем декодирование */
 
-    (void) jpeg_finish_decompress(&cinfo);
+    (void)jpeg_finish_decompress(&cinfo);
 
     /* Шаг 8: Освобождаем объект декодирования */
 
@@ -227,4 +252,4 @@ Image LoadJPEG(const Path& file) {
     return result;
 }
 
-} // of namespace img_lib
+}  // namespace img_lib

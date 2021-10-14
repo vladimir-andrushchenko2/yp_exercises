@@ -86,7 +86,8 @@
         "stack": "cpp",
         "variant": "cpp",
         "regex": "cpp",
-        "charconv": "cpp"
+        "charconv": "cpp",
+        "filesystem": "cpp"
     },
     "cmake.configureOnOpen": false
 }
