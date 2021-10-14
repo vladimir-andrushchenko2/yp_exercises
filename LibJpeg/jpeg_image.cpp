@@ -42,7 +42,6 @@ void ConvertRowToJpeg(std::vector<JSAMPLE>& row, int y, const Image& image) {
     }
 }
 
-
 bool SaveJPEG(const Path& file, const Image& image) {
 
     jpeg_compress_struct cinfo;
