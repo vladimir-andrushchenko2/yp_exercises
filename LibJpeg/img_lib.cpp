@@ -32,4 +32,17 @@ int Image::GetStep() const {
     return step_;
 }
 
+Format GetFormatByExtension(const img_lib::Path& input_file) {
+    const std::string ext = input_file.extension().string();
+    if (ext == ".jpg"sv || ext == ".jpeg"sv) {
+        return Format::JPEG;
+    }
+
+    if (ext == ".ppm"sv) {
+        return Format::PPM;
+    }
+
+    return Format::UNKNOWN;
+}
+
 }  // namespace img_lib

@@ -4,8 +4,15 @@
 #include <cassert>
 #include <cstddef>
 #include <vector>
+#include <string_view>
+#include <string>
+#include <filesystem>
 
 namespace img_lib {
+
+using namespace std::string_view_literals;
+
+using Path = std::filesystem::path;
 
 struct Size {
     int width;
@@ -13,15 +20,13 @@ struct Size {
 };
 
 struct Color {
-    static Color Black() {
-        return {std::byte{0}, std::byte{0}, std::byte{0}, std::byte{255}};
-    }
+    static Color Black() { return {std::byte{0}, std::byte{0}, std::byte{0}, std::byte{255}}; }
 
     std::byte r, g, b, a;
 };
 
 class Image {
-public:
+   public:
     // создаёт пустое изображение
     Image() = default;
 
@@ -29,9 +34,7 @@ public:
     Image(int w, int h, Color fill);
 
     // геттеры для отдельного пикселя изображения
-    Color GetPixel(int x, int y) const {
-        return const_cast<Image*>(this)->GetPixel(x, y);
-    }
+    Color GetPixel(int x, int y) const { return const_cast<Image*>(this)->GetPixel(x, y); }
     Color& GetPixel(int x, int y) {
         assert(x < GetWidth() && y < GetHeight() && x >= 0 && y >= 0);
         return GetLine(y)[x];
@@ -50,20 +53,26 @@ public:
 
     // будем считать изображение корректным, если
     // его площадь положительна
-    explicit operator bool() const {
-        return GetWidth() > 0 && GetHeight() > 0;
-    }
+    explicit operator bool() const { return GetWidth() > 0 && GetHeight() > 0; }
 
-    bool operator!() const {
-        return !operator bool();
-    }
+    bool operator!() const { return !operator bool(); }
 
-private:
+   private:
     int width_ = 0;
     int height_ = 0;
     int step_;
 
     std::vector<Color> pixels_;
 };
+
+class ImageFormatInterface {
+   public:
+    virtual bool SaveImage(const img_lib::Path& file, const img_lib::Image& image) const = 0;
+    virtual img_lib::Image LoadImage(const img_lib::Path& file) const = 0;
+};
+
+enum class Format { JPEG, PPM, UNKNOWN };
+
+Format GetFormatByExtension(const img_lib::Path& input_file);
 
 }  // namespace img_lib
