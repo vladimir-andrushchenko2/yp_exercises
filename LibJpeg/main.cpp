@@ -31,26 +31,28 @@ int main(int argc, const char** argv) {
         case Format::JPEG:
             input_interface_ptr = unique_ptr<ImageFormatInterface>(new JPEGInterface());
             break;
-        
+
         case Format::PPM:
             input_interface_ptr = unique_ptr<ImageFormatInterface>(new PPMInterface());
             break;
-        
+
         default:
-            assert(false);
+            cerr << "Unknown format of the output file"sv << endl;
+            return 2;
     }
 
     switch (output_format) {
         case Format::JPEG:
             output_interface_ptr = unique_ptr<ImageFormatInterface>(new JPEGInterface());
             break;
-        
+
         case Format::PPM:
             output_interface_ptr = unique_ptr<ImageFormatInterface>(new PPMInterface());
             break;
 
         default:
-            assert(false);
+            cerr << "Unknown format of the output file"sv << endl;
+            return 3;
     }
 
     img_lib::Image image = input_interface_ptr->LoadImage(in_path);
