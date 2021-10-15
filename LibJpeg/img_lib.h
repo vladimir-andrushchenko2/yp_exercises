@@ -65,14 +65,4 @@ class Image {
     std::vector<Color> pixels_;
 };
 
-class ImageFormatInterface {
-   public:
-    virtual bool SaveImage(const img_lib::Path& file, const img_lib::Image& image) const = 0;
-    virtual img_lib::Image LoadImage(const img_lib::Path& file) const = 0;
-};
-
-enum class Format { JPEG, PPM, UNKNOWN };
-
-Format GetFormatByExtension(const img_lib::Path& input_file);
-
 }  // namespace img_lib

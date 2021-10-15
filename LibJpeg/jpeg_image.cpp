@@ -4,7 +4,7 @@
 #include <array>
 #include <fstream>
 
-#include "jpeglib.h"
+#include "jpeg/jpeglib.h"
 #include "ppm_image.h"
 
 using namespace std;
