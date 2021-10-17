@@ -19,7 +19,8 @@ PACKED_STRUCT_BEGIN BitmapFileHeader {
         total_size_of_headers_and_data = GetBMPStride(width) * height;
     }
 
-    const char* signature = "BM";
+    char B = 'B';
+    char M = 'M';
     uint32_t total_size_of_headers_and_data{};
     uint32_t space_filled_with_zeroes = 0;
     //size of both headers is 54 bytes
@@ -48,6 +49,11 @@ PACKED_STRUCT_END
 // напишите эту функцию
 bool SaveBMP(const Path& file, const Image& image) {
     ofstream out(file, ios::binary);
+    BitmapFileHeader file_header(image.GetWidth(), image.GetHeight());
+    BitmapInfoHeader info_header(image.GetWidth(), image.GetHeight());
+
+    assert(sizeof(file_header) == 14);
+    assert(sizeof(info_header) == 40);
 
     return false;
 }
