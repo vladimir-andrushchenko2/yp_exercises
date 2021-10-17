@@ -69,9 +69,9 @@ bool SaveBMP(const Path& file, const Image& image) {
         const Color* line = image.GetLine(y);
 
         for (int x = 0; x < image.GetWidth(); ++x) {
-            buff[x * 3 + 2] = static_cast<char>(line[x].b);
+            buff[x * 3 + 0] = static_cast<char>(line[x].b);
             buff[x * 3 + 1] = static_cast<char>(line[x].g);
-            buff[x * 3 + 0] = static_cast<char>(line[x].r);
+            buff[x * 3 + 2] = static_cast<char>(line[x].r);
         }
 
         out.write(reinterpret_cast<const char*>(buff.data()), buff.size());
