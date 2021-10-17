@@ -9,23 +9,46 @@ using namespace std;
 
 namespace img_lib {
 
-PACKED_STRUCT_BEGIN BitmapFileHeader {
-    // поля заголовка Bitmap File Header
-}
-PACKED_STRUCT_END
-
-PACKED_STRUCT_BEGIN BitmapInfoHeader {
-    // поля заголовка Bitmap Info Header
-}
-PACKED_STRUCT_END
-
 // функция вычисления отступа по ширине
 static int GetBMPStride(int w) {
     return 4 * ((w * 3 + 3) / 4);
 }
 
+PACKED_STRUCT_BEGIN BitmapFileHeader {
+    BitmapFileHeader(int width, int height) {
+        total_size_of_headers_and_data = GetBMPStride(width) * height;
+    }
+
+    const char* signature = "BM";
+    uint32_t total_size_of_headers_and_data{};
+    uint32_t space_filled_with_zeroes = 0;
+    //size of both headers is 54 bytes
+    uint32_t heades_size = 54;
+}
+PACKED_STRUCT_END
+
+PACKED_STRUCT_BEGIN BitmapInfoHeader {
+    BitmapInfoHeader(int width, int height) : width(width), height(height) {
+        total_bytes = GetBMPStride(width) * height;
+    }
+
+    uint32_t bitmat_info_header_size = 40;
+    int32_t width{};
+    int32_t height{};
+    uint16_t n_dimentions = 1;
+    uint16_t bit_per_pixel = 24;
+    uint32_t type_of_compression = 0;
+    uint32_t total_bytes{};
+    int32_t horizontal_resolution = 11811;
+    int32_t vertical_resolution = 11811;
+    int32_t colors_used = 0;
+}
+PACKED_STRUCT_END
+
 // напишите эту функцию
 bool SaveBMP(const Path& file, const Image& image) {
+    ofstream out(file, ios::binary);
+
     return false;
 }
 
